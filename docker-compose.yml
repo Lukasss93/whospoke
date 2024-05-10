@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+    app:
+        container_name: whospoke-app
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+        depends_on:
+            - db
+        volumes:
+            - ./:/var/www/html
+            - ./.docker/000-default.conf:/etc/apache2/sites-available/000-default.conf
+            - ./.docker/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+        networks:
+            - whospoke-network
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+    db:
+        container_name: whospoke-db
+        image: mariadb
+        volumes:
+            - db-volume:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: db
+            MYSQL_USER: db
+            MYSQL_PASSWORD: db
+        ports:
+            - "3306:3306"
+        networks:
+            - whospoke-network
+
+volumes:
+    db-volume:
+        name: whospoke-db-volume
+
+networks:
+    whospoke-network:
+        driver: bridge
