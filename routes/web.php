@@ -5,6 +5,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use SergiX44\Nutgram\Exception\InvalidDataException;
+use SergiX44\Nutgram\Nutgram;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -25,8 +27,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/access', function (Request $request) {
-    dd($request->all());
+Route::get('/access', function (Request $request, Nutgram $bot) {
+
+    try {
+        $loginData = $bot->validateLoginData($request->getQueryString());
+
+        dd($loginData);
+
+    } catch (InvalidDataException) {
+        abort(422, 'Invalid Telegram Data');
+    }
 })->name('access');
 
 require __DIR__.'/auth.php';
