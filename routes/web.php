@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -28,12 +29,24 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/access', function (Request $request, Nutgram $bot) {
-
     try {
+        // Validate the login data
         $loginData = $bot->validateLoginData($request->getQueryString());
 
-        dd($loginData);
+        // Get the user from the database or create a new one
+        $user = User::firstOrCreate([
+            'telegram_id' => $loginData->id,
+        ], [
+            'username' => $loginData->username,
+            'first_name' => $loginData->first_name,
+            'last_name' => $loginData->last_name,
+        ]);
 
+        // Log the user in
+        auth()->login($user, true);
+
+        // Redirect to the home page
+        return redirect()->route('home');
     } catch (InvalidDataException) {
         abort(422, 'Invalid Telegram Data');
     }
