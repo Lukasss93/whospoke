@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
+import {LoginWidget} from 'vue-tg';
 
 defineProps<{
     canLogin?: boolean;
@@ -71,6 +72,14 @@ function handleImageError() {
                 </header>
 
                 <main class="mt-6">
+
+                    <LoginWidget
+                        bot-username="WhoSpokeBot"
+                        :redirect-url="route('access')"
+                        corner-radius="10"
+                        :user-photo="false"
+                    />
+
                     <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                         <a
                             href="https://laravel.com/docs"

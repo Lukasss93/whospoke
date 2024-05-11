@@ -12,6 +12,7 @@
 
         <!-- Scripts -->
         @routes
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
         @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
     </head>
