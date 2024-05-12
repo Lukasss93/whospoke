@@ -46,6 +46,7 @@ defineProps<{
     appName: string;
     appVersion: string;
     rooms: Room[];
+    canCreateRooms: boolean;
 }>();
 
 function getFirstArrayError(errors: Record<string, string>, key: string): string | null {
@@ -80,12 +81,21 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                             :user-photo="false"
                         />
 
+                        <p class="text-yellow-600 dark:text-yellow-500" v-if="!isLogged">
+                            Per creare una sessione, devi prima eseguire il login.
+                        </p>
+
                         <p class="text-xl" v-if="isLogged">
                             Benvenuto, {{ page.props.auth.user?.first_name }}
                         </p>
-                        <PrimaryButton v-if="isLogged" @click="isCreatingRoom=true">
+                        <PrimaryButton v-if="isLogged && canCreateRooms" @click="isCreatingRoom=true">
                             Crea una sessione
                         </PrimaryButton>
+
+                        <div v-if="isLogged && !canCreateRooms" class="text-sm text-red-500 text-center">
+                            Non puoi creare nuove sessioni, hai raggiunto il limite massimo.<br/>
+                            Cancella una sessione attiva per crearne una nuova.
+                        </div>
 
                         <Modal :show="isCreatingRoom" @close="isCreatingRoom=false">
                             <div class="p-6">
@@ -160,13 +170,9 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                             </div>
                         </Modal>
 
-                        <p class="text-red-500" v-if="!isLogged">
-                            Per creare una sessione, devi prima eseguire il login.
-                        </p>
-
                         <p class="text-xl mt-2">Per unirti in una sessione, apri un link diretto alla sessione.</p>
 
-                        <div v-if="isLogged && $page.props.rooms.length>0" class="flex flex-col items-center gap-2">
+                        <div v-if="isLogged && rooms.length>0" class="flex flex-col items-center gap-2">
                             <div class="border-b-[1px] w-64 my-2 border-gray-500"></div>
                             <p class="text-sm uppercase font-bold">Le tue sessioni</p>
 
