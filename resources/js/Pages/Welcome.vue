@@ -16,30 +16,40 @@ const page = usePage();
 const logoColor = computed(() => isDark.value ? 'white' : 'black');
 const isLogged = computed(() => page.props.auth.user !== null);
 
-const isCreatingSession = ref<boolean>(false);
-const sessionForm = useForm<{
-    name: string;
+const isCreatingRoom = ref<boolean>(false);
+const roomForm = useForm<{
+    code: string;
     members: string[];
 }>({
-    name: '',
+    code: '',
     members: [],
 });
 
-const removeMember = (index: number) => sessionForm.members.splice(index, 1);
+const removeMember = (index: number) => roomForm.members.splice(index, 1);
 const newMember = ref<string>('');
 const addNewMember = () => {
     if (newMember.value.trim() === '') {
         return;
     }
 
-    sessionForm.members.push(newMember.value);
+    roomForm.members.push(newMember.value);
     newMember.value = '';
-}
+};
+const storeRoom = () => {
+    roomForm.clearErrors();
+    roomForm.post(route('room.store'));
+    isCreatingRoom.value = false;
+};
 
 defineProps<{
     appName: string;
     appVersion: string;
 }>();
+
+function getFirstArrayError(errors: Record<string, string>, key: string): string | null {
+    const errorKey = Object.keys(errors).find(i => i.startsWith(key + '.'));
+    return errorKey ? errors[errorKey] : null;
+}
 
 </script>
 
@@ -71,35 +81,38 @@ defineProps<{
                         <p class="text-xl" v-if="isLogged">
                             Benvenuto, {{ page.props.auth.user?.first_name }}
                         </p>
-                        <PrimaryButton v-if="isLogged" @click="isCreatingSession=true">
+                        <PrimaryButton v-if="isLogged" @click="isCreatingRoom=true">
                             Crea una sessione
                         </PrimaryButton>
 
-                        <Modal :show="isCreatingSession" @close="isCreatingSession=false">
+                        <Modal :show="isCreatingRoom" @close="isCreatingRoom=false">
                             <div class="p-6">
                                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                                     Crea una sessione
                                 </h2>
 
                                 <p class="mt-1 text-gray-600 dark:text-gray-400">
-                                    Inserisci il nome della sessione che vuoi creare
+                                    Inserisci il codice della sessione che vuoi creare
                                 </p>
                                 <input type="text"
-                                       v-model="sessionForm.name"
+                                       v-model="roomForm.code"
                                        class="mt-1 w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
-                                       placeholder="Nome membro"/>
+                                       placeholder="Codice sessione"/>
                                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-500 italic">
                                     Verrà usato per generare un link diretto alla sessione
                                 </p>
-
-                                <p class="my-2 text-gray-600 dark:text-gray-400">
-                                    Membri della sessione ({{ sessionForm.members.length }})
+                                <p class="text-sm text-red-500" v-if="roomForm.errors.code">
+                                    {{ roomForm.errors.code }}
                                 </p>
 
-                                <div class="flex gap-2 mb-2" v-for="(name,index) in sessionForm.members" :key="index">
+                                <p class="my-2 text-gray-600 dark:text-gray-400">
+                                    Membri della sessione ({{ roomForm.members.length }}/20)
+                                </p>
+
+                                <div class="flex gap-2 mb-2" v-for="(name,index) in roomForm.members" :key="index">
                                     <div class="flex-1">
                                         <input type="text"
-                                               v-model="sessionForm.members[index]"
+                                               v-model="roomForm.members[index]"
                                                class="w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
                                                placeholder="Nome membro"/>
                                     </div>
@@ -125,12 +138,20 @@ defineProps<{
                                     </div>
                                 </div>
 
+                                <p class="text-sm text-red-500" v-if="roomForm.errors.members">
+                                    {{ roomForm.errors.members }}
+                                </p>
+
+                                <p class="text-sm text-red-500" v-if="getFirstArrayError(roomForm.errors, 'members')">
+                                    {{ getFirstArrayError(roomForm.errors, 'members') }}
+                                </p>
+
                                 <div class="mt-4 flex justify-end gap-4">
                                     <button type="button" class="text-red-500 hover:underline"
-                                            @click="isCreatingSession=false">
+                                            @click="isCreatingRoom=false">
                                         Annulla
                                     </button>
-                                    <PrimaryButton :disabled="sessionForm.members.length<2">
+                                    <PrimaryButton @click="storeRoom">
                                         Crea sessione
                                     </PrimaryButton>
                                 </div>
