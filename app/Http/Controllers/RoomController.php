@@ -18,6 +18,7 @@ class RoomController extends Controller
             'appName' => config('app.name'),
             'appVersion' => config('app.version'),
             'rooms' => auth()->user()?->rooms ?? [],
+            'canCreateRooms' => auth()->user()?->can('create', Room::class),
         ]);
     }
 
@@ -48,6 +49,8 @@ class RoomController extends Controller
 
     public function storeRoom(CreateRoomRequest $request)
     {
+        $this->authorize('create', Room::class);
+
         $room = Room::create([
             'user_id' => auth()->id(),
             'code' => $request->input('code'),
@@ -67,6 +70,8 @@ class RoomController extends Controller
 
     public function deleteRoom(Room $room)
     {
+        $this->authorize('delete', $room);
+
         $room->delete();
 
         return redirect()->route('home');
