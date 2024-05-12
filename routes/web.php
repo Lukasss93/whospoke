@@ -5,7 +5,7 @@ use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RoomController::class, 'index'])->name('home');
-Route::get('/@{room:code}', [RoomController::class, 'showRoom'])->name('room.show');
+Route::get('@{room:code}', [RoomController::class, 'showRoom'])->name('room.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('access', [RoomController::class, 'access'])->name('access');
@@ -13,5 +13,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::post('/room', [RoomController::class, 'storeRoom'])->name('room.store');
+    Route::post('room', [RoomController::class, 'storeRoom'])->name('room.store');
+    Route::delete('@{room:code}', [RoomController::class, 'deleteRoom'])->name('room.delete');
 });

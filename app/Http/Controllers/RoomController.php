@@ -17,6 +17,7 @@ class RoomController extends Controller
         return Inertia::render('Welcome', [
             'appName' => config('app.name'),
             'appVersion' => config('app.version'),
+            'rooms' => auth()->user()?->rooms ?? [],
         ]);
     }
 
@@ -62,5 +63,12 @@ class RoomController extends Controller
     public function showRoom(Room $room)
     {
         abort(404, "Room {$room->code} not found");
+    }
+
+    public function deleteRoom(Room $room)
+    {
+        $room->delete();
+
+        return redirect()->route('home');
     }
 }

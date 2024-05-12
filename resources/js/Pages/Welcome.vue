@@ -9,6 +9,7 @@ import Modal from "@/Components/Modal.vue";
 import CancelIcon from "@/Components/CancelIcon.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import PlusIcon from "@/Components/PlusIcon.vue";
+import {Room} from "@/types";
 
 const isDark = useDark();
 const page = usePage();
@@ -44,6 +45,7 @@ const storeRoom = () => {
 defineProps<{
     appName: string;
     appVersion: string;
+    rooms: Room[];
 }>();
 
 function getFirstArrayError(errors: Record<string, string>, key: string): string | null {
@@ -163,6 +165,28 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                         </p>
 
                         <p class="text-xl mt-2">Per unirti in una sessione, apri un link diretto alla sessione.</p>
+
+                        <div v-if="isLogged && $page.props.rooms.length>0" class="flex flex-col items-center gap-2">
+                            <div class="border-b-[1px] w-64 my-2 border-gray-500"></div>
+                            <p class="text-sm uppercase font-bold">Le tue sessioni</p>
+
+                            <div v-for="(room, i) in rooms" :key="room.id"
+                                 class="flex items-center gap-2 p-1">
+                                <div class="flex-1">#{{ i + 1 }}</div>
+                                <Link :href="route('room.show', room.id)" class="text-blue-500 hover:underline">
+                                    {{ room.code }}
+                                </Link>
+
+                                <Link :href="route('room.delete', room.code)"
+                                      method="delete"
+                                      class="inline-flex items-center px-1 py-0.5 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                    <CancelIcon :size="15" color="white"/>
+                                </Link>
+
+                            </div>
+                        </div>
+
+                        <div class="border-b-[1px] w-64 my-2 border-gray-500" v-if="isLogged"></div>
 
                         <Link :href="route('logout')" method="post"
                               v-if="isLogged"
