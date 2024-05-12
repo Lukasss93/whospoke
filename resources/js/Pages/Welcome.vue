@@ -1,17 +1,40 @@
 <script setup lang="ts">
-import {Head, Link, usePage} from '@inertiajs/vue3';
+import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import {LoginWidget} from 'vue-tg';
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import {useDark} from '@vueuse/core'
 import {computed, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Modal from "@/Components/Modal.vue";
+import CancelIcon from "@/Components/CancelIcon.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import PlusIcon from "@/Components/PlusIcon.vue";
 
 const isDark = useDark();
 const page = usePage();
 
 const logoColor = computed(() => isDark.value ? 'white' : 'black');
 const isLogged = computed(() => page.props.auth.user !== null);
-const isCreatingSession = ref(false);
+
+const isCreatingSession = ref<boolean>(false);
+const sessionForm = useForm<{
+    name: string;
+    members: string[];
+}>({
+    name: '',
+    members: [],
+});
+
+const removeMember = (index: number) => sessionForm.members.splice(index, 1);
+const newMember = ref<string>('');
+const addNewMember = () => {
+    if (newMember.value.trim() === '') {
+        return;
+    }
+
+    sessionForm.members.push(newMember.value);
+    newMember.value = '';
+}
 
 defineProps<{
     appName: string;
@@ -27,7 +50,7 @@ defineProps<{
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <header class="flex flex-col items-center gap-2 py-10">
+                <header class="flex flex-col items-center gap-2 py-8">
                     <ApplicationLogo :color="logoColor"/>
                     <h4 class="text-black dark:text-white uppercase font-bold">Who Spoke?</h4>
                     <h1 class="text-3xl text-black dark:text-white uppercase font-bold">Chi ha parlato?</h1>
@@ -45,13 +68,80 @@ defineProps<{
                             :user-photo="false"
                         />
 
-                        <PrimaryButton v-if="isLogged">
+                        <p class="text-xl" v-if="isLogged">
+                            Benvenuto, {{ page.props.auth.user?.first_name }}
+                        </p>
+                        <PrimaryButton v-if="isLogged" @click="isCreatingSession=true">
                             Crea una sessione
                         </PrimaryButton>
-                        <p class="text-red-500" v-if="!isLogged">Per creare una sessione, devi prima eseguire il
-                            login.</p>
 
-                        <p class="text-xl">Per unirti in una sessione, apri un link diretto alla sessione.</p>
+                        <Modal :show="isCreatingSession" @close="isCreatingSession=false">
+                            <div class="p-6">
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    Crea una sessione
+                                </h2>
+
+                                <p class="mt-1 text-gray-600 dark:text-gray-400">
+                                    Inserisci il nome della sessione che vuoi creare
+                                </p>
+                                <input type="text"
+                                       v-model="sessionForm.name"
+                                       class="mt-1 w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
+                                       placeholder="Nome membro"/>
+                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-500 italic">
+                                    Verrà usato per generare un link diretto alla sessione
+                                </p>
+
+                                <p class="my-2 text-gray-600 dark:text-gray-400">
+                                    Membri della sessione ({{ sessionForm.members.length }})
+                                </p>
+
+                                <div class="flex gap-2 mb-2" v-for="(name,index) in sessionForm.members" :key="index">
+                                    <div class="flex-1">
+                                        <input type="text"
+                                               v-model="sessionForm.members[index]"
+                                               class="w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
+                                               placeholder="Nome membro"/>
+                                    </div>
+                                    <div>
+                                        <DangerButton @click="()=>removeMember(index)">
+                                            <CancelIcon :size="24" color="white"/>
+                                        </DangerButton>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-2 mb-2">
+                                    <div class="flex-1">
+                                        <input type="text"
+                                               v-model="newMember"
+                                               @keyup.enter="addNewMember"
+                                               class="w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
+                                               placeholder="Nome membro"/>
+                                    </div>
+                                    <div>
+                                        <PrimaryButton @click="addNewMember">
+                                            <PlusIcon :size="24" :color="isDark ? 'black' : 'white'"/>
+                                        </PrimaryButton>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 flex justify-end gap-4">
+                                    <button type="button" class="text-red-500 hover:underline"
+                                            @click="isCreatingSession=false">
+                                        Annulla
+                                    </button>
+                                    <PrimaryButton :disabled="sessionForm.members.length<2">
+                                        Crea sessione
+                                    </PrimaryButton>
+                                </div>
+                            </div>
+                        </Modal>
+
+                        <p class="text-red-500" v-if="!isLogged">
+                            Per creare una sessione, devi prima eseguire il login.
+                        </p>
+
+                        <p class="text-xl mt-2">Per unirti in una sessione, apri un link diretto alla sessione.</p>
 
                         <Link :href="route('logout')" method="post"
                               v-if="isLogged"
