@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -11,10 +10,8 @@ use SergiX44\Nutgram\Nutgram;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'appName' => config('app.name'),
+        'appVersion' => config('app.version'),
     ]);
 })->name('home');
 
