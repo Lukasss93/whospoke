@@ -65,6 +65,8 @@ class RoomController extends Controller
     {
         return Inertia::render('Room', [
             'room' => $room,
+            'isMyRoom' => auth()->id() === $room->user_id,
+            'roomUrl' => route('room.show', $room->code),
         ]);
     }
 

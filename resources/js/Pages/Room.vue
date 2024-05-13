@@ -16,13 +16,10 @@ const props = defineProps<{
 
 const isDark = useDark();
 const page = usePage();
-
 const logoColor = computed(() => isDark.value ? 'white' : 'black');
 const isLogged = computed(() => page.props.auth.user !== null);
-
-defineProps<{
-    room: Room;
-}>();
+const source = ref(props.roomUrl);
+const {text, copy, copied, isSupported} = useClipboard({source});
 
 </script>
 
@@ -38,6 +35,25 @@ defineProps<{
                 <Header/>
 
                 <main>
+                    <div class="flex flex-col items-center gap-1 text-center mb-4">
+                        <p class="text-xl">
+                            Benvenuto! Questa è la stanza
+                            <abbr title="Clicca per copiare l'url"
+                                  @click="copy(source)"
+                                  class="font-bold text-blue-500 cursor-pointer">
+                                {{ room.code }}
+                            </abbr>.<br/>
+                            Qui puoi vedere lo stato dei membri che hanno parlato.<br/>
+                        </p>
+                        <p class="text-sm">
+                            Non hai bisogno di aggiornare la pagina, i dati vengono aggiornati in
+                            <span class="font-bold text-orange-400 animate-pulse">tempo reale</span>.
+                        </p>
+                        <p class="text-sm text-green-600" v-if="isMyRoom">
+                            Come proprietario della stanza, puoi modificare lo stato dei membri.
+                        </p>
+                    </div>
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 md:mx-32 lg:mx-52">
                         <div class="flex items-center gap-2 w-full bg-gray-300 dark:bg-gray-800 p-1 rounded"
                              v-for="(member, i) in room.members" :key="i">
@@ -45,7 +61,7 @@ defineProps<{
                                 {{ member.name }}
                             </div>
                             <div>
-                                <Checkbox class="size-8" checked/>
+                                <Checkbox class="size-8" :checked="member.status" :disabled="!isMyRoom"/>
                             </div>
 
                         </div>
