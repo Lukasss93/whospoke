@@ -19,4 +19,9 @@ class RoomPolicy
     {
         return $user->id === $room->user_id;
     }
+
+    public function updateMemberStatus(User $user, Room $room): bool
+    {
+        return $user->id === $room->user_id;
+    }
 }

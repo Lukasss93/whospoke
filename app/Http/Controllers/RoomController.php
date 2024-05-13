@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateRoomRequest;
+use App\Http\Requests\UpdateMemberStatusRequest;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -77,5 +78,18 @@ class RoomController extends Controller
         $room->delete();
 
         return redirect()->route('home');
+    }
+
+    public function setMemberStatus(UpdateMemberStatusRequest $request, Room $room)
+    {
+        $this->authorize('updateMemberStatus', $room);
+
+        $memberIndex = $request->integer('member');
+        $status = $request->boolean('status');
+
+        $members = $room->members;
+        $members[$memberIndex]['status'] = $status;
+        $room->members = $members;
+        $room->save();
     }
 }

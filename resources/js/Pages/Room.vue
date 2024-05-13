@@ -9,6 +9,7 @@ import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 import {toast} from "vue3-toastify";
 import {Tippy} from 'vue-tippy';
+import axios from "axios";
 
 const props = defineProps<{
     room: Room;
@@ -28,6 +29,26 @@ watch(copied, () => {
         toast.success('Link copiato negli appunti!');
     }
 });
+
+async function updateMemberStatus(memberIndex: number, status: boolean) {
+    // store the old status to revert if the request fails
+    const oldStatus = props.room.members[memberIndex].status;
+
+    // update the status in the frontend
+    props.room.members[memberIndex].status = status;
+
+    try {
+        // send the request to the server
+        await axios.post(route('room.member.update', {room: props.room.code}), {
+            member: memberIndex,
+            status: status,
+        });
+    } catch (e) {
+        // revert the status if the request fails
+        props.room.members[memberIndex].status = oldStatus;
+        toast.error('Errore durante l\'aggiornamento dello stato del membro');
+    }
+}
 
 </script>
 
@@ -73,7 +94,10 @@ watch(copied, () => {
                                 {{ member.name }}
                             </div>
                             <div>
-                                <Checkbox class="size-8" :checked="member.status" :disabled="!isMyRoom"/>
+                                <Checkbox class="size-8"
+                                          :checked="member.status"
+                                          :disabled="!isMyRoom"
+                                          @change="(e: InputEvent) => updateMemberStatus(i, (e.target as HTMLInputElement).checked)"/>
                             </div>
 
                         </div>
