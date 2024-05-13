@@ -37,7 +37,7 @@ const {text, copy, copied, isSupported} = useClipboard({source});
                 <main>
                     <div class="flex flex-col items-center gap-1 text-center mb-4">
                         <p class="text-xl">
-                            Benvenuto! Questa è la stanza
+                            Benvenuto! Questa è la sessione
                             <abbr title="Clicca per copiare l'url"
                                   @click="copy(source)"
                                   class="font-bold text-blue-500 cursor-pointer">
@@ -46,8 +46,9 @@ const {text, copy, copied, isSupported} = useClipboard({source});
                             Qui puoi vedere lo stato dei membri che hanno parlato.<br/>
                         </p>
                         <p class="text-sm">
-                            Non hai bisogno di aggiornare la pagina, i dati vengono aggiornati in
-                            <span class="font-bold text-orange-400 animate-pulse">tempo reale</span>.
+                            I dati vengono aggiornati in
+                            <span class="font-bold text-green-500 animate-pulse">tempo reale</span> dal proprietario
+                            della sessione.
                         </p>
                         <p class="text-sm text-green-600" v-if="isMyRoom">
                             Come proprietario della stanza, puoi modificare lo stato dei membri.
