@@ -15,8 +15,6 @@ class RoomController extends Controller
     public function index()
     {
         return Inertia::render('Welcome', [
-            'appName' => config('app.name'),
-            'appVersion' => config('app.version'),
             'rooms' => auth()->user()?->rooms ?? [],
             'canCreateRooms' => auth()->user()?->can('create', Room::class),
         ]);

@@ -43,8 +43,6 @@ const storeRoom = () => {
 };
 
 defineProps<{
-    appName: string;
-    appVersion: string;
     rooms: Room[];
     canCreateRooms: boolean;
 }>();
@@ -63,7 +61,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <header class="flex flex-col items-center gap-2 py-8">
+                <header class="flex flex-col items-center gap-2 py-8 text-center">
                     <ApplicationLogo :color="logoColor"/>
                     <h4 class="text-black dark:text-white uppercase font-bold">Who Spoke?</h4>
                     <h1 class="text-3xl text-black dark:text-white uppercase font-bold">Chi ha parlato?</h1>
@@ -71,7 +69,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
 
                 <main>
 
-                    <div class="flex flex-col items-center gap-2">
+                    <div class="flex flex-col items-center gap-2 text-center">
 
                         <LoginWidget
                             v-if="!isLogged"
@@ -179,7 +177,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                             <div v-for="(room, i) in rooms" :key="room.id"
                                  class="flex items-center gap-2 p-1">
                                 <div class="flex-1">#{{ i + 1 }}</div>
-                                <Link :href="route('room.show', room.id)" class="text-blue-500 hover:underline">
+                                <Link :href="route('room.show', room.code)" class="text-blue-500 hover:underline">
                                     {{ room.code }}
                                 </Link>
 
@@ -209,8 +207,8 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                     <a href="https://github.com/Lukasss93/whospoke"
                        target="_blank"
                        class="text-blue-500 hover:underline">
-                        {{ appName }}
-                    </a> v{{ appVersion }} -
+                        {{ $page.props.appName }}
+                    </a> v{{ $page.props.appVersion }} -
                     Developed by
                     <a href="https://www.lucapatera.it"
                        target="_blank"
