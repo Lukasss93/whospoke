@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import {LoginWidget} from 'vue-tg';
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import {useDark} from '@vueuse/core'
 import {computed, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -10,6 +9,9 @@ import CancelIcon from "@/Components/CancelIcon.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import PlusIcon from "@/Components/PlusIcon.vue";
 import {Room} from "@/types";
+import Header from "@/Components/Header.vue";
+import Footer from "@/Components/Footer.vue";
+import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 
 const isDark = useDark();
 const page = usePage();
@@ -58,14 +60,12 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
     <Head title="Home Page"/>
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
         <div
-            class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
-        >
+            class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
+
+            <BackgroundPattern/>
+
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <header class="flex flex-col items-center gap-2 py-8 text-center">
-                    <ApplicationLogo :color="logoColor"/>
-                    <h4 class="text-black dark:text-white uppercase font-bold">Who Spoke?</h4>
-                    <h1 class="text-3xl text-black dark:text-white uppercase font-bold">Chi ha parlato?</h1>
-                </header>
+                <Header/>
 
                 <main>
 
@@ -203,19 +203,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                     </div>
                 </main>
 
-                <footer class="py-10 text-center text-sm text-black dark:text-white/70">
-                    <a href="https://github.com/Lukasss93/whospoke"
-                       target="_blank"
-                       class="text-blue-500 hover:underline">
-                        {{ $page.props.appName }}
-                    </a> v{{ $page.props.appVersion }} -
-                    Developed by
-                    <a href="https://www.lucapatera.it"
-                       target="_blank"
-                       class="text-blue-500 hover:underline">
-                        Luca Patera
-                    </a>
-                </footer>
+                <Footer/>
             </div>
         </div>
     </div>
