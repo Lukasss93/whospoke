@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import {Head, usePage} from '@inertiajs/vue3';
 import {useClipboard, useDark} from '@vueuse/core'
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {Room} from "@/types";
 import Checkbox from "@/Components/Checkbox.vue";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
+import {toast} from "vue3-toastify";
 
 const props = defineProps<{
     room: Room;
@@ -20,6 +21,12 @@ const logoColor = computed(() => isDark.value ? 'white' : 'black');
 const isLogged = computed(() => page.props.auth.user !== null);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
+
+watch(copied, () => {
+    if (copied.value) {
+        toast.success('Link copiato negli appunti!');
+    }
+});
 
 </script>
 
