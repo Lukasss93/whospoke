@@ -63,7 +63,9 @@ class RoomController extends Controller
 
     public function showRoom(Room $room)
     {
-        abort(404, "Room {$room->code} not found");
+        return Inertia::render('Room', [
+            'room' => $room,
+        ]);
     }
 
     public function deleteRoom(Room $room)
