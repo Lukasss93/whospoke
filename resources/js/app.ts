@@ -7,6 +7,12 @@ import {createInertiaApp} from '@inertiajs/vue3';
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {ZiggyVue} from '../../vendor/tightenco/ziggy';
 import Vue3Toastify from 'vue3-toastify';
+import VueTippy from 'vue-tippy';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/translucent.css';
+import 'tippy.js/themes/material.css';
+import 'tippy.js/themes/light-border.css';
+import 'tippy.js/themes/light.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -21,6 +27,7 @@ createInertiaApp({
                 autoClose: 3000,
                 theme: 'auto',
             })
+            .use(VueTippy)
             .mount(el);
     },
     progress: {
