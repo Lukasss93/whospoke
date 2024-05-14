@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
-    size: number;
-    background: string;
-    color: string;
+    size?: number;
+    background?: string;
+    color?: string;
 }>(), {
     size: 100,
     background: 'transparent',
