@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {Head, usePage} from '@inertiajs/vue3';
-import {useClipboard, useDark} from '@vueuse/core'
-import {computed, ref, watch} from "vue";
-import {Room} from "@/types";
+import {Head} from '@inertiajs/vue3';
+import {useClipboard} from '@vueuse/core'
+import {onMounted, ref, watch} from "vue";
+import {Member, Room} from "@/types";
 import Checkbox from "@/Components/Checkbox.vue";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
@@ -10,6 +10,7 @@ import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 import {toast} from "vue3-toastify";
 import {Tippy} from 'vue-tippy';
 import axios from "axios";
+import DangerButton from "@/Components/DangerButton.vue";
 
 const props = defineProps<{
     room: Room;
@@ -17,10 +18,6 @@ const props = defineProps<{
     roomUrl: string;
 }>();
 
-const isDark = useDark();
-const page = usePage();
-const logoColor = computed(() => isDark.value ? 'white' : 'black');
-const isLogged = computed(() => page.props.auth.user !== null);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
 
@@ -49,6 +46,24 @@ async function updateMemberStatus(memberIndex: number, status: boolean) {
         toast.error('Errore durante l\'aggiornamento dello stato del membro');
     }
 }
+
+async function resetMembersStatus() {
+    try {
+        await axios.delete(route('room.members.reset', {room: props.room.code}));
+        props.room.members.forEach(member => member.status = false);
+        toast.success('Stato dei membri resettato con successo');
+    } catch (e) {
+        toast.error('Errore durante il reset dello stato dei membri');
+    }
+}
+
+onMounted(() => {
+    window.Echo
+        .channel(`room.${props.room.id}`)
+        .listen('MemberStatusChangedEvent', (data: { members: Member[] }) => {
+            props.room.members = data.members;
+        });
+})
 
 </script>
 
@@ -87,7 +102,7 @@ async function updateMemberStatus(memberIndex: number, status: boolean) {
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 md:mx-32 lg:mx-52">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 md:mx-32 lg:mx-52 mb-4">
                         <div class="flex items-center gap-2 w-full bg-gray-300 dark:bg-gray-800 p-1 rounded"
                              v-for="(member, i) in room.members" :key="i">
                             <div class="flex-1 text-2xl text-black dark:text-white">
@@ -101,6 +116,12 @@ async function updateMemberStatus(memberIndex: number, status: boolean) {
                             </div>
 
                         </div>
+                    </div>
+
+                    <div class="flex flex-col items-center gap-1 text-center" v-if="isMyRoom">
+                        <DangerButton @click="resetMembersStatus">
+                            Resetta lo stato di tutti i membri
+                        </DangerButton>
                     </div>
                 </main>
 

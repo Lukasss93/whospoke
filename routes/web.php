@@ -16,4 +16,5 @@ Route::middleware('auth')->group(function () {
     Route::post('room', [RoomController::class, 'storeRoom'])->name('room.store');
     Route::delete('@{room:code}', [RoomController::class, 'deleteRoom'])->name('room.delete');
     Route::post('@{room:code}/member', [RoomController::class, 'setMemberStatus'])->name('room.member.update');
+    Route::delete('@{room:code}/members', [RoomController::class, 'resetMembersStatus'])->name('room.members.reset');
 });

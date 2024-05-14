@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MemberStatusChangedEvent;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\UpdateMemberStatusRequest;
 use App\Models\Room;
@@ -91,5 +92,21 @@ class RoomController extends Controller
         $members[$memberIndex]['status'] = $status;
         $room->members = $members;
         $room->save();
+
+        MemberStatusChangedEvent::dispatch($room, $memberIndex, $status);
+    }
+
+    public function resetMembersStatus(Room $room)
+    {
+        $this->authorize('updateMemberStatus', $room);
+
+        $members = $room->members;
+        foreach ($members as $key => $member) {
+            $members[$key]['status'] = false;
+        }
+        $room->members = $members;
+        $room->save();
+
+        MemberStatusChangedEvent::dispatch($room);
     }
 }
