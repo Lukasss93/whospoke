@@ -18,6 +18,7 @@ const props = defineProps<{
     roomUrl: string;
 }>();
 
+const onlineUsers = ref(0);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
 
@@ -63,7 +64,19 @@ onMounted(() => {
         .listen('MemberStatusChangedEvent', (data: { members: Member[] }) => {
             props.room.members = data.members;
         });
-})
+
+    const onlineChannel = window.Echo.join(`room.${props.room.id}.online`);
+
+    if (props.isMyRoom) {
+        onlineChannel.here((users: string[]) => {
+            onlineUsers.value = users.length-1;
+        }).joining(() => {
+            onlineUsers.value++;
+        }).leaving(() => {
+            onlineUsers.value--;
+        });
+    }
+});
 
 </script>
 
@@ -94,7 +107,8 @@ onMounted(() => {
                         </p>
                         <p class="text-sm">
                             I dati vengono aggiornati in
-                            <span class="font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse">tempo reale</span> dal proprietario
+                            <span class="font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse">tempo reale</span>
+                            dal proprietario
                             della sessione.
                         </p>
                         <p class="text-sm text-green-600" v-if="isMyRoom">
@@ -120,8 +134,12 @@ onMounted(() => {
 
                     <div class="flex flex-col items-center gap-1 text-center" v-if="isMyRoom">
                         <DangerButton @click="resetMembersStatus">
-                            Resetta lo stato di tutti i membri
+                            Resetta tutti gli stati
                         </DangerButton>
+
+                        <p v-if="isMyRoom">
+                            {{ onlineUsers }} utenti online
+                        </p>
                     </div>
                 </main>
 
