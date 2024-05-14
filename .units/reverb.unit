@@ -1,0 +1,19 @@
+#1 nano /etc/systemd/system/whospoke.reverb.service
+
+[Unit]
+Description=Who Spoke Reverb Worker
+StartLimitBurst=0
+
+[Service]
+Restart=always
+WorkingDirectory=/yourfolder
+ExecStart=/bin/sh -c '/usr/bin/php8.3 artisan reverb:start'
+User=whospoke
+Group=whospoke
+
+[Install]
+WantedBy=default.target
+
+#2 systemctl enable whospoke.reverb.service
+#3 systemctl daemon-reload
+#4 systemctl start whospoke.reverb.service
