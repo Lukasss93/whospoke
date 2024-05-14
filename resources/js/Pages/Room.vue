@@ -94,7 +94,7 @@ onMounted(() => {
                         </p>
                         <p class="text-sm">
                             I dati vengono aggiornati in
-                            <span class="font-bold text-green-500 animate-pulse">tempo reale</span> dal proprietario
+                            <span class="font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse">tempo reale</span> dal proprietario
                             della sessione.
                         </p>
                         <p class="text-sm text-green-600" v-if="isMyRoom">
