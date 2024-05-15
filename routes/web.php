@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\LocalController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::post('@{room:code}/member', [RoomController::class, 'setMemberStatus'])->name('room.member.update');
     Route::delete('@{room:code}/members', [RoomController::class, 'resetMembersStatus'])->name('room.members.reset');
 });
+
+if (app()->isLocal()) {
+    Route::get('local/login', [LocalController::class, 'login'])->name('local.login');
+}

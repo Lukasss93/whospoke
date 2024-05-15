@@ -47,6 +47,7 @@ const storeRoom = () => {
 defineProps<{
     rooms: Room[];
     canCreateRooms: boolean;
+    isLocal: boolean;
 }>();
 
 function getFirstArrayError(errors: Record<string, string>, key: string): string | null {
@@ -72,12 +73,17 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                     <div class="flex flex-col items-center gap-2 text-center">
 
                         <LoginWidget
-                            v-if="!isLogged"
+                            v-if="!isLogged && !isLocal"
                             bot-username="WhoSpokeBot"
                             :redirect-url="route('access')"
                             corner-radius="8"
                             :user-photo="false"
                         />
+
+                        <Link :href="route('local.login')" v-if="!isLogged && isLocal"
+                              class="text-blue-500 hover:underline">
+                            ⚠️ Local Login ⚠️
+                        </Link>
 
                         <p class="text-yellow-600 dark:text-yellow-500" v-if="!isLogged">
                             Per creare una sessione, devi prima eseguire il login.
