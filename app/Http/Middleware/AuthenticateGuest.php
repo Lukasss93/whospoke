@@ -13,7 +13,11 @@ class AuthenticateGuest
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::check()) {
-            $user = User::factory()->make();
+            $user = User::make([
+                'id' => hrtime(true),
+                'telegram_id' => 123456,
+                'first_name' => 'Guest',
+            ]);
 
             Auth::login($user);
 
