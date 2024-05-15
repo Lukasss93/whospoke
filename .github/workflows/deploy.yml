@@ -1,0 +1,35 @@
+name: Deploy
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASS }}
+          debug: true
+          script: |
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            cd ${{ secrets.PROJECT_PATH}}
+            php8.3 artisan down
+            git reset --hard
+            git fetch origin
+            git pull "https://Lukasss93:${{ secrets.GIT_TOKEN }}@github.com/Lukasss93/whospoke.git" master
+            wget https://getcomposer.org/download/latest-2.x/composer.phar -O composer.phar
+            php8.3 composer.phar install --no-dev --optimize-autoloader --no-ansi --no-interaction --no-progress
+            php8.3 artisan migrate --force --step
+            php8.3 artisan optimize:clear
+            php8.3 artisan optimize
+            npm ci
+            npm run build
+            php8.3 artisan reverb:restart
+            php8.3 artisan up
+            echo 'DONE!'
