@@ -11,5 +11,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::routes(['middleware' => ['web', AuthenticateGuest::class]]);
 
 Broadcast::channel('room.{id}.online', function (User $user, $id) {
-    return $user->id;
+    return $user->first_name;
 });
