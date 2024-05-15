@@ -94,14 +94,14 @@ onMounted(() => {
                 <main>
                     <div class="flex flex-col items-center gap-1 text-center mb-4">
                         <p class="text-xl">
-                            Benvenuto! Questa è la sessione
+                            Benvenuto nella sessione
                             <tippy content="Clicca per copiare l'url">
                                 <span class="font-bold text-blue-500 cursor-pointer underline decoration-dotted"
                                       @click="copy(source)">
                                     {{ room.code }}
                                 </span>
                             </tippy>
-                            .
+                            !
                             <br/>
                             Qui puoi vedere lo stato dei membri che hanno parlato.<br/>
                         </p>
