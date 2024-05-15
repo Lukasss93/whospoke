@@ -1,22 +1,16 @@
 <script setup lang="ts">
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import {LoginWidget} from 'vue-tg';
-import {useDark} from '@vueuse/core'
 import {computed, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import Modal from "@/Components/Modal.vue";
 import CancelIcon from "@/Components/CancelIcon.vue";
-import DangerButton from "@/Components/DangerButton.vue";
-import PlusIcon from "@/Components/PlusIcon.vue";
 import {Room} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
+import CreateRoom from "@/Modals/CreateRoom.vue";
 
-const isDark = useDark();
 const page = usePage();
-
-const logoColor = computed(() => isDark.value ? 'white' : 'black');
 const isLogged = computed(() => page.props.auth.user !== null);
 
 const isCreatingRoom = ref<boolean>(false);
@@ -28,20 +22,11 @@ const roomForm = useForm<{
     members: [],
 });
 
-const removeMember = (index: number) => roomForm.members.splice(index, 1);
-const newMember = ref<string>('');
-const addNewMember = () => {
-    if (newMember.value.trim() === '') {
-        return;
-    }
-
-    roomForm.members.push(newMember.value);
-    newMember.value = '';
-};
 const storeRoom = () => {
     roomForm.clearErrors();
-    roomForm.post(route('room.store'));
-    isCreatingRoom.value = false;
+    roomForm.post(route('room.store'), {
+        onSuccess: () => isCreatingRoom.value = false,
+    });
 };
 
 defineProps<{
@@ -49,11 +34,6 @@ defineProps<{
     canCreateRooms: boolean;
     isLocal: boolean;
 }>();
-
-function getFirstArrayError(errors: Record<string, string>, key: string): string | null {
-    const errorKey = Object.keys(errors).find(i => i.startsWith(key + '.'));
-    return errorKey ? errors[errorKey] : null;
-}
 
 </script>
 
@@ -101,78 +81,12 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                             Cancella una sessione attiva per crearne una nuova.
                         </div>
 
-                        <Modal :show="isCreatingRoom" @close="isCreatingRoom=false">
-                            <div class="p-6">
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                    Crea una sessione
-                                </h2>
-
-                                <p class="mt-1 text-gray-600 dark:text-gray-400">
-                                    Inserisci il codice della sessione che vuoi creare
-                                </p>
-                                <input type="text"
-                                       v-model="roomForm.code"
-                                       class="mt-1 w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
-                                       placeholder="Codice sessione"/>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-500 italic">
-                                    Verrà usato per generare un link diretto alla sessione
-                                </p>
-                                <p class="text-sm text-red-500" v-if="roomForm.errors.code">
-                                    {{ roomForm.errors.code }}
-                                </p>
-
-                                <p class="my-2 text-gray-600 dark:text-gray-400">
-                                    Membri della sessione ({{ roomForm.members.length }}/20)
-                                </p>
-
-                                <div class="flex gap-2 mb-2" v-for="(name,index) in roomForm.members" :key="index">
-                                    <div class="flex-1">
-                                        <input type="text"
-                                               v-model="roomForm.members[index]"
-                                               class="w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
-                                               placeholder="Nome membro"/>
-                                    </div>
-                                    <div>
-                                        <DangerButton @click="()=>removeMember(index)">
-                                            <CancelIcon :size="24" color="white"/>
-                                        </DangerButton>
-                                    </div>
-                                </div>
-
-                                <div class="flex gap-2 mb-2">
-                                    <div class="flex-1">
-                                        <input type="text"
-                                               v-model="newMember"
-                                               @keyup.enter="addNewMember"
-                                               class="w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
-                                               placeholder="Nome membro"/>
-                                    </div>
-                                    <div>
-                                        <PrimaryButton @click="addNewMember">
-                                            <PlusIcon :size="24" :color="isDark ? 'black' : 'white'"/>
-                                        </PrimaryButton>
-                                    </div>
-                                </div>
-
-                                <p class="text-sm text-red-500" v-if="roomForm.errors.members">
-                                    {{ roomForm.errors.members }}
-                                </p>
-
-                                <p class="text-sm text-red-500" v-if="getFirstArrayError(roomForm.errors, 'members')">
-                                    {{ getFirstArrayError(roomForm.errors, 'members') }}
-                                </p>
-
-                                <div class="mt-4 flex justify-end gap-4">
-                                    <button type="button" class="text-red-500 hover:underline"
-                                            @click="isCreatingRoom=false">
-                                        Annulla
-                                    </button>
-                                    <PrimaryButton @click="storeRoom">
-                                        Crea sessione
-                                    </PrimaryButton>
-                                </div>
-                            </div>
-                        </Modal>
+                        <CreateRoom :show="isCreatingRoom"
+                                    @close="isCreatingRoom=false"
+                                    @save="storeRoom"
+                                    v-model:code="roomForm.code"
+                                    v-model:members="roomForm.members"
+                                    v-model:errors="roomForm.errors"/>
 
                         <p class="text-xl mt-2">Per unirti in una sessione, apri un link diretto alla sessione.</p>
 
