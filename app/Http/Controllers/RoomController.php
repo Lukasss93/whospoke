@@ -19,6 +19,7 @@ class RoomController extends Controller
         return Inertia::render('Welcome', [
             'rooms' => auth()->user()?->rooms ?? [],
             'canCreateRooms' => auth()->user()?->can('create', Room::class),
+            'canCreateRooms' => auth()->user()?->can('create', Room::class) ?? false,
         ]);
     }
 
