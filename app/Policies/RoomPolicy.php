@@ -12,7 +12,7 @@ class RoomPolicy
 
     public function create(User $user): bool
     {
-        return $user->rooms()->count() <= 1;
+        return $user->rooms()->count() < 1;
     }
 
     public function delete(User $user, Room $room): bool
