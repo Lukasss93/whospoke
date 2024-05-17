@@ -9,6 +9,7 @@ import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 import CreateRoom from "@/Modals/CreateRoom.vue";
+import {trans} from "laravel-translator";
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -66,19 +67,19 @@ defineProps<{
                         </Link>
 
                         <p class="text-yellow-600 dark:text-yellow-500" v-if="!isLogged">
-                            Per creare una sessione, devi prima eseguire il login.
+                            {{ trans('app.create.guest') }}
                         </p>
 
                         <p class="text-xl" v-if="isLogged">
-                            Benvenuto, {{ page.props.auth.user?.first_name }}
+                            {{ trans('app.welcome', {name: page.props.auth.user?.first_name}) }}
                         </p>
                         <PrimaryButton v-if="isLogged && canCreateRooms" @click="isCreatingRoom=true">
-                            Crea una sessione
+                            {{ trans('app.create.label') }}
                         </PrimaryButton>
 
                         <div v-if="isLogged && !canCreateRooms" class="text-sm text-red-500 text-center">
-                            Non puoi creare nuove sessioni, hai raggiunto il limite massimo.<br/>
-                            Cancella una sessione attiva per crearne una nuova.
+                            <p>{{ trans('app.create.limit') }}</p>
+                            <p>{{ trans('app.create.recreate') }}</p>
                         </div>
 
                         <CreateRoom :show="isCreatingRoom"
@@ -88,11 +89,15 @@ defineProps<{
                                     v-model:members="roomForm.members"
                                     v-model:errors="roomForm.errors"/>
 
-                        <p class="text-xl mt-2">Per unirti in una sessione, apri un link diretto alla sessione.</p>
+                        <p class="text-xl mt-2">
+                            {{ trans('app.join.info') }}
+                        </p>
 
                         <div v-if="isLogged && rooms.length>0" class="flex flex-col items-center gap-2">
                             <div class="border-b-[1px] w-64 my-2 border-gray-500"></div>
-                            <p class="text-sm uppercase font-bold">Le tue sessioni</p>
+                            <p class="text-sm uppercase font-bold">
+                                {{ trans('app.your_rooms')}}
+                            </p>
 
                             <div v-for="(room, i) in rooms" :key="room.id"
                                  class="flex items-center gap-2 p-1">
@@ -118,7 +123,7 @@ defineProps<{
                               as="button"
                               type="button"
                               class="text-red-500 hover:underline">
-                            Logout
+                            {{ trans('app.logout') }}
                         </Link>
 
                     </div>

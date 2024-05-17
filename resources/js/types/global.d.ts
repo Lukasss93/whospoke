@@ -23,13 +23,3 @@ declare module 'vue' {
 declare module '@inertiajs/core' {
     interface PageProps extends InertiaPageProps, AppPageProps {}
 }
-
-declare module '@vue/runtime-core' {
-    interface ComponentCustomProperties {
-        trans: (key: string, replace?: object, locale?: string, config?: Config) => string;
-        transChoice: (key: string, number: number, replace?: Object, locale?: string, config?: Config) => string;
-        __: (key: string, replace?: object, locale?: string, config?: Config) => string;
-        t: (key: string, replace?: object, locale?: string, config?: Config) => string;
-        trans_choice: (key: string, number: number, replace?: Object, locale?: string, config?: Config) => string;
-    }
-}

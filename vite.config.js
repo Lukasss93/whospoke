@@ -19,4 +19,9 @@ export default defineConfig({
         }),
         laravelTranslator(),
     ],
+    resolve: {
+        alias: {
+            'vue': 'vue/dist/vue.esm-bundler',
+        },
+    }
 });

@@ -11,6 +11,8 @@ import {toast} from "vue3-toastify";
 import {Tippy} from 'vue-tippy';
 import axios from "axios";
 import DangerButton from "@/Components/DangerButton.vue";
+import Interpolator from "@/Components/Interpolator.vue";
+import {trans, trans_choice} from "laravel-translator";
 
 const props = defineProps<{
     room: Room;
@@ -24,7 +26,7 @@ const {text, copy, copied, isSupported} = useClipboard({source});
 
 watch(copied, () => {
     if (copied.value) {
-        toast.success('Link copiato negli appunti!');
+        toast.success(trans('app.room.link.copied'));
     }
 });
 
@@ -44,17 +46,24 @@ async function updateMemberStatus(memberIndex: number, status: boolean) {
     } catch (e) {
         // revert the status if the request fails
         props.room.members[memberIndex].status = oldStatus;
-        toast.error('Errore durante l\'aggiornamento dello stato del membro');
+        toast.error(trans('app.error'));
     }
 }
 
 async function resetMembersStatus() {
+    // store the old status to revert if the request fails
+    const oldStatus = props.room.members;
+
+    // update the status in the frontend
+    props.room.members.forEach(member => member.status = false);
+
     try {
+        // send the request to the server
         await axios.delete(route('room.members.reset', {room: props.room.code}));
-        props.room.members.forEach(member => member.status = false);
-        toast.success('Stato dei membri resettato con successo');
     } catch (e) {
-        toast.error('Errore durante il reset dello stato dei membri');
+        // revert the status if the request fails
+        props.room.members = oldStatus;
+        toast.error(trans('app.error'));
     }
 }
 
@@ -69,7 +78,7 @@ onMounted(() => {
 
     if (props.isMyRoom) {
         onlineChannel.here((users: string[]) => {
-            onlineUsers.value = users.length-1;
+            onlineUsers.value = users.length - 1;
         }).joining(() => {
             onlineUsers.value++;
         }).leaving(() => {
@@ -94,25 +103,26 @@ onMounted(() => {
                 <main>
                     <div class="flex flex-col items-center gap-1 text-center mb-4">
                         <p class="text-xl">
-                            Benvenuto nella sessione
-                            <tippy content="Clicca per copiare l'url">
+                            {{ trans('app.room.welcome') }}
+                            <tippy :content="trans('app.room.link.copy')">
                                 <span class="font-bold text-blue-500 cursor-pointer underline decoration-dotted"
                                       @click="copy(source)">
                                     {{ room.code }}
                                 </span>
                             </tippy>
-                            !
-                            <br/>
-                            Qui puoi vedere lo stato dei membri che hanno parlato.<br/>
+                        </p>
+                        <p class="text-xl">
+                            {{ trans('app.room.info') }}
                         </p>
                         <p class="text-sm">
-                            I dati vengono aggiornati in
-                            <span class="font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse">tempo reale</span>
-                            dal proprietario
-                            della sessione.
+                            <Interpolator :message="trans('app.room.live')">
+                                <template v-slot:live>
+                                    <span class="live-badge">{{ trans('app.live') }}</span>
+                                </template>
+                            </Interpolator>
                         </p>
                         <p class="text-sm text-green-600" v-if="isMyRoom">
-                            Come proprietario della stanza, puoi modificare lo stato dei membri.
+                            {{ trans('app.room.owner') }}
                         </p>
                     </div>
 
@@ -134,11 +144,11 @@ onMounted(() => {
 
                     <div class="flex flex-col items-center gap-1 text-center" v-if="isMyRoom">
                         <DangerButton @click="resetMembersStatus">
-                            Resetta tutti gli stati
+                            {{ trans('app.room.reset') }}
                         </DangerButton>
 
                         <p v-if="isMyRoom">
-                            {{ onlineUsers }} utenti online
+                            {{ trans_choice('app.room.online', onlineUsers) }}
                         </p>
                     </div>
                 </main>
@@ -148,3 +158,9 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<style scoped>
+.live-badge {
+    @apply font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse;
+}
+</style>

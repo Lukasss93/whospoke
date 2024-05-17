@@ -6,6 +6,7 @@ import DangerButton from "@/Components/DangerButton.vue";
 import PlusIcon from "@/Components/PlusIcon.vue";
 import {ref} from "vue";
 import {useDark} from "@vueuse/core";
+import {trans} from "laravel-translator";
 
 const isDark = useDark();
 
@@ -43,25 +44,25 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
     <Modal :show="show" @close="$emit('close')">
         <div class="p-6">
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                Crea una sessione
+                {{ trans('app.create.label') }}
             </h2>
 
             <p class="mt-1 text-gray-600 dark:text-gray-400">
-                Inserisci il codice della sessione che vuoi creare
+                {{ trans('app.room.code.title') }}
             </p>
             <input type="text"
                    v-model="code"
                    class="mt-1 w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
-                   placeholder="Codice sessione"/>
+                   :placeholder="trans('app.room.code.placeholder')"/>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-500 italic">
-                Verrà usato per generare un link diretto alla sessione
+                {{ trans('app.room.code.info') }}
             </p>
             <p class="text-sm text-red-500" v-if="errors.code">
                 {{ errors.code }}
             </p>
 
             <p class="my-2 text-gray-600 dark:text-gray-400">
-                Membri della sessione ({{ members.length }}/20)
+                {{ trans('app.room.members.title') }} ({{ members.length }}/20)
             </p>
 
             <div class="flex gap-2 mb-2" v-for="(name,index) in members" :key="index">
@@ -69,7 +70,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                     <input type="text"
                            v-model="members[index]"
                            class="w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
-                           placeholder="Nome membro"/>
+                           :placeholder="trans('app.room.members.placeholder')"/>
                 </div>
                 <div>
                     <DangerButton @click="()=>removeMember(index)">
@@ -84,7 +85,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                            v-model="newMember"
                            @keyup.enter="addNewMember"
                            class="w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
-                           placeholder="Nome membro"/>
+                           :placeholder="trans('app.room.members.placeholder')"/>
                 </div>
                 <div>
                     <PrimaryButton @click="addNewMember">
@@ -104,10 +105,10 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
             <div class="mt-4 flex justify-end gap-4">
                 <button type="button" class="text-red-500 hover:underline"
                         @click="$emit('close')">
-                    Annulla
+                    {{ trans('actions.cancel') }}
                 </button>
                 <PrimaryButton @click="$emit('save')">
-                    Salva
+                    {{ trans('actions.save') }}
                 </PrimaryButton>
             </div>
         </div>

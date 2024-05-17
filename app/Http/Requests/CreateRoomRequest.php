@@ -18,9 +18,9 @@ class CreateRoomRequest extends FormRequest
     public function attributes()
     {
         return [
-            'code' => '"Codice sessione"',
-            'members' => 'I "Membri della sessione"',
-            'members.*' => 'Il "Membro della sessione"',
+            'code' => sprintf('"%s"', trans('app.room.code.placeholder')),
+            'members' => sprintf('"%s"', trans('app.room.members.title')),
+            'members.*' => sprintf('"%s"', trans('app.room.members.placeholder')),
         ];
     }
 }

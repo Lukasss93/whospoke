@@ -116,16 +116,4 @@ return [
     'user'            => 'Utente',
     'view'            => 'Visualizzazione',
     'yes'             => 'SÌ',
-
-    /*
-     'apples1' => 'There is one apple|There are many apples',
-    'apples2' => '{0} There are none|[1,19] There are some|[20,*] There are many',
-    'apples3' => '{0} There are none|{1} There is one|[2,*] There are :count',
-    'minutes_ago' => '{1} :value minute ago|[2,*] :value minutes ago',
-     */
-
-    'apples1' => 'C\'è una mela|Ci sono molte mele',
-    'apples2' => '{0} Non ci sono|[1,19] Ce ne sono alcuni|[20,*] Ce ne sono molti',
-    'apples3' => '{0} Non ce ne sono|{1} Ce n\'è uno|[2,*] Ce ne sono :count',
-    'minutes_ago' => '{1} :value minuto fa|[2,*] :value minuti fa',
 ];

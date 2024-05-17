@@ -1,7 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
 import 'vue3-toastify/dist/index.css';
-
 import {createApp, DefineComponent, h} from 'vue';
 import {createInertiaApp} from '@inertiajs/vue3';
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
@@ -13,8 +12,6 @@ import 'tippy.js/themes/translucent.css';
 import 'tippy.js/themes/material.css';
 import 'tippy.js/themes/light-border.css';
 import 'tippy.js/themes/light.css';
-import { useStorage } from '@vueuse/core';
-import {LaravelTranslatorVue} from "laravel-translator/vue";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -30,10 +27,6 @@ createInertiaApp({
                 theme: 'auto',
             })
             .use(VueTippy)
-            .use(LaravelTranslatorVue, {
-                locale: useStorage('lang', 'en'),
-                fallbackLocale: 'en',
-            })
             .mount(el);
     },
     progress: {

@@ -20,6 +20,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('@{room:code}/members', [RoomController::class, 'resetMembersStatus'])->name('room.members.reset');
 });
 
+Route::get('locale/{locale}', function(string $locale){
+    session()->put('locale', $locale);
+    return back();
+})->name('locale.set');
+
 if (app()->isLocal()) {
     Route::get('local/login', [LocalController::class, 'login'])->name('local.login');
 }

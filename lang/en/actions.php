@@ -116,10 +116,4 @@ return [
     'user'            => 'User',
     'view'            => 'View',
     'yes'             => 'Yes',
-
-
-    'apples1' => 'There is one apple|There are many apples',
-    'apples2' => '{0} There are none|[1,19] There are some|[20,*] There are many',
-    'apples3' => '{0} There are none|{1} There is one|[2,*] There are :count',
-    'minutes_ago' => '{1} :value minute ago|[2,*] :value minutes ago',
 ];

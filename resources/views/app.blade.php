@@ -12,6 +12,9 @@
 
         <!-- Scripts -->
         @routes
+        <script>
+            window.fallbackLocale = "{{ config('app.fallback_locale') }}"
+        </script>
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
         @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
