@@ -13,6 +13,8 @@ import 'tippy.js/themes/translucent.css';
 import 'tippy.js/themes/material.css';
 import 'tippy.js/themes/light-border.css';
 import 'tippy.js/themes/light.css';
+import { useStorage } from '@vueuse/core';
+import {LaravelTranslatorVue} from "laravel-translator/vue";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -28,6 +30,10 @@ createInertiaApp({
                 theme: 'auto',
             })
             .use(VueTippy)
+            .use(LaravelTranslatorVue, {
+                locale: useStorage('lang', 'en'),
+                fallbackLocale: 'en',
+            })
             .mount(el);
     },
     progress: {
