@@ -12,7 +12,7 @@ class RoomPolicy
 
     public function create(User $user): bool
     {
-        return $user->rooms()->count() < 1;
+        return $user->rooms()->count() < config('room.create.limit');
     }
 
     public function update(User $user, Room $room): bool

@@ -30,4 +30,12 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
+    app: {
+        name: string;
+        version: string;
+    };
+    developer: {
+        name: string;
+        github: string;
+    };
 };

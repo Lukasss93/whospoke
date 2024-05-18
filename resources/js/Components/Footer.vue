@@ -11,16 +11,16 @@ const langs = [
 </script>
 
 <template>
-    <footer class="py-10 text-center text-sm text-black dark:text-white/70">
+    <footer class="pt-5 text-center text-sm text-black dark:text-white/70">
         <p>
-            <a href="https://github.com/Lukasss93/whospoke" target="_blank" class="text-blue-500 hover:underline">
-                {{ $page.props.appName }}
+            <a :href="$page.props.developer.github" target="_blank" class="text-blue-500 hover:underline">
+                {{ $page.props.app.name }}
             </a>
-            v{{ $page.props.appVersion }}
+            v{{ $page.props.app.version }}
             -
             {{ trans('app.developed') }}
             <a href="https://www.lucapatera.it" target="_blank" class="text-blue-500 hover:underline">
-                Luca Patera
+                {{ $page.props.developer.name }}
             </a>
         </p>
         <p>
