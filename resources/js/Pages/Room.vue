@@ -195,10 +195,10 @@ onMounted(() => {
                             <DangerButton @click="reset">
                                 {{ trans('app.room.reset') }}
                             </DangerButton>
-                            <SuccessButton @click="startRoom" :disabled="room.started_at">
+                            <SuccessButton @click="startRoom" :disabled="room.started_at!==null">
                                 START
                             </SuccessButton>
-                            <DangerButton @click="stopRoom" :disabled="room.ended_at">
+                            <DangerButton @click="stopRoom" :disabled="room.ended_at!==null">
                                 STOP
                             </DangerButton>
                         </div>
