@@ -7,7 +7,7 @@
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .bg-pattern {
     background: url('../../img/pattern.svg');
     background-size: 30%;

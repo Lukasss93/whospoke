@@ -3,7 +3,6 @@ import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import {LoginWidget} from 'vue-tg';
 import {computed, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import CancelIcon from "@/Components/CancelIcon.vue";
 import {Room} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
@@ -110,7 +109,7 @@ defineProps<{
                                       method="delete"
                                       as="button"
                                       class="inline-flex items-center px-1 py-0.5 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                    <CancelIcon :size="15" color="white"/>
+                                    <font-awesome-icon icon="fa-solid fa-xmark"/>
                                 </Link>
 
                             </div>

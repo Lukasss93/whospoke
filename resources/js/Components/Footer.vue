@@ -35,7 +35,7 @@ const langs = [
     </footer>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .lang-button {
     &[data-active="false"] {
         @apply cursor-pointer text-blue-500 hover:underline;

@@ -211,7 +211,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .live-badge {
     @apply font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse;
 }

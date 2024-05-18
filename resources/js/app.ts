@@ -21,6 +21,8 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 library.add(faSolidIcons.faPlay);
 library.add(faSolidIcons.faStop);
 library.add(faSolidIcons.faRotateLeft);
+library.add(faSolidIcons.faXmark);
+library.add(faSolidIcons.faPlus);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import Modal from "@/Components/Modal.vue";
-import CancelIcon from "@/Components/CancelIcon.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
-import PlusIcon from "@/Components/PlusIcon.vue";
 import {ref} from "vue";
 import {useDark} from "@vueuse/core";
 import {trans} from "laravel-translator";
+import InputError from "@/Components/InputError.vue";
 
 const isDark = useDark();
 
@@ -33,9 +32,9 @@ const addNewMember = () => {
     newMember.value = '';
 };
 
-function getFirstArrayError(errors: Record<string, string>, key: string): string | null {
+function getFirstArrayError(errors: Record<string, string>, key: string): string {
     const errorKey = Object.keys(errors).find(i => i.startsWith(key + '.'));
-    return errorKey ? errors[errorKey] : null;
+    return errorKey ? errors[errorKey] : '';
 }
 
 </script>
@@ -57,9 +56,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-500 italic">
                 {{ trans('app.room.code.info') }}
             </p>
-            <p class="text-sm text-red-500" v-if="errors.code">
-                {{ errors.code }}
-            </p>
+            <InputError :message="errors.code"/>
 
             <p class="my-2 text-gray-600 dark:text-gray-400">
                 {{ trans('app.room.members.title') }} ({{ members.length }}/20)
@@ -74,7 +71,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                 </div>
                 <div>
                     <DangerButton @click="()=>removeMember(index)">
-                        <CancelIcon :size="24" color="white"/>
+                        <font-awesome-icon fixed-width icon="fa-solid fa-xmark" size="2x"/>
                     </DangerButton>
                 </div>
             </div>
@@ -89,18 +86,13 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                 </div>
                 <div>
                     <PrimaryButton @click="addNewMember">
-                        <PlusIcon :size="24" :color="isDark ? 'black' : 'white'"/>
+                        <font-awesome-icon fixed-width icon="fa-solid fa-plus" size="2x"/>
                     </PrimaryButton>
                 </div>
             </div>
 
-            <p class="text-sm text-red-500" v-if="errors.members">
-                {{ errors.members }}
-            </p>
-
-            <p class="text-sm text-red-500" v-if="getFirstArrayError(errors, 'members')">
-                {{ getFirstArrayError(errors, 'members') }}
-            </p>
+            <InputError :message="errors.members"/>
+            <InputError :message="getFirstArrayError(errors, 'members')"/>
 
             <div class="mt-4 flex justify-end gap-4">
                 <button type="button" class="text-red-500 hover:underline"
