@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MemberStatusChangedEvent;
+use App\Events\RoomChangedEvent;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\UpdateMemberStatusRequest;
 use App\Models\Room;
@@ -67,7 +67,7 @@ class RoomController extends Controller
     public function showRoom(Room $room)
     {
         return Inertia::render('Room', [
-            'room' => $room,
+            'baseRoom' => $room,
             'isMyRoom' => auth()->id() === $room->user_id,
             'roomUrl' => route('room.show', $room->code),
         ]);
@@ -84,7 +84,7 @@ class RoomController extends Controller
 
     public function setMemberStatus(UpdateMemberStatusRequest $request, Room $room)
     {
-        $this->authorize('updateMemberStatus', $room);
+        $this->authorize('update', $room);
 
         $memberIndex = $request->integer('member');
         $status = $request->boolean('status');
@@ -94,20 +94,42 @@ class RoomController extends Controller
         $room->members = $members;
         $room->save();
 
-        MemberStatusChangedEvent::dispatch($room, $memberIndex, $status);
+        RoomChangedEvent::dispatch($room);
     }
 
-    public function resetMembersStatus(Room $room)
+    public function reset(Room $room)
     {
-        $this->authorize('updateMemberStatus', $room);
+        $this->authorize('update', $room);
 
         $members = $room->members;
         foreach ($members as $key => $member) {
             $members[$key]['status'] = false;
         }
         $room->members = $members;
+        $room->started_at = null;
+        $room->ended_at = null;
         $room->save();
 
-        MemberStatusChangedEvent::dispatch($room);
+        RoomChangedEvent::dispatch($room);
+    }
+
+    public function start(Room $room)
+    {
+        $this->authorize('update', $room);
+
+        $room->started_at = now();
+        $room->save();
+
+        RoomChangedEvent::dispatch($room);
+    }
+
+    public function stop(Room $room)
+    {
+        $this->authorize('update', $room);
+
+        $room->ended_at = now();
+        $room->save();
+
+        RoomChangedEvent::dispatch($room);
     }
 }

@@ -15,12 +15,12 @@ class RoomPolicy
         return $user->rooms()->count() < 1;
     }
 
-    public function delete(User $user, Room $room): bool
+    public function update(User $user, Room $room): bool
     {
         return $user->id === $room->user_id;
     }
 
-    public function updateMemberStatus(User $user, Room $room): bool
+    public function delete(User $user, Room $room): bool
     {
         return $user->id === $room->user_id;
     }

@@ -7,16 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Room extends Model
 {
-    protected $fillable = [
-        'code',
-        'user_id',
-        'members',
-    ];
+    protected static $unguarded = true;
 
     protected function casts()
     {
         return [
             'members' => 'array',
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
         ];
     }
 

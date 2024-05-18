@@ -27,8 +27,8 @@ return [
         'welcome' => 'Benvenuto nella sessione:',
         'info' => 'Qui puoi vedere lo stato dei membri che hanno parlato.',
         'live' => 'I dati vengono aggiornati in :live dal proprietario della sessione.',
-        'owner' => 'Come proprietario della sessione, puoi modificare lo stato dei membri.',
-        'reset' => 'Resetta tutti gli stati',
+        'owner' => 'Come proprietario, puoi modificare lo stato della sessione.',
+        'reset' => 'Reset',
         'online' => ':count utente online|:count utenti online',
         'link' => [
             'copy' => 'Clicca per copiare l\'url',
@@ -38,4 +38,6 @@ return [
     'your_rooms' => 'Le tue sessioni',
     'live' => 'tempo reale',
     'error' => 'Errore',
+    'minutes' => 'minuti',
+    'seconds' => 'secondi',
 ];

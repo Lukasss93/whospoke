@@ -1,13 +1,13 @@
 export interface User {
     id: number;
     telegram_id: number;
-    username: string;
+    username: string | null;
     first_name: string;
-    last_name: string;
-    email: string;
-    email_verified_at: string;
-    created_at: string;
-    updated_at: string;
+    last_name: string | null;
+    email: string | null;
+    email_verified_at: string | null;
+    created_at: string | null;
+    updated_at: string | null;
 }
 
 export interface Member {
@@ -20,8 +20,10 @@ export interface Room {
     user_id: number;
     code: string;
     members: Member[];
-    created_at: string;
-    updated_at: string;
+    started_at: string | null;
+    ended_at: string | null;
+    created_at: string | null;
+    updated_at: string | null;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
