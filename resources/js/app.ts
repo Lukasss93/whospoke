@@ -12,14 +12,22 @@ import 'tippy.js/themes/translucent.css';
 import 'tippy.js/themes/material.css';
 import 'tippy.js/themes/light-border.css';
 import 'tippy.js/themes/light.css';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import * as faSolidIcons from '@fortawesome/free-solid-svg-icons';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+library.add(faSolidIcons.faPlay);
+library.add(faSolidIcons.faStop);
+library.add(faSolidIcons.faRotateLeft);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
+            .component('font-awesome-icon', FontAwesomeIcon)
             .use(plugin)
             .use(ZiggyVue)
             .use(Vue3Toastify, {

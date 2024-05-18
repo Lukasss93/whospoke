@@ -193,13 +193,13 @@ onMounted(() => {
 
                         <div class="flex gap-2">
                             <DangerButton @click="reset">
-                                {{ trans('app.room.reset') }}
+                                <font-awesome-icon icon="fa-solid fa-rotate-left"/>
                             </DangerButton>
                             <SuccessButton @click="startRoom" :disabled="room.started_at!==null">
-                                START
+                                <font-awesome-icon icon="fa-solid fa-play"/>
                             </SuccessButton>
                             <DangerButton @click="stopRoom" :disabled="room.ended_at!==null">
-                                STOP
+                                <font-awesome-icon icon="fa-solid fa-stop"/>
                             </DangerButton>
                         </div>
                     </div>
