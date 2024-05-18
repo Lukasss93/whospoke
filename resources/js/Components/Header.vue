@@ -13,14 +13,14 @@ const currentTime = useDateFormat(useNow(), 'dddd, DD MMMM YYYY HH:mm:ss', {loca
 </script>
 
 <template>
-    <header class="flex flex-col items-center gap-2 py-8 text-center">
+    <header class="flex flex-col items-center gap-1 pb-4 text-center">
         <Link :href="route('home')">
             <ApplicationLogo :color="logoColor" class="transition-all duration-300 ease-in-out hover:scale-110"/>
         </Link>
         <h1 class="text-3xl text-black dark:text-white uppercase font-bold">
             {{ trans('app.name') }}
         </h1>
-        <p class="font-mono text-gray-600">{{currentTime}}</p>
+        <p class="font-mono text-gray-600 dark:text-gray-500">{{currentTime}}</p>
     </header>
 </template>
 
