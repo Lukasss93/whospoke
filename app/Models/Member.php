@@ -13,8 +13,8 @@ class Member extends Model
     {
         return [
             'status' => 'boolean',
-            'started_at' => 'timestamp',
-            'ended_at' => 'timestamp',
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
         ];
     }
 
