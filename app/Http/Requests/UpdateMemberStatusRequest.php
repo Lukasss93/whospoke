@@ -9,7 +9,6 @@ class UpdateMemberStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member' => 'required|integer',
             'status' => 'required|boolean',
         ];
     }

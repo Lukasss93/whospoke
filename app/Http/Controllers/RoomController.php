@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\RoomChangedEvent;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\UpdateMemberStatusRequest;
+use App\Models\Member;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -52,14 +53,16 @@ class RoomController extends Controller
     {
         $this->authorize('create', Room::class);
 
+        $members = $request->collect('members');
+
         $room = Room::create([
             'user_id' => auth()->id(),
             'code' => $request->input('code'),
-            'members' => collect($request->input('members', []))->map(fn(string $x) => [
-                'name' => $x,
-                'status' => false,
-            ]),
         ]);
+
+        $room->members()->createMany($members->map(fn(string $x) => [
+            'name' => $x,
+        ]));
 
         return redirect()->route('room.show', $room->code);
     }
@@ -82,33 +85,35 @@ class RoomController extends Controller
         return redirect()->route('home');
     }
 
-    public function setMemberStatus(UpdateMemberStatusRequest $request, Room $room)
+    public function setMemberStatus(UpdateMemberStatusRequest $request, Member $member)
     {
-        $this->authorize('update', $room);
+        $this->authorize('update', $member->room);
 
-        $memberIndex = $request->integer('member');
         $status = $request->boolean('status');
 
-        $members = $room->members;
-        $members[$memberIndex]['status'] = $status;
-        $room->members = $members;
-        $room->save();
+        $member->status = $status;
+        $member->save();
 
-        RoomChangedEvent::dispatch($room);
+        $member->room->refresh();
+
+        RoomChangedEvent::dispatch($member->room);
     }
 
     public function reset(Room $room)
     {
         $this->authorize('update', $room);
 
-        $members = $room->members;
-        foreach ($members as $key => $member) {
-            $members[$key]['status'] = false;
-        }
-        $room->members = $members;
+        $room->members()->update([
+            'status' => false,
+            'started_at' => null,
+            'ended_at' => null,
+        ]);
+
         $room->started_at = null;
         $room->ended_at = null;
         $room->save();
+
+        $room->refresh();
 
         RoomChangedEvent::dispatch($room);
     }

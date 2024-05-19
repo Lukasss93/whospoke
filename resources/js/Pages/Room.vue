@@ -2,7 +2,7 @@
 import {Head} from '@inertiajs/vue3';
 import {useClipboard} from '@vueuse/core'
 import {onMounted, ref, watch} from "vue";
-import {Room} from "@/types";
+import {Member, Room} from "@/types";
 import Checkbox from "@/Components/Checkbox.vue";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
@@ -33,39 +33,44 @@ watch(copied, () => {
     }
 });
 
-async function updateMemberStatus(memberIndex: number, status: boolean) {
+async function updateMemberStatus(member: Member, status: boolean) {
     // store the old status to revert if the request fails
-    const oldStatus = room.value.members[memberIndex].status;
+    const oldStatus = member.status;
 
     // update the status in the frontend
-    room.value.members[memberIndex].status = status;
+    member.status = status;
 
     try {
         // send the request to the server
-        await axios.post(route('room.member.update', {room: room.value.code}), {
-            member: memberIndex,
+        await axios.post(route('member.status.update', {member: member.id}), {
             status: status,
         });
     } catch (e) {
         // revert the status if the request fails
-        room.value.members[memberIndex].status = oldStatus;
+        member.status = oldStatus;
         toast.error(trans('app.error'));
     }
 }
 
 async function reset() {
     // store the old status to revert if the request fails
-    const oldStatus = room.value.members;
+    const oldMembers = room.value.members;
+    const oldStartedAt = room.value.started_at;
+    const oldEndedAt = room.value.ended_at;
 
     // update the status in the frontend
     room.value.members.forEach(member => member.status = false);
+    room.value.started_at = null;
+    room.value.ended_at = null;
 
     try {
         // send the request to the server
         await axios.delete(route('room.reset', {room: room.value.code}));
     } catch (e) {
         // revert the status if the request fails
-        room.value.members = oldStatus;
+        room.value.members = oldMembers;
+        room.value.started_at = oldStartedAt;
+        room.value.ended_at = oldEndedAt;
         toast.error(trans('app.error'));
     }
 }
@@ -172,7 +177,7 @@ onMounted(() => {
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 md:mx-32 lg:mx-52 mb-2">
                         <div
                             class="flex items-center gap-2 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded"
-                             v-for="(member, i) in room.members" :key="i">
+                            v-for="member in room.members" :key="member.id">
                             <div class="flex-1 text-2xl text-black dark:text-white">
                                 {{ member.name }}
                             </div>
@@ -180,7 +185,7 @@ onMounted(() => {
                                 <Checkbox class="size-8"
                                           :checked="member.status"
                                           :disabled="!isMyRoom"
-                                          @change="(e: InputEvent) => updateMemberStatus(i, (e.target as HTMLInputElement).checked)"/>
+                                          @change="(e: InputEvent) => updateMemberStatus(member, (e.target as HTMLInputElement).checked)"/>
                             </div>
 
                         </div>

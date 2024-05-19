@@ -15,11 +15,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::post('room', [RoomController::class, 'storeRoom'])->name('room.store');
+
     Route::delete('@{room:code}', [RoomController::class, 'deleteRoom'])->name('room.delete');
-    Route::post('@{room:code}/member', [RoomController::class, 'setMemberStatus'])->name('room.member.update');
     Route::delete('@{room:code}/members', [RoomController::class, 'reset'])->name('room.reset');
     Route::post('@{room:code}/start', [RoomController::class, 'start'])->name('room.time.start');
     Route::post('@{room:code}/stop', [RoomController::class, 'stop'])->name('room.time.stop');
+
+    Route::post('member/{member}', [RoomController::class, 'setMemberStatus'])->name('member.status.update');
 });
 
 Route::get('locale/{locale}', function(string $locale){

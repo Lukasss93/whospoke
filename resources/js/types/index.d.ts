@@ -11,8 +11,14 @@ export interface User {
 }
 
 export interface Member {
+    id: number;
+    room_id: number;
     name: string;
     status: boolean;
+    started_at: string | null;
+    ended_at: string | null;
+    created_at: string | null;
+    updated_at: string | null;
 }
 
 export interface Room {
