@@ -3,7 +3,6 @@ import {Head} from '@inertiajs/vue3';
 import {useClipboard} from '@vueuse/core'
 import {onMounted, ref, watch} from "vue";
 import {Member, Room} from "@/types";
-import Checkbox from "@/Components/Checkbox.vue";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
@@ -15,6 +14,7 @@ import Interpolator from "@/Components/Interpolator.vue";
 import {trans, trans_choice} from "laravel-translator";
 import Stopwatch from "@/Components/Stopwatch.vue";
 import SuccessButton from "@/Components/SuccessButton.vue";
+import RoomMember from "@/Components/RoomMember.vue";
 
 const props = defineProps<{
     baseRoom: Room;
@@ -175,20 +175,8 @@ onMounted(() => {
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 md:mx-32 lg:mx-52 mb-2">
-                        <div
-                            class="flex items-center gap-2 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded"
-                            v-for="member in room.members" :key="member.id">
-                            <div class="flex-1 text-2xl text-black dark:text-white">
-                                {{ member.name }}
-                            </div>
-                            <div>
-                                <Checkbox class="size-8"
-                                          :checked="member.status"
-                                          :disabled="!isMyRoom"
-                                          @change="(e: InputEvent) => updateMemberStatus(member, (e.target as HTMLInputElement).checked)"/>
-                            </div>
-
-                        </div>
+                        <RoomMember v-model="room.members[i]" :canEdit="isMyRoom"
+                                    v-for="(member, i) in room.members" :key="member.id"/>
                     </div>
 
                     <div class="flex flex-col items-center gap-2 text-center" v-if="isMyRoom">
