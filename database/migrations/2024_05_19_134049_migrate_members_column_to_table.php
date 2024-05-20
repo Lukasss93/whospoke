@@ -38,20 +38,24 @@ return new class extends Migration {
     {
         // add column
         Schema::table('rooms', function (Blueprint $table) {
-            $table->json('members');
+            $table->json('members')->after('code');
         });
 
         // migrate members table to members column
-        DB::table('members')
+        DB::table('rooms')
             ->lazyById()
-            ->each(function (object $member) {
-                $members[] = [
-                    'name' => $member->name,
-                    'status' => $member->status,
-                ];
+            ->each(function (object $room) {
+                $members = DB::table('members')
+                    ->where('room_id', $room->id)
+                    ->get()
+                    ->map(fn(object $member) => [
+                        'name' => $member->name,
+                        'status' => $member->status,
+                    ])
+                    ->toArray();
 
                 DB::table('rooms')
-                    ->where('id', $member->room_id)
+                    ->where('id', $room->id)
                     ->update([
                         'members' => json_encode($members, flags: JSON_THROW_ON_ERROR),
                     ]);

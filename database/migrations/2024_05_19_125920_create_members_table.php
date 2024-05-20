@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->boolean('status')->default(false);
             $table->timestamp('started_at')->nullable();
             $table->timestamp('ended_at')->nullable();
+            $table->boolean('offline')->default(false);
             $table->timestamps();
         });
     }
