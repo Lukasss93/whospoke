@@ -40,4 +40,11 @@ return [
     'error' => 'Error',
     'minutes' => 'minutes',
     'seconds' => 'seconds',
+    'member' => [
+        'status' => [
+            'offline' => 'Offline',
+            'set' => 'Set offline',
+            'unset' => 'Set online',
+        ],
+    ],
 ];

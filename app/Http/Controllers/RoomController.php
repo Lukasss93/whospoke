@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\RoomChangedEvent;
 use App\Http\Requests\CreateRoomRequest;
+use App\Http\Requests\UpdateMemberOfflineRequest;
 use App\Http\Requests\UpdateMemberStatusRequest;
 use App\Models\Member;
 use App\Models\Room;
@@ -99,6 +100,18 @@ class RoomController extends Controller
         RoomChangedEvent::dispatch($member->room);
     }
 
+    public function setMemberOffline(UpdateMemberOfflineRequest $request, Member $member)
+    {
+        $this->authorize('update', $member->room);
+
+        $member->offline = $request->boolean('offline');
+        $member->save();
+
+        $member->room->refresh();
+
+        RoomChangedEvent::dispatch($member->room);
+    }
+
     public function reset(Room $room)
     {
         $this->authorize('update', $room);
@@ -107,6 +120,7 @@ class RoomController extends Controller
             'status' => false,
             'started_at' => null,
             'ended_at' => null,
+            'offline' => false,
         ]);
 
         $room->started_at = null;

@@ -17,6 +17,7 @@ export interface Member {
     status: boolean;
     started_at: string | null;
     ended_at: string | null;
+    offline: boolean;
     created_at: string | null;
     updated_at: string | null;
 }

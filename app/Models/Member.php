@@ -15,6 +15,7 @@ class Member extends Model
             'status' => 'boolean',
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
+            'offline' => 'boolean',
         ];
     }
 
