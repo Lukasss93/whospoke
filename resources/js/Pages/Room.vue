@@ -191,7 +191,8 @@ onMounted(() => {
                             <SuccessButton @click="startRoom" :disabled="room.started_at!==null">
                                 <font-awesome-icon icon="fa-solid fa-play"/>
                             </SuccessButton>
-                            <DangerButton @click="stopRoom" :disabled="room.ended_at!==null">
+                            <DangerButton @click="stopRoom"
+                                          :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
                                 <font-awesome-icon icon="fa-solid fa-stop"/>
                             </DangerButton>
                         </div>

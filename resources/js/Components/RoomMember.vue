@@ -5,12 +5,19 @@ import axios from "axios";
 import {toast} from "vue3-toastify";
 import {trans} from "laravel-translator";
 import {Tippy} from "vue-tippy";
+import {useTimeCounter} from "@/Support/Hooks";
+import DangerButton from "@/Components/DangerButton.vue";
+import SuccessButton from "@/Components/SuccessButton.vue";
 
 const props = defineProps<{
     canEdit: boolean;
 }>();
 
 const member = defineModel<Member>({required: true});
+const {minutes, seconds} = useTimeCounter(
+    () => member.value.started_at ? new Date(member.value.started_at) : null,
+    () => member.value.ended_at ? new Date(member.value.ended_at) : null
+);
 
 async function updateStatus(status: boolean) {
     // store the old status to revert if the request fails
@@ -49,6 +56,60 @@ async function updateOffline() {
         toast.error(trans('app.error'));
     }
 }
+
+async function resetTime() {
+    // store the old status to revert if the request fails
+    const oldStartedAt = member.value.started_at;
+    const oldEndedAt = member.value.ended_at;
+
+    // update the status in the frontend
+    member.value.started_at = null;
+    member.value.ended_at = null;
+
+    try {
+        // send the request to the server
+        await axios.post(route('member.time.reset', {member: member.value.id}));
+    } catch (e) {
+        // revert the status if the request fails
+        member.value.started_at = oldStartedAt;
+        member.value.ended_at = oldEndedAt;
+        toast.error(trans('app.error'));
+    }
+}
+
+async function startTime() {
+    // store the old status to revert if the request fails
+    const oldValue = member.value.started_at;
+
+    // update the status in the frontend
+    member.value.started_at = new Date().toISOString();
+
+    try {
+        // send the request to the server
+        await axios.post(route('member.time.start', {member: member.value.id}));
+    } catch (e) {
+        // revert the status if the request fails
+        member.value.started_at = oldValue;
+        toast.error(trans('app.error'));
+    }
+}
+
+async function stopTime() {
+    // store the old status to revert if the request fails
+    const oldValue = member.value.ended_at;
+
+    // update the status in the frontend
+    member.value.ended_at = new Date().toISOString();
+
+    try {
+        // send the request to the server
+        await axios.post(route('member.time.end', {member: member.value.id}));
+    } catch (e) {
+        // revert the status if the request fails
+        member.value.ended_at = oldValue;
+        toast.error(trans('app.error'));
+    }
+}
 </script>
 
 <template>
@@ -74,6 +135,25 @@ async function updateOffline() {
         <div class="flex-1 text-2xl text-black dark:text-white">
             {{ member.name }}
         </div>
+
+        <div class="flex gap-1" v-if="canEdit && !member.offline">
+            <DangerButton class="!px-1" @click="resetTime">
+                <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
+            </DangerButton>
+            <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
+                <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
+            </SuccessButton>
+            <DangerButton class="!px-1" @click="stopTime"
+                          :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
+                <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
+            </DangerButton>
+        </div>
+
+        <div class="mx-2 font-mono text-xl"
+             v-show="!member.offline && (!(minutes==='00' && seconds==='00') || canEdit)">
+            {{ minutes }}:{{ seconds }}
+        </div>
+
         <Checkbox class="size-8" :checked="member.status" :disabled="!canEdit" v-if="!member.offline"
                   @change="(e: InputEvent) => updateStatus((e.target as HTMLInputElement).checked)"/>
         <span v-if="member.offline" class="uppercase text-red-600 font-bold">
