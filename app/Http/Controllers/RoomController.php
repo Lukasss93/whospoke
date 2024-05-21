@@ -78,7 +78,10 @@ class RoomController extends Controller
     {
         $this->authorize('delete', $room);
 
-        $room->delete();
+        DB::transaction(function () use ($room) {
+            $room->members()->delete();
+            $room->delete();
+        });
 
         return redirect()->route('home');
     }
