@@ -15,9 +15,11 @@ const isLogged = computed(() => page.props.auth.user !== null);
 
 const isCreatingRoom = ref<boolean>(false);
 const roomForm = useForm<{
+    title: string;
     code: string;
     members: string[];
 }>({
+    title: '',
     code: '',
     members: [],
 });
@@ -84,6 +86,7 @@ defineProps<{
                         <CreateRoom :show="isCreatingRoom"
                                     @close="isCreatingRoom=false"
                                     @save="storeRoom"
+                                    v-model:title="roomForm.title"
                                     v-model:code="roomForm.code"
                                     v-model:members="roomForm.members"
                                     v-model:errors="roomForm.errors"/>

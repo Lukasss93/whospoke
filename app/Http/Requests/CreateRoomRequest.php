@@ -9,6 +9,7 @@ class CreateRoomRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'title' => 'nullable|string|max:255',
             'code' => 'required|string|alpha_dash:ascii|min:3|max:64|unique:rooms,code',
             'members' => 'array|min:2|max:20',
             'members.*' => 'min:1|max:32|string',

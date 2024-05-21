@@ -16,6 +16,7 @@ withDefaults(defineProps<{
     show: false,
 });
 
+const title = defineModel<string>('title', {default: ''});
 const code = defineModel<string>('code', {default: ''});
 const codeMask = reactive({
     mask: 'X',
@@ -27,7 +28,7 @@ const codeMask = reactive({
     },
 });
 const members = defineModel<string[]>('members', {default: []});
-const errors = defineModel<Partial<Record<"code" | "members", string>>>('errors', {default: {}});
+const errors = defineModel<Partial<Record<"title" | "code" | "members", string>>>('errors', {default: {}});
 
 defineEmits(['close', 'save']);
 
@@ -56,7 +57,19 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                 {{ trans('app.create.label') }}
             </h2>
 
-            <p class="mt-1 text-gray-600 dark:text-gray-400 required">
+            <p class="mt-2 text-gray-600 dark:text-gray-400">
+                {{ trans('app.room.title.title') }}
+            </p>
+            <input type="text"
+                   v-model="title"
+                   class="mt-1 w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
+                   :placeholder="trans('app.name')"/>
+            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-500 italic">
+                {{ trans('app.room.title.info') }}
+            </p>
+            <InputError :message="errors.title"/>
+
+            <p class="mt-2 text-gray-600 dark:text-gray-400 required">
                 {{ trans('app.room.code.title') }}
             </p>
             <input type="text"
@@ -64,7 +77,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                    v-model="code"
                    class="mt-1 w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
                    :placeholder="trans('app.room.code.placeholder')"/>
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-500 italic">
+            <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-500 italic">
                 {{ trans('app.room.code.info') }}
             </p>
             <InputError :message="errors.code"/>

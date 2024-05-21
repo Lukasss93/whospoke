@@ -15,8 +15,12 @@ return [
     'welcome' => 'Benvenuto, :name!',
     'logout' => 'Esci',
     'room' => [
+        'title' => [
+            'title' => 'Inserisci il titolo della sessione',
+            'info' => 'Opzionale. Se vuoto, verrà visualizzato il nome dell\'applicazione',
+        ],
         'code' => [
-            'title' => 'Inserisci il codice della sessione che vuoi creare',
+            'title' => 'Inserisci il codice della sessione',
             'placeholder' => 'Codice sessione',
             'info' => 'Verrà usato per generare un link diretto alla sessione',
         ],

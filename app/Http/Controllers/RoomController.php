@@ -7,6 +7,7 @@ use App\Http\Requests\CreateRoomRequest;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use SergiX44\Nutgram\Exception\InvalidDataException;
 use SergiX44\Nutgram\Nutgram;
@@ -55,6 +56,7 @@ class RoomController extends Controller
 
         $room = Room::create([
             'user_id' => auth()->id(),
+            'title' => $request->input('title'),
             'code' => $request->input('code'),
         ]);
 

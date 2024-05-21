@@ -25,6 +25,7 @@ export interface Member {
 export interface Room {
     id: number;
     user_id: number;
+    title: string | null;
     code: string;
     members: Member[];
     started_at: string | null;

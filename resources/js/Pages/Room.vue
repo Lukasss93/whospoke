@@ -139,7 +139,7 @@ onMounted(() => {
             <BackgroundPattern/>
 
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <Header/>
+                <Header :title="room.title"/>
 
                 <main>
                     <div class="flex flex-col items-center gap-1 text-center mb-2">

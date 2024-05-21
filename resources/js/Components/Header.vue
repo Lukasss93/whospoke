@@ -5,10 +5,16 @@ import {useDark, useDateFormat, useNow} from "@vueuse/core";
 import {Link} from '@inertiajs/vue3';
 import {trans} from "laravel-translator";
 
+withDefaults(defineProps<{
+    title?: string | null;
+}>(), {
+    title: trans('app.name'),
+});
+
 const isDark = useDark();
 const logoColor = computed(() => isDark.value ? 'white' : 'black');
 const locale = document.getElementsByTagName('html')[0].getAttribute('lang') || window.fallbackLocale;
-const currentTime = useDateFormat(useNow(), 'dddd, DD MMMM YYYY HH:mm:ss', {locales: locale})
+const currentTime = useDateFormat(useNow(), 'dddd, DD MMMM YYYY HH:mm:ss', {locales: locale});
 </script>
 
 <template>
@@ -17,7 +23,7 @@ const currentTime = useDateFormat(useNow(), 'dddd, DD MMMM YYYY HH:mm:ss', {loca
             <ApplicationLogo :color="logoColor" class="transition-all duration-300 ease-in-out hover:scale-110"/>
         </Link>
         <h1 class="text-3xl text-black dark:text-white uppercase font-bold">
-            {{ trans('app.name') }}
+            {{ title }}
         </h1>
         <p class="font-mono uppercase font-bold text-gray-600 dark:text-gray-400">{{ currentTime }}</p>
     </header>

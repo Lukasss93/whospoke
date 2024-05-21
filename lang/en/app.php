@@ -15,8 +15,12 @@ return [
     'welcome' => 'Welcome, :name!',
     'logout' => 'Logout',
     'room' => [
+        'title' => [
+            'title' => 'Enter the title of the session',
+            'info' => 'Optional, the name of the application will be displayed',
+        ],
         'code' => [
-            'title' => 'Enter the code of the session you want to create',
+            'title' => 'Enter the code of the session',
             'placeholder' => 'Session code',
             'info' => 'It will be used to generate a direct link to the session',
         ],
