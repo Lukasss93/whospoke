@@ -23,7 +23,7 @@ const currentTime = useDateFormat(useNow(), 'dddd, DD MMMM YYYY HH:mm:ss', {loca
             <ApplicationLogo :color="logoColor" class="transition-all duration-300 ease-in-out hover:scale-110"/>
         </Link>
         <h1 class="text-3xl text-black dark:text-white uppercase font-bold">
-            {{ title }}
+            {{ title || trans('app.name') }}
         </h1>
         <p class="font-mono uppercase font-bold text-gray-600 dark:text-gray-400">{{ currentTime }}</p>
     </header>
