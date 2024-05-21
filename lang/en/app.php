@@ -29,7 +29,7 @@ return [
         'live' => 'Data is updated in :live by the session owner.',
         'owner' => 'As the owner, you can modify the status of the session.',
         'reset' => 'Reset',
-        'online' => ':count user online|:count users online',
+        'online' => ':count user is watching this session|:count users are watching this session',
         'link' => [
             'copy' => 'Click to copy the url',
             'copied' => 'Link copied to clipboard!',

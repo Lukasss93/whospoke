@@ -29,7 +29,7 @@ return [
         'live' => 'I dati vengono aggiornati in :live dal proprietario della sessione.',
         'owner' => 'Come proprietario, puoi modificare lo stato della sessione.',
         'reset' => 'Reset',
-        'online' => ':count utente online|:count utenti online',
+        'online' => ':count utente sta guardando questa sessione|:count utenti stanno guardando questa sessione',
         'link' => [
             'copy' => 'Clicca per copiare l\'url',
             'copied' => 'Link copiato negli appunti!',

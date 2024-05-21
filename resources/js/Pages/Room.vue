@@ -116,17 +116,17 @@ onMounted(() => {
             room.value = data.room;
         });
 
-    const onlineChannel = window.Echo.join(`room.${room.value.id}.online`);
-
-    if (props.isMyRoom) {
-        onlineChannel.here((users: string[]) => {
-            onlineUsers.value = users.length - 1;
-        }).joining(() => {
+    window.Echo
+        .join(`room.${room.value.id}.online`)
+        .here((users: string[]) => {
+            onlineUsers.value = users.length;
+        })
+        .joining(() => {
             onlineUsers.value++;
-        }).leaving(() => {
+        })
+        .leaving(() => {
             onlineUsers.value--;
         });
-    }
 });
 </script>
 
@@ -179,12 +179,12 @@ onMounted(() => {
                                     v-for="(member, i) in room.members" :key="member.id"/>
                     </div>
 
-                    <div class="flex flex-col items-center gap-2 text-center" v-if="isMyRoom">
-                        <p v-if="isMyRoom" :class="{'text-red-500': onlineUsers===0, 'text-green-500': onlineUsers>0}">
+                    <div class="flex flex-col items-center gap-2 text-center">
+                        <p :class="{'text-red-500': onlineUsers===0, 'text-green-500': onlineUsers>0}">
                             {{ trans_choice('app.room.online', onlineUsers) }}
                         </p>
 
-                        <div class="flex gap-2">
+                        <div class="flex gap-2" v-if="isMyRoom">
                             <DangerButton @click="reset">
                                 <font-awesome-icon icon="fa-solid fa-rotate-left"/>
                             </DangerButton>
