@@ -2,10 +2,11 @@
 import Modal from "@/Components/Modal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {useDark} from "@vueuse/core";
 import {trans} from "laravel-translator";
 import InputError from "@/Components/InputError.vue";
+import {vMaska} from "maska";
 
 const isDark = useDark();
 
@@ -16,6 +17,15 @@ withDefaults(defineProps<{
 });
 
 const code = defineModel<string>('code', {default: ''});
+const codeMask = reactive({
+    mask: 'X',
+    tokens: {
+        'X': {
+            pattern: /[a-zA-Z0-9_-]/,
+            repeated: true,
+        },
+    },
+});
 const members = defineModel<string[]>('members', {default: []});
 const errors = defineModel<Partial<Record<"code" | "members", string>>>('errors', {default: {}});
 
@@ -50,6 +60,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                 {{ trans('app.room.code.title') }}
             </p>
             <input type="text"
+                   v-maska:[codeMask]
                    v-model="code"
                    class="mt-1 w-full border border-gray-600 rounded-md p-2 dark:bg-gray-900 dark:text-white"
                    :placeholder="trans('app.room.code.placeholder')"/>

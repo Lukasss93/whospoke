@@ -22,6 +22,7 @@
         "laravel-translator": "^1.1.1",
         "laravel-vite-plugin": "^1.0",
         "luxon": "^3.4.4",
+        "maska": "^2.1.11",
         "postcss": "^8.4.31",
         "pusher-js": "^8.4.0-rc2",
         "sass": "^1.77.2",
