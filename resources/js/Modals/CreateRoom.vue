@@ -46,7 +46,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                 {{ trans('app.create.label') }}
             </h2>
 
-            <p class="mt-1 text-gray-600 dark:text-gray-400">
+            <p class="mt-1 text-gray-600 dark:text-gray-400 required">
                 {{ trans('app.room.code.title') }}
             </p>
             <input type="text"
@@ -58,7 +58,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
             </p>
             <InputError :message="errors.code"/>
 
-            <p class="my-2 text-gray-600 dark:text-gray-400">
+            <p class="my-2 text-gray-600 dark:text-gray-400 required">
                 {{ trans('app.room.members.title') }} ({{ members.length }}/20)
             </p>
 
