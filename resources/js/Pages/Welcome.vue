@@ -18,10 +18,12 @@ const roomForm = useForm<{
     title: string;
     code: string;
     members: string[];
+    type: string;
 }>({
     title: '',
     code: '',
     members: [],
+    type: 'status',
 });
 
 const storeRoom = () => {
@@ -89,6 +91,7 @@ defineProps<{
                                     v-model:title="roomForm.title"
                                     v-model:code="roomForm.code"
                                     v-model:members="roomForm.members"
+                                    v-model:type="roomForm.type"
                                     v-model:errors="roomForm.errors"/>
 
                         <p class="text-xl mt-2">

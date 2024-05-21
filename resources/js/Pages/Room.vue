@@ -181,7 +181,7 @@ onUnmounted(() => {
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
-                        <RoomMember v-model="room.members[i]" :canEdit="isMyRoom"
+                        <RoomMember v-model="room.members[i]" :canEdit="isMyRoom" :type="room.type"
                                     v-for="(member, i) in room.members" :key="member.id"/>
                     </div>
 

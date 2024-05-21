@@ -8,9 +8,11 @@ import {Tippy} from "vue-tippy";
 import {useTimeCounter} from "@/Support/Hooks";
 import DangerButton from "@/Components/DangerButton.vue";
 import SuccessButton from "@/Components/SuccessButton.vue";
+import Counter from "@/Components/Counter.vue";
 
 const props = defineProps<{
     canEdit: boolean;
+    type: "status" | "counter";
 }>();
 
 const member = defineModel<Member>({required: true});
@@ -113,6 +115,58 @@ async function stopTime() {
         toast.error(trans('app.error'));
     }
 }
+
+async function resetCount() {
+    // store the old status to revert if the request fails
+    const oldCount = member.value.count;
+
+    // update the status in the frontend
+    member.value.count = 0;
+
+    try {
+        // send the request to the server
+        await axios.post(route('member.count.reset', {member: member.value.id}));
+    } catch (e) {
+        // revert the status if the request fails
+        member.value.count = oldCount;
+        toast.error(trans('app.error'));
+    }
+}
+
+async function incrementCount() {
+    // store the old status to revert if the request fails
+    const oldCount = member.value.count;
+
+    // update the status in the frontend
+    member.value.count++;
+
+    try {
+        // send the request to the server
+        await axios.post(route('member.count.increment', {member: member.value.id}));
+    } catch (e) {
+        // revert the status if the request fails
+        member.value.count = oldCount;
+        toast.error(trans('app.error'));
+    }
+}
+
+async function decrementCount() {
+    // store the old status to revert if the request fails
+    const oldCount = member.value.count;
+
+    // update the status in the frontend
+    member.value.count--;
+
+    try {
+        // send the request to the server
+        await axios.post(route('member.count.decrement', {member: member.value.id}));
+    } catch (e) {
+        // revert the status if the request fails
+        member.value.count = oldCount;
+        toast.error(trans('app.error'));
+    }
+}
+
 </script>
 
 <template>
@@ -157,8 +211,16 @@ async function stopTime() {
             {{ minutes }}:{{ seconds }}
         </div>
 
-        <Checkbox class="size-8" :checked="member.status" :disabled="!canEdit" v-if="!member.offline"
+        <Checkbox class="size-8" :checked="member.status" :disabled="!canEdit" v-if="!member.offline && type==='status'"
                   @change="(e: InputEvent) => updateStatus((e.target as HTMLInputElement).checked)"/>
+
+        <Counter v-if="!member.offline && type==='counter'"
+                 @reset="resetCount"
+                 @decrement="decrementCount"
+                 @increment="incrementCount"
+                 v-model="member.count"
+                 :canEdit="canEdit"/>
+
         <span v-if="member.offline" class="uppercase text-red-600 font-bold">
             {{ trans('app.member.status.offline') }}
         </span>

@@ -17,6 +17,7 @@ return [
     'room' => [
         'title' => [
             'title' => 'Inserisci il titolo della sessione',
+            'placeholder' => 'Titolo sessione',
             'info' => 'Opzionale. Se vuoto, verrà visualizzato il nome dell\'applicazione',
         ],
         'code' => [
@@ -27,6 +28,11 @@ return [
         'members' => [
             'title' => 'Membri della sessione',
             'placeholder' => 'Nome membro',
+        ],
+        'type' => [
+            'title' => 'Seleziona il tipo di sessione',
+            'status' => 'Stato',
+            'counter' => 'Contatore',
         ],
         'welcome' => 'Benvenuto nella sessione:',
         'info' => 'Qui puoi vedere lo stato dei membri che hanno parlato.',

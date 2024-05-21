@@ -23,11 +23,13 @@ Route::middleware('auth')->group(function () {
     Route::post('@{room:code}/stop', [RoomController::class, 'stop'])->name('room.time.stop');
 
     Route::post('member/{member}/status', [MemberController::class, 'setMemberStatus'])->name('member.status.update');
-    Route::post('member/{member}/offline',
-        [MemberController::class, 'setMemberOffline'])->name('member.offline.update');
+    Route::post('member/{member}/offline', [MemberController::class, 'setMemberOffline'])->name('member.offline.update');
     Route::post('member/{member}/time/reset', [MemberController::class, 'resetTime'])->name('member.time.reset');
     Route::post('member/{member}/time/start', [MemberController::class, 'startTime'])->name('member.time.start');
     Route::post('member/{member}/time/end', [MemberController::class, 'endTime'])->name('member.time.end');
+    Route::post('member/{member}/count/reset', [MemberController::class, 'resetCount'])->name('member.count.reset');
+    Route::post('member/{member}/count/increment', [MemberController::class, 'incrementCount'])->name('member.count.increment');
+    Route::post('member/{member}/count/decrement', [MemberController::class, 'decrementCount'])->name('member.count.decrement');
 });
 
 Route::get('locale/{locale}', function(string $locale){

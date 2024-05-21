@@ -25,6 +25,8 @@ library.add(faSolidIcons.faXmark);
 library.add(faSolidIcons.faPlus);
 library.add(faSolidIcons.faEye);
 library.add(faSolidIcons.faEyeSlash);
+library.add(faSolidIcons.faPlus);
+library.add(faSolidIcons.faMinus);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

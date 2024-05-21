@@ -3,12 +3,10 @@ import Modal from "@/Components/Modal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import {reactive, ref} from "vue";
-import {useDark} from "@vueuse/core";
 import {trans} from "laravel-translator";
 import InputError from "@/Components/InputError.vue";
 import {vMaska} from "maska";
-
-const isDark = useDark();
+import Radio from "@/Components/Radio.vue";
 
 withDefaults(defineProps<{
     show?: boolean;
@@ -28,7 +26,8 @@ const codeMask = reactive({
     },
 });
 const members = defineModel<string[]>('members', {default: []});
-const errors = defineModel<Partial<Record<"title" | "code" | "members", string>>>('errors', {default: {}});
+const type = defineModel<string>('type', {default: 'status'});
+const errors = defineModel<Partial<Record<"title" | "code" | "members" | "type", string>>>('errors', {default: {}});
 
 defineEmits(['close', 'save']);
 
@@ -57,6 +56,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
                 {{ trans('app.create.label') }}
             </h2>
 
+            <!-- ROOM TITLE -->
             <p class="mt-2 text-gray-600 dark:text-gray-400">
                 {{ trans('app.room.title.title') }}
             </p>
@@ -69,6 +69,7 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
             </p>
             <InputError :message="errors.title"/>
 
+            <!-- ROOM CODE -->
             <p class="mt-2 text-gray-600 dark:text-gray-400 required">
                 {{ trans('app.room.code.title') }}
             </p>
@@ -82,10 +83,10 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
             </p>
             <InputError :message="errors.code"/>
 
+            <!-- ROOM MEMBERS -->
             <p class="my-2 text-gray-600 dark:text-gray-400 required">
                 {{ trans('app.room.members.title') }} ({{ members.length }}/20)
             </p>
-
             <div class="flex gap-2 mb-2" v-for="(name,index) in members" :key="index">
                 <div class="flex-1">
                     <input type="text"
@@ -118,6 +119,18 @@ function getFirstArrayError(errors: Record<string, string>, key: string): string
             <InputError :message="errors.members"/>
             <InputError :message="getFirstArrayError(errors, 'members')"/>
 
+            <!-- ROOM TYPE -->
+            <p class="my-2 text-gray-600 dark:text-gray-400 required">
+                {{ trans('app.room.type.title') }}
+            </p>
+
+            <div class="flex gap-2 mb-2">
+                <Radio v-model="type" :label="trans('app.room.type.status')" value="status" group="type"/>
+                <Radio v-model="type" :label="trans('app.room.type.counter')" value="counter" group="type"/>
+            </div>
+            <InputError :message="errors.type"/>
+
+            <!-- ACTIONS -->
             <div class="mt-4 flex justify-end gap-4">
                 <button type="button" class="text-red-500 hover:underline"
                         @click="$emit('close')">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RoomType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,6 +15,7 @@ class Room extends Model
     protected function casts()
     {
         return [
+            'type' => RoomType::class,
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
         ];

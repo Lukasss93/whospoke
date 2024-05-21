@@ -72,4 +72,38 @@ class MemberController extends Controller
 
         RoomChangedEvent::dispatch($member->room);
     }
+
+    public function resetCount(Member $member)
+    {
+        $this->authorize('update', $member->room);
+
+        $member->count = 0;
+        $member->save();
+
+        $member->room->refresh();
+
+        RoomChangedEvent::dispatch($member->room);
+    }
+
+    public function incrementCount(Member $member)
+    {
+        $this->authorize('update', $member->room);
+
+        $member->increment('count');
+
+        $member->room->refresh();
+
+        RoomChangedEvent::dispatch($member->room);
+    }
+
+    public function decrementCount(Member $member)
+    {
+        $this->authorize('update', $member->room);
+
+        $member->decrement('count');
+
+        $member->room->refresh();
+
+        RoomChangedEvent::dispatch($member->room);
+    }
 }

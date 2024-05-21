@@ -16,3 +16,7 @@ indent_size = 2
 
 [docker-compose.yml]
 indent_size = 4
+
+[routes/**.php]
+max_line_length = off
+ij_php_call_parameters_wrap = off

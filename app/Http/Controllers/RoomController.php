@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoomType;
 use App\Events\RoomChangedEvent;
 use App\Http\Requests\CreateRoomRequest;
 use App\Models\Room;
@@ -52,10 +53,12 @@ class RoomController extends Controller
     {
         $this->authorize('create', Room::class);
 
+        $type = $request->enum('type', RoomType::class);
         $members = $request->collect('members');
 
         $room = Room::create([
             'user_id' => auth()->id(),
+            'type' => $type,
             'title' => $request->input('title'),
             'code' => $request->input('code'),
         ]);
@@ -94,6 +97,7 @@ class RoomController extends Controller
 
         $room->members()->update([
             'status' => false,
+            'count' => 0,
             'started_at' => null,
             'ended_at' => null,
             'offline' => false,
