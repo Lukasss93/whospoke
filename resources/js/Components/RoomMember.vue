@@ -96,17 +96,20 @@ async function startTime() {
 
 async function stopTime() {
     // store the old status to revert if the request fails
-    const oldValue = member.value.ended_at;
+    const oldEndedAt = member.value.ended_at;
+    const oldStatus = member.value.status;
 
     // update the status in the frontend
     member.value.ended_at = new Date().toISOString();
+    member.value.status = true;
 
     try {
         // send the request to the server
         await axios.post(route('member.time.end', {member: member.value.id}));
     } catch (e) {
         // revert the status if the request fails
-        member.value.ended_at = oldValue;
+        member.value.ended_at = oldEndedAt;
+        member.value.status = oldStatus;
         toast.error(trans('app.error'));
     }
 }

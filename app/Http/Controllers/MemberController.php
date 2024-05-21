@@ -65,6 +65,7 @@ class MemberController extends Controller
         $this->authorize('update', $member->room);
 
         $member->ended_at = now();
+        $member->status = true;
         $member->save();
 
         $member->room->refresh();
