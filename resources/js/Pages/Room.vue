@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Head} from '@inertiajs/vue3';
 import {useClipboard} from '@vueuse/core'
-import {onMounted, ref, watch} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import {Member, Room} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
@@ -128,6 +128,12 @@ onMounted(() => {
             onlineUsers.value--;
         });
 });
+
+onUnmounted(() => {
+    window.Echo.leave(`room.${room.value.id}`);
+    window.Echo.leave(`room.${room.value.id}.online`);
+});
+
 </script>
 
 <template>
