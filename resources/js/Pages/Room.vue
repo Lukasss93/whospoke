@@ -149,7 +149,7 @@ onUnmounted(() => {
 
                 <main>
                     <div class="flex flex-col items-center gap-1 text-center mb-2">
-                        <p class="text-xl">
+                        <p class="text-xl text-gray-600 dark:text-gray-400">
                             {{ trans('app.room.welcome') }}
                             <tippy :content="trans('app.room.link.copy')">
                                 <span class="font-bold text-blue-500 cursor-pointer underline decoration-dotted"
@@ -158,10 +158,10 @@ onUnmounted(() => {
                                 </span>
                             </tippy>
                         </p>
-                        <p class="text-xl">
+                        <p class="text-xl text-gray-600 dark:text-gray-400">
                             {{ trans('app.room.info') }}
                         </p>
-                        <p class="text-sm">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
                             <Interpolator :message="trans('app.room.live')">
                                 <template v-slot:live>
                                     <span class="live-badge">{{ trans('app.live') }}</span>

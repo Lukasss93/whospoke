@@ -73,7 +73,7 @@ defineProps<{
                             {{ trans('app.create.guest') }}
                         </p>
 
-                        <p class="text-xl" v-if="isLogged">
+                        <p class="text-xl text-gray-600 dark:text-gray-400" v-if="isLogged">
                             {{ trans('app.welcome', {name: page.props.auth.user?.first_name}) }}
                         </p>
                         <PrimaryButton v-if="isLogged && canCreateRooms" @click="isCreatingRoom=true">
@@ -94,19 +94,19 @@ defineProps<{
                                     v-model:type="roomForm.type"
                                     v-model:errors="roomForm.errors"/>
 
-                        <p class="text-xl mt-2">
+                        <p class="text-xl mt-2 text-gray-600 dark:text-gray-400">
                             {{ trans('app.join.info') }}
                         </p>
 
                         <div v-if="isLogged && rooms.length>0" class="flex flex-col items-center gap-2">
                             <div class="border-b-[1px] w-64 my-2 border-gray-500"></div>
-                            <p class="text-sm uppercase font-bold">
+                            <p class="text-sm uppercase font-bold text-gray-600 dark:text-gray-400">
                                 {{ trans('app.your_rooms')}}
                             </p>
 
                             <div v-for="(room, i) in rooms" :key="room.id"
                                  class="flex items-center gap-2 p-1">
-                                <div class="flex-1">#{{ i + 1 }}</div>
+                                <div class="flex-1 text-gray-600 dark:text-gray-400">#{{ i + 1 }}</div>
                                 <Link :href="route('room.show', room.code)" class="text-blue-500 hover:underline">
                                     {{ room.code }}
                                 </Link>

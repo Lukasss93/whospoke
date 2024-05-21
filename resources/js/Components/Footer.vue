@@ -11,7 +11,7 @@ const langs = [
 </script>
 
 <template>
-    <footer class="pt-5 text-center text-sm text-black dark:text-white/70">
+    <footer class="pt-5 text-center text-sm text-black dark:text-white">
         <p>
             <a :href="$page.props.developer.github" target="_blank" class="text-blue-500 hover:underline">
                 {{ $page.props.app.name }}
