@@ -152,7 +152,7 @@ async function stopTime() {
             </DangerButton>
         </div>
 
-        <div class="mx-2 font-mono text-xl"
+        <div class="font-mono text-xl"
              v-show="!member.offline && (!(minutes==='00' && seconds==='00') || canEdit)">
             {{ minutes }}:{{ seconds }}
         </div>

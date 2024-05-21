@@ -174,7 +174,7 @@ onMounted(() => {
                         />
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 md:mx-32 lg:mx-52 mb-2">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
                         <RoomMember v-model="room.members[i]" :canEdit="isMyRoom"
                                     v-for="(member, i) in room.members" :key="member.id"/>
                     </div>
