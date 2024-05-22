@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97312fb8a9ba3312432a2292f3e74279",
+    "content-hash": "f6934f3fcb6bcd2eb26d184846ab1109",
     "packages": [
         {
             "name": "brick/math",
@@ -2628,6 +2628,59 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.2"
             },
             "time": "2024-03-05T20:51:40+00:00"
+        },
+        {
+            "name": "nubs/random-name-generator",
+            "version": "v2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nubs/random-name-generator.git",
+                "reference": "50abf24519badc5795a43c831f1d2a1faa45cb77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nubs/random-name-generator/zipball/50abf24519badc5795a43c831f1d2a1faa45cb77",
+                "reference": "50abf24519badc5795a43c831f1d2a1faa45cb77",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.6 || ~7.0 || ~8.0"
+            },
+            "require-dev": {
+                "cinam/randomizer": ">=1.1.1,<2.0",
+                "php-coveralls/php-coveralls": "~2.4",
+                "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^9.0",
+                "squizlabs/php_codesniffer": "~2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nubs\\RandomNameGenerator\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Spencer Rinehart",
+                    "email": "anubis@overthemonkey.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A library to create interesting, sometimes entertaining, random names.",
+            "keywords": [
+                "alliteration",
+                "generator",
+                "random",
+                "video game"
+            ],
+            "support": {
+                "issues": "https://github.com/nubs/random-name-generator/issues",
+                "source": "https://github.com/nubs/random-name-generator/tree/v2.2.0"
+            },
+            "time": "2021-01-12T13:46:08+00:00"
         },
         {
             "name": "nunomaduro/termwind",
@@ -7921,6 +7974,58 @@
                 }
             ],
             "time": "2023-11-03T12:00:00+00:00"
+        },
+        {
+            "name": "gam6itko/fakerphp-animal-provider",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gam6itko/fakerphp-animal-provider.git",
+                "reference": "d2e56d2fb1a2d543fb25b93a56f2556acd0ad4b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gam6itko/fakerphp-animal-provider/zipball/d2e56d2fb1a2d543fb25b93a56f2556acd0ad4b2",
+                "reference": "d2e56d2fb1a2d543fb25b93a56f2556acd0ad4b2",
+                "shasum": ""
+            },
+            "require": {
+                "fakerphp/faker": "^1.23",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5.26"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gam6itko\\Faker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "gam6itko",
+                    "email": "gam6itko@gmail.com"
+                }
+            ],
+            "description": "Additional plugin for fakerphp/faker that allows you to generate a random animal",
+            "keywords": [
+                "faker"
+            ],
+            "support": {
+                "issues": "https://github.com/gam6itko/fakerphp-animal-provider/issues",
+                "source": "https://github.com/gam6itko/fakerphp-animal-provider/tree/1.1.1"
+            },
+            "time": "2023-12-14T10:36:33+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
