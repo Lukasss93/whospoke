@@ -41,6 +41,14 @@ class RoomController extends Controller
                 'last_name' => $loginData->last_name,
             ]);
 
+            // Download the user's profile picture
+            if ($loginData->photo_url !== null) {
+                Storage::disk('public')->put(
+                    path: sprintf("avatars/%s.jpg", $loginData->id),
+                    contents: file_get_contents($loginData->photo_url)
+                );
+            }
+
             // Log the user in
             auth()->login($user, true);
 
