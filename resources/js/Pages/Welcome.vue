@@ -37,6 +37,7 @@ defineProps<{
     rooms: Room[];
     canCreateRooms: boolean;
     isLocal: boolean;
+    botUsername: string;
 }>();
 
 </script>
@@ -58,7 +59,7 @@ defineProps<{
 
                         <LoginWidget
                             v-if="!isLogged && !isLocal"
-                            bot-username="WhoSpokeBot"
+                            :bot-username="botUsername"
                             :redirect-url="route('access')"
                             corner-radius="8"
                             :user-photo="false"

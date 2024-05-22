@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use SergiX44\Nutgram\Exception\InvalidDataException;
 use SergiX44\Nutgram\Nutgram;
@@ -21,6 +22,7 @@ class RoomController extends Controller
             'rooms' => auth()->user()?->rooms ?? [],
             'canCreateRooms' => auth()->user()?->can('create', Room::class) ?? false,
             'isLocal' => app()->isLocal(),
+            'botUsername' => config('nutgram.config.bot_name'),
         ]);
     }
 
