@@ -194,25 +194,33 @@ onUnmounted(() => {
                         />
                     </div>
 
-                    <Transition>
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
                         <RoomMember v-model="room.members[i]" :canEdit="isMyRoom" :type="room.type"
-                                    v-for="(member, i) in room.members" :key="member.id"/>
+                                    v-for="(member, i) in room.members" :key="member.id"
+                                    v-motion
+                                    :initial="{ opacity: 0, x: i%2===0?-100:100 }"
+                                    :enter="{ opacity: 1, x: 0 }"
+                                    :delay="(i*80)"
+                                    :duration="1000"/>
                     </div>
-                    </Transition>
 
                     <div class="flex flex-col items-center gap-2 text-center">
                         <p :class="{'text-red-500': onlineUsers.length===0, 'text-green-500': onlineUsers.length>0}">
                             {{ trans_choice('app.room.online', onlineUsers.length) }}
                         </p>
 
-                        <div class="flex" v-for="users in chunk(onlineUsers, 8)">
-                            <Avatar v-for="user in users"
+                        <XyzTransitionGroup
+                            tag="div" class="flex" v-for="users in chunk(onlineUsers, 8)"
+                            xyz="fade small duration-1" appear
+                        >
+                            <Avatar v-for="user in users" :key="user.id"
                                     v-tippy="user.full_name"
                                     :image="user.avatar || undefined"
                                     :label="user.avatar ? undefined : user.initials"
-                                    class="m-0.5 text-white" :style="{'background-color':user.color}" shape="circle"/>
-                        </div>
+                                    class="m-0.5 text-white" :style="{'background-color':user.color}"
+                                    shape="circle"/>
+                        </XyzTransitionGroup>
+
 
                         <div class="flex gap-2" v-if="isMyRoom">
                             <DangerButton @click="reset">

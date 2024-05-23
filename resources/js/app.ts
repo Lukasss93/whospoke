@@ -1,5 +1,5 @@
 import './bootstrap';
-import '../css/app.css';
+import '../css/app.scss';
 import 'vue3-toastify/dist/index.css';
 import {createApp, DefineComponent, h} from 'vue';
 import {createInertiaApp} from '@inertiajs/vue3';
@@ -17,6 +17,9 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import * as faSolidIcons from '@fortawesome/free-solid-svg-icons';
 import PrimeVue from 'primevue/config';
 import Lara from '@/presets/lara';
+import {MotionPlugin} from '@vueuse/motion';
+import VueAnimXYZ from '@animxyz/vue3';
+import '@animxyz/core';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -37,6 +40,8 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .component('font-awesome-icon', FontAwesomeIcon)
             .use(plugin)
+            .use(MotionPlugin)
+            .use(VueAnimXYZ)
             .use(ZiggyVue)
             .use(Vue3Toastify, {
                 autoClose: 3000,
