@@ -15,6 +15,8 @@ import 'tippy.js/themes/light.css';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import * as faSolidIcons from '@fortawesome/free-solid-svg-icons';
+import PrimeVue from 'primevue/config';
+import Lara from '@/presets/lara';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -41,6 +43,10 @@ createInertiaApp({
                 theme: 'auto',
             })
             .use(VueTippy)
+            .use(PrimeVue, {
+                unstyled: true,
+                pt: Lara,
+            })
             .mount(el);
     },
     progress: {

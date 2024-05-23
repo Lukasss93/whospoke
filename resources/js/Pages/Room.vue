@@ -2,7 +2,7 @@
 import {Head} from '@inertiajs/vue3';
 import {useClipboard} from '@vueuse/core'
 import {onMounted, onUnmounted, ref, watch} from "vue";
-import {Member, Room} from "@/types";
+import {Room, User} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
@@ -15,6 +15,8 @@ import {trans, trans_choice} from "laravel-translator";
 import Stopwatch from "@/Components/Stopwatch.vue";
 import SuccessButton from "@/Components/SuccessButton.vue";
 import RoomMember from "@/Components/RoomMember.vue";
+import Avatar from 'primevue/avatar';
+import {chunk} from "@/Support/Helpers";
 
 const props = defineProps<{
     baseRoom: Room;
@@ -23,7 +25,7 @@ const props = defineProps<{
 }>();
 
 const room = ref(props.baseRoom);
-const onlineUsers = ref(0);
+const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
 
@@ -32,25 +34,6 @@ watch(copied, () => {
         toast.success(trans('app.room.link.copied'));
     }
 });
-
-async function updateMemberStatus(member: Member, status: boolean) {
-    // store the old status to revert if the request fails
-    const oldStatus = member.status;
-
-    // update the status in the frontend
-    member.status = status;
-
-    try {
-        // send the request to the server
-        await axios.post(route('member.status.update', {member: member.id}), {
-            status: status,
-        });
-    } catch (e) {
-        // revert the status if the request fails
-        member.status = oldStatus;
-        toast.error(trans('app.error'));
-    }
-}
 
 async function reset() {
     // store the old status to revert if the request fails
@@ -118,14 +101,14 @@ onMounted(() => {
 
     window.Echo
         .join(`room.${room.value.id}.online`)
-        .here((users: string[]) => {
-            onlineUsers.value = users.length;
+        .here((users: User[]) => {
+            onlineUsers.value = users;
         })
-        .joining(() => {
-            onlineUsers.value++;
+        .joining((user: User) => {
+            onlineUsers.value.push(user);
         })
-        .leaving(() => {
-            onlineUsers.value--;
+        .leaving((user: User) => {
+            onlineUsers.value = onlineUsers.value.filter(x => x.id !== user.id);
         });
 });
 
@@ -186,9 +169,17 @@ onUnmounted(() => {
                     </div>
 
                     <div class="flex flex-col items-center gap-2 text-center">
-                        <p :class="{'text-red-500': onlineUsers===0, 'text-green-500': onlineUsers>0}">
-                            {{ trans_choice('app.room.online', onlineUsers) }}
+                        <p :class="{'text-red-500': onlineUsers.length===0, 'text-green-500': onlineUsers.length>0}">
+                            {{ trans_choice('app.room.online', onlineUsers.length) }}
                         </p>
+
+                        <div class="flex" v-for="users in chunk(onlineUsers, 8)">
+                            <Avatar v-for="user in users"
+                                    v-tippy="user.full_name"
+                                    :image="user.avatar || undefined"
+                                    :label="user.avatar ? undefined : user.initials"
+                                    class="m-0.5 text-white" :style="{'background-color':user.color}" shape="circle"/>
+                        </div>
 
                         <div class="flex gap-2" v-if="isMyRoom">
                             <DangerButton @click="reset">

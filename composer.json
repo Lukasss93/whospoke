@@ -11,13 +11,13 @@
         "laravel/reverb": "@beta",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "nubs/random-name-generator": "^2.2",
+        "lasserafn/php-initials": "^3.1",
+        "lcherone/php-petname": "^1.0",
         "nutgram/laravel": "^1.4",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-        "gam6itko/fakerphp-animal-provider": "^1.1",
         "laravel-lang/common": "^6.2",
         "laravel/breeze": "^2.0",
         "laravel/pint": "^1.13",
