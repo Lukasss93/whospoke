@@ -17,12 +17,21 @@ import SuccessButton from "@/Components/SuccessButton.vue";
 import RoomMember from "@/Components/RoomMember.vue";
 import Avatar from 'primevue/avatar';
 import {chunk} from "@/Support/Helpers";
+import {useReward} from 'vue-rewards';
 
 const props = defineProps<{
     baseRoom: Room;
     isMyRoom: boolean;
     roomUrl: string;
 }>();
+
+const {reward, isAnimating} = useReward('reaction-panel', 'emoji', {
+    elementCount: 1,
+    emoji: ['❤️'],
+    spread: 0,
+    lifetime: 1200,
+    elementSize: 35,
+});
 
 const room = ref(props.baseRoom);
 const onlineUsers = ref<User[]>([]);
@@ -92,6 +101,14 @@ async function stopRoom() {
     }
 }
 
+function whisper() {
+    reward();
+
+    window.Echo.private(`room.${room.value.id}.online`)
+        //@ts-ignore
+        .whisper('love');
+}
+
 onMounted(() => {
     window.Echo
         .channel(`room.${room.value.id}`)
@@ -110,6 +127,11 @@ onMounted(() => {
         .leaving((user: User) => {
             onlineUsers.value = onlineUsers.value.filter(x => x.id !== user.id);
         });
+
+    window.Echo.private(`room.${room.value.id}.online`)
+        .listenForWhisper('love', () => {
+            reward();
+        });
 });
 
 onUnmounted(() => {
@@ -121,6 +143,15 @@ onUnmounted(() => {
 
 <template>
     <Head :title="room.code"/>
+
+    <Teleport to="body">
+        <div id="reaction-panel" class="size-[70px] fixed bottom-0 right-0 pointer-events-none"></div>
+        <button @click="whisper"
+                class="fixed bottom-3 right-3 text-2xl bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 rounded-full p-1 aspect-square transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 opacity-40 hover:opacity-100">
+            ❤️
+        </button>
+    </Teleport>
+
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
         <div
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
@@ -163,10 +194,12 @@ onUnmounted(() => {
                         />
                     </div>
 
+                    <Transition>
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
                         <RoomMember v-model="room.members[i]" :canEdit="isMyRoom" :type="room.type"
                                     v-for="(member, i) in room.members" :key="member.id"/>
                     </div>
+                    </Transition>
 
                     <div class="flex flex-col items-center gap-2 text-center">
                         <p :class="{'text-red-500': onlineUsers.length===0, 'text-green-500': onlineUsers.length>0}">
