@@ -141,7 +141,7 @@ onUnmounted(() => {
                                 </span>
                             </tippy>
                         </p>
-                        <p class="text-xl text-gray-600 dark:text-gray-400">
+                        <p class="text-xl text-gray-600 dark:text-gray-400" v-if="room.title===null">
                             {{ trans('app.room.info') }}
                         </p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">
