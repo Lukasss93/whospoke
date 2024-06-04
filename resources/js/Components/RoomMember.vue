@@ -175,7 +175,7 @@ async function decrementCount() {
             :class="{'!opacity-60':member.status || member.offline}"
             class="flex items-center gap-1 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded">
 
-            <tippy>
+            <tippy v-if="canEdit">
                 <template #content>
                 <span v-if="member.offline" class="text-green-500 font-bold">
                     {{ trans('app.member.status.unset') }}
