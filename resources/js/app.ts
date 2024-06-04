@@ -20,6 +20,7 @@ import Lara from '@/presets/lara';
 import {MotionPlugin} from '@vueuse/motion';
 import VueAnimXYZ from '@animxyz/vue3';
 import '@animxyz/core';
+import 'primeicons/primeicons.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -33,6 +34,7 @@ library.add(faSolidIcons.faEyeSlash);
 library.add(faSolidIcons.faPlus);
 library.add(faSolidIcons.faMinus);
 library.add(faSolidIcons.faCircleNotch);
+library.add(faSolidIcons.faUser);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

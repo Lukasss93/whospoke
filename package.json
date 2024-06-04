@@ -26,6 +26,7 @@
         "luxon": "^3.4.4",
         "maska": "^2.1.11",
         "postcss": "^8.4.31",
+        "primeicons": "^7.0.0",
         "primevue": "^3.52.0",
         "pusher-js": "^8.4.0-rc2",
         "sass": "^1.77.2",

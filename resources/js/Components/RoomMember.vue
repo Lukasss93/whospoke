@@ -9,6 +9,7 @@ import {useTimeCounter} from "@/Support/Hooks";
 import DangerButton from "@/Components/DangerButton.vue";
 import SuccessButton from "@/Components/SuccessButton.vue";
 import Counter from "@/Components/Counter.vue";
+import Avatar from "primevue/avatar";
 
 const props = defineProps<{
     canEdit: boolean;
@@ -191,6 +192,11 @@ async function decrementCount() {
                     <font-awesome-icon v-if="!member.offline" icon="fa-solid fa-eye-slash"/>
                 </button>
             </tippy>
+
+            <div class="inline-block">
+                <Avatar icon="pi pi-user" class="!bg-gray-400 dark:!bg-gray-900" shape="circle"/>
+            </div>
+
             <div class="flex-1 text-2xl text-black dark:text-white">
                 {{ member.name }}
             </div>
