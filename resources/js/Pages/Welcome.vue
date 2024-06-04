@@ -36,8 +36,6 @@ const storeRoom = () => {
 defineProps<{
     rooms: Room[];
     canCreateRooms: boolean;
-    isLocal: boolean;
-    botUsername: string;
 }>();
 
 </script>
@@ -58,14 +56,14 @@ defineProps<{
                     <div class="flex flex-col items-center gap-2 text-center">
 
                         <LoginWidget
-                            v-if="!isLogged && !isLocal"
-                            :bot-username="botUsername"
+                            v-if="!isLogged && !$page.props.app.isLocal"
+                            :bot-username="$page.props.auth.botUsername"
                             :redirect-url="route('access')"
                             corner-radius="8"
                             :user-photo="false"
                         />
 
-                        <Link :href="route('local.login')" v-if="!isLogged && isLocal"
+                        <Link :href="route('local.login')" v-if="!isLogged && $page.props.app.isLocal"
                               class="text-blue-500 hover:underline">
                             ⚠️ Local Login ⚠️
                         </Link>

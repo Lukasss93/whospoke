@@ -43,10 +43,12 @@ export interface Room {
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;
+        botUsername: string;
     };
     app: {
         name: string;
         version: string;
+        isLocal: boolean;
     };
     developer: {
         name: string;

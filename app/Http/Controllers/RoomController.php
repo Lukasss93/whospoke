@@ -21,16 +21,17 @@ class RoomController extends Controller
         return Inertia::render('Welcome', [
             'rooms' => auth()->user()?->rooms ?? [],
             'canCreateRooms' => auth()->user()?->can('create', Room::class) ?? false,
-            'isLocal' => app()->isLocal(),
-            'botUsername' => config('nutgram.config.bot_name'),
         ]);
     }
 
     public function access(Request $request, Nutgram $bot)
     {
         try {
+            // Redirect url
+            $redirectUrl = $request->input('redirect') ?: route('home');
+
             // Validate the login data
-            $loginData = $bot->validateLoginData($request->getQueryString());
+            $loginData = $bot->validateLoginData(http_build_query($request->except('redirect')));
 
             // Get the user from the database or create a new one
             $user = User::firstOrCreate([
@@ -53,7 +54,7 @@ class RoomController extends Controller
             auth()->login($user, true);
 
             // Redirect to the home page
-            return redirect()->route('home');
+            return redirect()->to($redirectUrl);
         } catch (InvalidDataException) {
             abort(422, 'Invalid Telegram Data');
         }

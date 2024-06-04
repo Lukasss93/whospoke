@@ -33,10 +33,12 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'botUsername' => config('nutgram.config.bot_name'),
             ],
             'app' => [
                 'name' => config('app.name'),
                 'version' => config('app.version'),
+                'isLocal' => app()->isLocal(),
             ],
             'developer' => [
                 'name' => config('developer.name'),
