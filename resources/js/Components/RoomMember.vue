@@ -173,7 +173,7 @@ async function decrementCount() {
     <div>
         <div
             :class="{'!opacity-60':member.status || member.offline}"
-            class="flex items-center gap-1 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded">
+            class="flex items-center gap-1 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
 
             <tippy v-if="canEdit">
                 <template #content>
