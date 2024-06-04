@@ -188,8 +188,8 @@ async function decrementCount() {
 
                 <button v-if="canEdit" @click="updateOffline"
                         class="text-black dark:text-white bg-black/20 dark:bg-black/50 p-1 rounded">
-                    <font-awesome-icon v-if="member.offline" icon="fa-solid fa-eye"/>
-                    <font-awesome-icon v-if="!member.offline" icon="fa-solid fa-eye-slash"/>
+                    <font-awesome-icon v-if="member.offline" fixed-width icon="fa-solid fa-eye"/>
+                    <font-awesome-icon v-if="!member.offline" fixed-width icon="fa-solid fa-eye-slash"/>
                 </button>
             </tippy>
 
