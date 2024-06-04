@@ -213,7 +213,11 @@ async function decrementCount() {
                 {{ minutes }}:{{ seconds }}
             </div>
 
-            <Checkbox class="size-8" :checked="member.status" :disabled="!canEdit" v-if="!member.offline && type==='status'"
+            <Checkbox class="size-8"
+                      :checked="member.status"
+                      :disabled="!canEdit"
+                      :loadingWhenUnchecked="member.started_at!==null && member.ended_at===null"
+                      v-if="!member.offline && type==='status'"
                       @change="(e: InputEvent) => updateStatus((e.target as HTMLInputElement).checked)"/>
 
             <Counter v-if="!member.offline && type==='counter'"

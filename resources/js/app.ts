@@ -32,6 +32,7 @@ library.add(faSolidIcons.faEye);
 library.add(faSolidIcons.faEyeSlash);
 library.add(faSolidIcons.faPlus);
 library.add(faSolidIcons.faMinus);
+library.add(faSolidIcons.faCircleNotch);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
