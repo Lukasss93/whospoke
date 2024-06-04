@@ -170,60 +170,63 @@ async function decrementCount() {
 </script>
 
 <template>
-    <div
-        class="flex items-center gap-1 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded">
+    <div>
+        <div
+            :class="{'!opacity-60':member.status || member.offline}"
+            class="flex items-center gap-1 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded">
 
-        <tippy>
-            <template #content>
+            <tippy>
+                <template #content>
                 <span v-if="member.offline" class="text-green-500 font-bold">
                     {{ trans('app.member.status.unset') }}
                 </span>
-                <span v-if="!member.offline" class="text-red-500 font-bold">
+                    <span v-if="!member.offline" class="text-red-500 font-bold">
                     {{ trans('app.member.status.set') }}
                 </span>
-            </template>
+                </template>
 
-            <button v-if="canEdit" @click="updateOffline"
-                    class="text-black dark:text-white bg-black/20 dark:bg-black/50 p-1 rounded">
-                <font-awesome-icon v-if="member.offline" icon="fa-solid fa-eye"/>
-                <font-awesome-icon v-if="!member.offline" icon="fa-solid fa-eye-slash"/>
-            </button>
-        </tippy>
-        <div class="flex-1 text-2xl text-black dark:text-white">
-            {{ member.name }}
-        </div>
+                <button v-if="canEdit" @click="updateOffline"
+                        class="text-black dark:text-white bg-black/20 dark:bg-black/50 p-1 rounded">
+                    <font-awesome-icon v-if="member.offline" icon="fa-solid fa-eye"/>
+                    <font-awesome-icon v-if="!member.offline" icon="fa-solid fa-eye-slash"/>
+                </button>
+            </tippy>
+            <div class="flex-1 text-2xl text-black dark:text-white">
+                {{ member.name }}
+            </div>
 
-        <div class="flex gap-1" v-if="canEdit && !member.offline">
-            <DangerButton class="!px-1" @click="resetTime">
-                <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
-            </DangerButton>
-            <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
-                <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
-            </SuccessButton>
-            <DangerButton class="!px-1" @click="stopTime"
-                          :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
-                <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
-            </DangerButton>
-        </div>
+            <div class="flex gap-1" v-if="canEdit && !member.offline">
+                <DangerButton class="!px-1" @click="resetTime">
+                    <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
+                </DangerButton>
+                <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
+                    <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
+                </SuccessButton>
+                <DangerButton class="!px-1" @click="stopTime"
+                              :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
+                    <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
+                </DangerButton>
+            </div>
 
-        <div class="font-mono text-xl"
-             v-show="!member.offline && (!(minutes==='00' && seconds==='00') || canEdit)">
-            {{ minutes }}:{{ seconds }}
-        </div>
+            <div class="font-mono text-xl"
+                 v-show="!member.offline && (!(minutes==='00' && seconds==='00') || canEdit)">
+                {{ minutes }}:{{ seconds }}
+            </div>
 
-        <Checkbox class="size-8" :checked="member.status" :disabled="!canEdit" v-if="!member.offline && type==='status'"
-                  @change="(e: InputEvent) => updateStatus((e.target as HTMLInputElement).checked)"/>
+            <Checkbox class="size-8" :checked="member.status" :disabled="!canEdit" v-if="!member.offline && type==='status'"
+                      @change="(e: InputEvent) => updateStatus((e.target as HTMLInputElement).checked)"/>
 
-        <Counter v-if="!member.offline && type==='counter'"
-                 @reset="resetCount"
-                 @decrement="decrementCount"
-                 @increment="incrementCount"
-                 v-model="member.count"
-                 :canEdit="canEdit"/>
+            <Counter v-if="!member.offline && type==='counter'"
+                     @reset="resetCount"
+                     @decrement="decrementCount"
+                     @increment="incrementCount"
+                     v-model="member.count"
+                     :canEdit="canEdit"/>
 
-        <span v-if="member.offline" class="uppercase text-red-600 font-bold">
+            <span v-if="member.offline" class="uppercase text-red-600 font-bold">
             {{ trans('app.member.status.offline') }}
         </span>
+        </div>
     </div>
 </template>
 
