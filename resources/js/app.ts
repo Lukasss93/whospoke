@@ -21,6 +21,8 @@ import {MotionPlugin} from '@vueuse/motion';
 import VueAnimXYZ from '@animxyz/vue3';
 import '@animxyz/core';
 import 'primeicons/primeicons.css';
+import ConfirmationService from 'primevue/confirmationservice';
+import ToastService from 'primevue/toastservice';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -55,6 +57,8 @@ createInertiaApp({
                 unstyled: true,
                 pt: Lara,
             })
+            .use(ConfirmationService)
+            .use(ToastService)
             .mount(el);
     },
     progress: {

@@ -44,6 +44,10 @@ return [
             'copy' => 'Clicca per copiare l\'url',
             'copied' => 'Link copiato negli appunti!',
         ],
+        'delete' => [
+            'question' => 'Sei sicuro di voler cancellare questa sessione?',
+            'success' => 'Sessione cancellata!',
+        ],
     ],
     'your_rooms' => 'Le tue sessioni',
     'live' => 'tempo reale',

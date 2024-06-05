@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import {Head, Link, router, useForm, usePage} from '@inertiajs/vue3';
 import {computed, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import {Room} from "@/types";
@@ -10,7 +10,12 @@ import CreateRoom from "@/Modals/CreateRoom.vue";
 import {trans} from "laravel-translator";
 import ButtonLogout from "@/Components/ButtonLogout.vue";
 import ButtonLogin from "@/Components/ButtonLogin.vue";
+import {useConfirm} from "primevue/useconfirm";
+import Button from 'primevue/button';
+import ConfirmDialog from 'primevue/confirmdialog';
+import {toast} from "vue3-toastify";
 
+const confirm = useConfirm();
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
 
@@ -39,9 +44,27 @@ defineProps<{
     canCreateRooms: boolean;
 }>();
 
+const confirmRoomDelete = (event, roomCode) => {
+    confirm.require({
+        target: event.currentTarget,
+        header: trans('actions.confirm'),
+        message: trans('app.room.delete.question'),
+        rejectClass: 'text-white !bg-transparent hover:!bg-gray-600 !border-gray-500 hover:!border-gray-600 focus:!ring-gray-600',
+        acceptClass: 'text-white !bg-red-500 hover:!bg-red-600 !border-red-500 hover:!border-red-600 focus:!ring-red-600',
+        rejectLabel: trans('actions.cancel'),
+        acceptLabel: trans('actions.delete'),
+        accept: () => {
+            router.delete(route('room.delete', roomCode), {
+                onSuccess: () => toast.success(trans('app.room.delete.success')),
+            });
+        },
+    });
+};
+
 </script>
 
 <template>
+    <ConfirmDialog></ConfirmDialog>
     <Head title="Home Page"/>
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
         <div
@@ -93,21 +116,27 @@ defineProps<{
                                 {{ trans('app.your_rooms')}}
                             </p>
 
-                            <div v-for="(room, i) in rooms" :key="room.id"
-                                 class="flex items-center gap-2">
-                                <div class="flex-1 text-gray-600 dark:text-gray-400">#{{ i + 1 }}</div>
-                                <Link :href="route('room.show', room.code)" class="text-blue-500 hover:underline">
-                                    {{ room.code }}
-                                </Link>
-
-                                <Link :href="route('room.delete', room.code)"
-                                      method="delete"
-                                      as="button"
-                                      class="inline-flex items-center px-1 py-0.5 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                    <font-awesome-icon icon="fa-solid fa-xmark"/>
-                                </Link>
-
-                            </div>
+                            <table>
+                                <tbody>
+                                <tr v-for="(room, i) in rooms" :key="room.id" class="*:px-2 *:py-1">
+                                    <td class="text-right text-gray-600 dark:text-gray-400">
+                                        #{{ i + 1 }}
+                                    </td>
+                                    <td class="text-left">
+                                        <Link :href="route('room.show', room.code)"
+                                              class="text-blue-500 hover:underline">
+                                            {{ room.code }}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Button @click="confirmRoomDelete($event, room.code)" label="Delete"
+                                                severity="danger" outlined size="small">
+                                            <font-awesome-icon icon="fa-solid fa-xmark"/>
+                                        </Button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <div class="border-b-[1px] w-64 my-2 border-gray-500" v-if="isLogged"></div>

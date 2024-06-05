@@ -44,6 +44,10 @@ return [
             'copy' => 'Click to copy the url',
             'copied' => 'Link copied to clipboard!',
         ],
+        'delete' => [
+            'question' => 'Are you sure you want to delete this session?',
+            'success' => 'Session deleted!',
+        ],
     ],
     'your_rooms' => 'Your sessions',
     'live' => 'real time',
