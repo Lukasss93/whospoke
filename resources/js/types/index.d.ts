@@ -17,6 +17,7 @@ export interface User {
 export interface Member {
     id: number;
     room_id: number;
+    user_id: number | null;
     name: string;
     status: boolean;
     count: number;
@@ -25,6 +26,7 @@ export interface Member {
     offline: boolean;
     created_at: string | null;
     updated_at: string | null;
+    user: User | null;
 }
 
 export interface Room {
