@@ -18,8 +18,8 @@ import RoomMember from "@/Components/RoomMember.vue";
 import Avatar from 'primevue/avatar';
 import {chunk} from "@/Support/Helpers";
 import {useReward} from 'vue-rewards';
-import {LoginWidget} from "vue-tg";
 import ButtonLogout from "@/Components/ButtonLogout.vue";
+import ButtonLogin from "@/Components/ButtonLogin.vue";
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -229,14 +229,7 @@ onUnmounted(() => {
                                     shape="circle"/>
                         </XyzTransitionGroup>
 
-                        <LoginWidget
-                            v-if="!isLogged && !$page.props.app.isLocal"
-                            size="medium"
-                            :bot-username="$page.props.auth.botUsername"
-                            :redirect-url="route('access', {redirect: route(route().current() ?? '', route().params)})"
-                            corner-radius="6"
-                            :user-photo="false"
-                        />
+                        <ButtonLogin v-if="!isLogged" :redirect="route(route().current() ?? '', route().params)"/>
 
                         <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
 

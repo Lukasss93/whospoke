@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
-import {LoginWidget} from 'vue-tg';
 import {computed, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import {Room} from "@/types";
@@ -10,6 +9,7 @@ import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 import CreateRoom from "@/Modals/CreateRoom.vue";
 import {trans} from "laravel-translator";
 import ButtonLogout from "@/Components/ButtonLogout.vue";
+import ButtonLogin from "@/Components/ButtonLogin.vue";
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -56,18 +56,7 @@ defineProps<{
 
                     <div class="flex flex-col items-center gap-2 text-center">
 
-                        <LoginWidget
-                            v-if="!isLogged && !$page.props.app.isLocal"
-                            :bot-username="$page.props.auth.botUsername"
-                            :redirect-url="route('access')"
-                            corner-radius="8"
-                            :user-photo="false"
-                        />
-
-                        <Link :href="route('local.login')" v-if="!isLogged && $page.props.app.isLocal"
-                              class="text-blue-500 hover:underline">
-                            ⚠️ Local Login ⚠️
-                        </Link>
+                        <ButtonLogin v-if="!isLogged"/>
 
                         <p class="text-yellow-600 dark:text-yellow-500" v-if="!isLogged">
                             {{ trans('app.create.guest') }}

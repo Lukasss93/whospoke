@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class LocalController extends Controller
 {
-    public function login()
+    public function login(Request $request)
     {
+        $redirectUrl = $request->input('redirect') ?: route('home');
+
         $user = User::firstOrCreate([
             'telegram_id' => 0,
         ], [
@@ -18,6 +21,6 @@ class LocalController extends Controller
 
         auth()->login($user, true);
 
-        return redirect()->route('home');
+        return redirect()->to($redirectUrl);
     }
 }
