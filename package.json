@@ -18,6 +18,7 @@
         "@vitejs/plugin-vue": "^5.0.0",
         "@vueuse/core": "^10.9.0",
         "@vueuse/motion": "^2.1.0",
+        "@vueuse/sound": "^2.0.1",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
         "laravel-echo": "^1.16.1",

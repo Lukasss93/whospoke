@@ -10,12 +10,19 @@ import DangerButton from "@/Components/DangerButton.vue";
 import SuccessButton from "@/Components/SuccessButton.vue";
 import Counter from "@/Components/Counter.vue";
 import Avatar from "primevue/avatar";
+import {useSound} from '@vueuse/sound';
+import bellSound from "@sound/bell.mp3";
+import {watch} from "vue";
 
 const props = defineProps<{
     canEdit: boolean;
     type: "status" | "counter";
     isOnline: boolean;
 }>();
+
+const checkedSound = useSound(bellSound, {
+    volume: 0.01
+});
 
 const member = defineModel<Member>({required: true});
 const {minutes, seconds} = useTimeCounter(
@@ -169,6 +176,17 @@ async function decrementCount() {
     }
 }
 
+function checkboxChange(e: InputEvent) {
+    let status: boolean = (e.target as HTMLInputElement).checked;
+    updateStatus(status);
+}
+
+watch(() => member.value.status, (status) => {
+    if (status) {
+        checkedSound.play();
+    }
+});
+
 </script>
 
 <template>
@@ -236,7 +254,7 @@ async function decrementCount() {
                       :disabled="!canEdit"
                       :loadingWhenUnchecked="member.started_at!==null && member.ended_at===null"
                       v-if="!member.offline && type==='status'"
-                      @change="(e: InputEvent) => updateStatus((e.target as HTMLInputElement).checked)"/>
+                      @change="checkboxChange"/>
 
             <Counter v-if="!member.offline && type==='counter'"
                      @reset="resetCount"
