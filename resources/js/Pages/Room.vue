@@ -195,7 +195,10 @@ onUnmounted(() => {
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
-                        <RoomMember v-model="room.members[i]" :canEdit="isMyRoom" :type="room.type"
+                        <RoomMember v-model="room.members[i]"
+                                    :canEdit="isMyRoom"
+                                    :type="room.type"
+                                    :isOnline="onlineUsers.some(x => x.id === room.members[i].user_id)"
                                     v-for="(member, i) in room.members" :key="member.id"
                                     v-motion
                                     :initial="{ opacity: 0, x: i%2===0?-100:100 }"

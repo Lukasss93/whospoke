@@ -14,6 +14,7 @@ import Avatar from "primevue/avatar";
 const props = defineProps<{
     canEdit: boolean;
     type: "status" | "counter";
+    isOnline: boolean;
 }>();
 
 const member = defineModel<Member>({required: true});
@@ -193,9 +194,20 @@ async function decrementCount() {
                 </button>
             </tippy>
 
-            <div class="inline-block">
-                <Avatar icon="pi pi-user" class="!bg-gray-400 dark:!bg-gray-900" shape="circle"/>
+            <div class="inline-flex relative">
+                <Avatar icon="pi pi-user"
+                        v-if="!member.user?.avatar"
+                        class="!bg-gray-400 dark:!bg-gray-900"
+                        shape="circle"/>
+
+                <Avatar v-if="member.user?.avatar"
+                        :image="member.user?.avatar"
+                        shape="circle"/>
+
+                <div v-if="isOnline" class="absolute bottom-[-3px] right-[-3px] inline-block size-3 bg-green-500 rounded-full border-2 border-gray-300 dark:border-gray-800"></div>
             </div>
+
+
 
             <div class="flex-1 text-2xl text-black dark:text-white">
                 {{ member.name }}
