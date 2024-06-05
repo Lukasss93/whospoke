@@ -9,6 +9,7 @@ import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 import CreateRoom from "@/Modals/CreateRoom.vue";
 import {trans} from "laravel-translator";
+import ButtonLogout from "@/Components/ButtonLogout.vue";
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -122,14 +123,7 @@ defineProps<{
 
                         <div class="border-b-[1px] w-64 my-2 border-gray-500" v-if="isLogged"></div>
 
-                        <Link :href="route('logout')" method="post"
-                              v-if="isLogged"
-                              as="button"
-                              type="button"
-                              class="text-red-500 hover:underline">
-                            {{ trans('app.logout') }}
-                        </Link>
-
+                        <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
                     </div>
                 </main>
 

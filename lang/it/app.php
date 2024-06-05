@@ -13,7 +13,7 @@ return [
     ],
     'developed' => 'Sviluppato da',
     'welcome' => 'Benvenuto, :name!',
-    'logout' => 'Esci',
+    'logout' => 'Logout',
     'room' => [
         'title' => [
             'title' => 'Inserisci il titolo della sessione',

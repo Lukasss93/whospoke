@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {Head} from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
 import {useClipboard} from '@vueuse/core'
-import {onMounted, onUnmounted, ref, watch} from "vue";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import {Room, User} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
@@ -18,6 +18,11 @@ import RoomMember from "@/Components/RoomMember.vue";
 import Avatar from 'primevue/avatar';
 import {chunk} from "@/Support/Helpers";
 import {useReward} from 'vue-rewards';
+import {LoginWidget} from "vue-tg";
+import ButtonLogout from "@/Components/ButtonLogout.vue";
+
+const page = usePage();
+const isLogged = computed(() => page.props.auth.user !== null);
 
 const props = defineProps<{
     baseRoom: Room;
@@ -224,6 +229,16 @@ onUnmounted(() => {
                                     shape="circle"/>
                         </XyzTransitionGroup>
 
+                        <LoginWidget
+                            v-if="!isLogged && !$page.props.app.isLocal"
+                            size="medium"
+                            :bot-username="$page.props.auth.botUsername"
+                            :redirect-url="route('access', {redirect: route(route().current() ?? '', route().params)})"
+                            corner-radius="6"
+                            :user-photo="false"
+                        />
+
+                        <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
 
                         <div class="flex gap-2" v-if="isMyRoom">
                             <DangerButton @click="reset">
