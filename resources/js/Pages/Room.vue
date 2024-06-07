@@ -43,6 +43,9 @@ const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
 
+const membersTotal = computed(() => room.value.members.filter(x => !x.offline).length);
+const membersSpoke = computed(() => room.value.members.filter(x => x.status && !x.offline).length);
+
 watch(copied, () => {
     if (copied.value) {
         toast.success(trans('app.room.link.copied'));
@@ -177,8 +180,9 @@ onUnmounted(() => {
                                 </span>
                             </tippy>
                         </p>
-                        <p class="text-xl text-gray-600 dark:text-gray-400" v-if="room.title===null">
-                            {{ trans('app.room.info') }}
+                        <p class="text-xl text-gray-600 dark:text-gray-400"
+                           v-if="room.title===null && room.type==='status'">
+                            {{ trans('app.room.info', {current: membersSpoke, total: membersTotal}) }}
                         </p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">
                             <Interpolator :message="trans('app.room.live')">

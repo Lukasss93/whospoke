@@ -35,7 +35,7 @@ return [
             'counter' => 'Counter',
         ],
         'welcome' => 'Welcome to the session:',
-        'info' => 'Here you can see the status of the members who spoke.',
+        'info' => 'Members who spoke: :current out of :total',
         'live' => 'Data is updated in :live by the session owner.',
         'owner' => 'As the owner, you can modify the status of the session.',
         'reset' => 'Reset',

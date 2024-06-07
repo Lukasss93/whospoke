@@ -35,7 +35,7 @@ return [
             'counter' => 'Contatore',
         ],
         'welcome' => 'Benvenuto nella sessione:',
-        'info' => 'Qui puoi vedere lo stato dei membri che hanno parlato.',
+        'info' => 'Membri che hanno parlato: :current su :total',
         'live' => 'I dati vengono aggiornati in :live dal proprietario della sessione.',
         'owner' => 'Come proprietario, puoi modificare lo stato della sessione.',
         'reset' => 'Reset',
