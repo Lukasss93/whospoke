@@ -29,11 +29,13 @@ async function localLogin() {
         <LoginWidget v-if="!$page.props.app.isLocal"
                      :bot-username="$page.props.auth.botUsername"
                      :redirect-url="route('access', {redirect: props.redirect})"
-                     corner-radius="8"
+                     corner-radius="5"
+                     size="small"
                      :user-photo="false"/>
 
         <Button v-if="$page.props.app.isLocal"
                 size="small"
+                class="text-xs !py-1 !px-8"
                 label="Local Login"
                 severity="warning"
                 @click="localLogin"/>
