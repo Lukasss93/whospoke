@@ -61,4 +61,6 @@ return [
             'unset' => 'Set online',
         ],
     ],
+    'show_as_owner' => 'Show as owner',
+    'show_as_guest' => 'Show as guest',
 ];

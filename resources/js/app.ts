@@ -23,6 +23,7 @@ import '@animxyz/core';
 import 'primeicons/primeicons.css';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
+import {usePassThrough} from "primevue/passthrough";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -37,6 +38,15 @@ library.add(faSolidIcons.faPlus);
 library.add(faSolidIcons.faMinus);
 library.add(faSolidIcons.faCircleNotch);
 library.add(faSolidIcons.faUser);
+
+const CustomPreset = usePassThrough(
+    Lara,
+    {},
+    {
+        mergeSections: true,
+        mergeProps: true,
+    }
+);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -55,7 +65,11 @@ createInertiaApp({
             .use(VueTippy)
             .use(PrimeVue, {
                 unstyled: true,
-                pt: Lara,
+                pt: CustomPreset,
+                ptOptions: {
+                    mergeSections: true,
+                    mergeProps: true,
+                }
             })
             .use(ConfirmationService)
             .use(ToastService)

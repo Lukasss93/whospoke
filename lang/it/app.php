@@ -61,4 +61,6 @@ return [
             'unset' => 'Imposta online',
         ],
     ],
+    'show_as_owner' => 'Mostra come proprietario',
+    'show_as_guest' => 'Mostra come ospite',
 ];

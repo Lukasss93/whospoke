@@ -20,6 +20,7 @@ import {chunk} from "@/Support/Helpers";
 import {useReward} from 'vue-rewards';
 import ButtonLogout from "@/Components/ButtonLogout.vue";
 import ButtonLogin from "@/Components/ButtonLogin.vue";
+import ToggleButton from 'primevue/togglebutton';
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -38,6 +39,7 @@ const {reward, isAnimating} = useReward('reaction-panel', 'emoji', {
     elementSize: 35,
 });
 
+const canEditThisRoom = ref(props.isMyRoom);
 const room = ref(props.baseRoom);
 const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
@@ -191,7 +193,7 @@ onUnmounted(() => {
                                 </template>
                             </Interpolator>
                         </p>
-                        <p class="text-sm text-green-600" v-if="isMyRoom">
+                        <p class="text-sm text-green-600" v-if="canEditThisRoom">
                             {{ trans('app.room.owner') }}
                         </p>
 
@@ -205,7 +207,7 @@ onUnmounted(() => {
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
                         <RoomMember v-model="room.members[i]"
-                                    :canEdit="isMyRoom"
+                                    :canEdit="canEditThisRoom"
                                     :type="room.type"
                                     :isOnline="onlineUsers.some(x => x.id === room.members[i].user_id)"
                                     v-for="(member, i) in room.members" :key="member.id"
@@ -237,7 +239,7 @@ onUnmounted(() => {
 
                         <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
 
-                        <div class="flex gap-2" v-if="isMyRoom">
+                        <div class="flex gap-2" v-if="canEditThisRoom">
                             <DangerButton @click="reset">
                                 <font-awesome-icon icon="fa-solid fa-rotate-left"/>
                             </DangerButton>
@@ -249,6 +251,10 @@ onUnmounted(() => {
                                 <font-awesome-icon icon="fa-solid fa-stop"/>
                             </DangerButton>
                         </div>
+                        <ToggleButton v-model="canEditThisRoom" class="text-xs" pt:box:class="!py-1"
+                                      v-if="isMyRoom"
+                                      :offLabel="trans('app.show_as_owner')"
+                                      :onLabel="trans('app.show_as_guest')"/>
                     </div>
                 </main>
 
