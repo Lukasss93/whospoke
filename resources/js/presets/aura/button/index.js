@@ -21,6 +21,7 @@ export default {
             { 'shadow-lg': props.raised },
             { 'rounded-md': !props.rounded, 'rounded-full': props.rounded },
             { 'rounded-none first:rounded-l-md last:rounded-r-md': parent.instance.$name == 'InputGroup' },
+            { 'rounded-none first:rounded-l-md last:rounded-r-md': parent.instance.$name == 'AutoComplete' },
 
             // Link Button
             { 'text-primary-600 bg-transparent border-transparent': props.link },

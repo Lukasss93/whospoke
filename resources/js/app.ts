@@ -1,29 +1,29 @@
 import './bootstrap';
-import '../css/app.scss';
-import 'vue3-toastify/dist/index.css';
 import {createApp, DefineComponent, h} from 'vue';
 import {createInertiaApp} from '@inertiajs/vue3';
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {ZiggyVue} from '../../vendor/tightenco/ziggy';
 import Vue3Toastify from 'vue3-toastify';
 import VueTippy from 'vue-tippy';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import * as faSolidIcons from '@fortawesome/free-solid-svg-icons';
+import {MotionPlugin} from '@vueuse/motion';
+import VueAnimXYZ from '@animxyz/vue3';
+import PrimeVue from 'primevue/config';
+import Lara from '@/presets/lara';
+import Aura from '@/presets/aura';
+import ConfirmationService from 'primevue/confirmationservice';
+import ToastService from 'primevue/toastservice';
+import 'vue3-toastify/dist/index.css';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/translucent.css';
 import 'tippy.js/themes/material.css';
 import 'tippy.js/themes/light-border.css';
 import 'tippy.js/themes/light.css';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {library} from '@fortawesome/fontawesome-svg-core';
-import * as faSolidIcons from '@fortawesome/free-solid-svg-icons';
-import PrimeVue from 'primevue/config';
-import Lara from '@/presets/lara';
-import {MotionPlugin} from '@vueuse/motion';
-import VueAnimXYZ from '@animxyz/vue3';
 import '@animxyz/core';
 import 'primeicons/primeicons.css';
-import ConfirmationService from 'primevue/confirmationservice';
-import ToastService from 'primevue/toastservice';
-import {usePassThrough} from "primevue/passthrough";
+import '../css/app.scss';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -38,15 +38,6 @@ library.add(faSolidIcons.faPlus);
 library.add(faSolidIcons.faMinus);
 library.add(faSolidIcons.faCircleNotch);
 library.add(faSolidIcons.faUser);
-
-const CustomPreset = usePassThrough(
-    Lara,
-    {},
-    {
-        mergeSections: true,
-        mergeProps: true,
-    }
-);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -65,7 +56,7 @@ createInertiaApp({
             .use(VueTippy)
             .use(PrimeVue, {
                 unstyled: true,
-                pt: CustomPreset,
+                pt: Aura,
                 ptOptions: {
                     mergeSections: true,
                     mergeProps: true,

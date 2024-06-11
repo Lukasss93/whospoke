@@ -145,7 +145,7 @@ export default {
                 'rounded-r-md',
 
                 // Size
-                'py-2 leading-none',
+                '!px-2 py-2 leading-none',
                 'w-10',
 
                 // Colors
