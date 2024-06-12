@@ -63,4 +63,9 @@ return [
     ],
     'show_as_owner' => 'Show as owner',
     'show_as_guest' => 'Show as guest',
+    'member_user' => [
+        'detach' => 'Remove association',
+        'empty' => 'No user found',
+        'title' => 'Associate a user to :name',
+    ],
 ];

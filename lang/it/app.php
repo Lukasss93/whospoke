@@ -63,4 +63,9 @@ return [
     ],
     'show_as_owner' => 'Mostra come proprietario',
     'show_as_guest' => 'Mostra come ospite',
+    'member_user' => [
+        'detach' => 'Rimuovi associazione',
+        'empty' => 'Nessun utente trovato',
+        'title' => 'Associa un utente a :name',
+    ],
 ];

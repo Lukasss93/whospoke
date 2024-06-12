@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {Head, usePage} from '@inertiajs/vue3';
 import {useClipboard} from '@vueuse/core'
-import {computed, onMounted, onUnmounted, ref, watch} from "vue";
-import {Room, User} from "@/types";
+import {computed, onMounted, onUnmounted, ref, toRaw, watch} from "vue";
+import {Member, Room, User} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
@@ -21,6 +21,7 @@ import {useReward} from 'vue-rewards';
 import ButtonLogout from "@/Components/ButtonLogout.vue";
 import ButtonLogin from "@/Components/ButtonLogin.vue";
 import ToggleButton from 'primevue/togglebutton';
+import MemberUserLink from "@/Modals/MemberUserLink.vue";
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -53,6 +54,13 @@ watch(copied, () => {
         toast.success(trans('app.room.link.copied'));
     }
 });
+
+const memberUserLinkMember = ref<Member | null>(null);
+const memberUserLinkShow = computed(() => memberUserLinkMember.value !== null);
+
+function openMemberUserLink(member: Member) {
+    memberUserLinkMember.value = structuredClone(toRaw(member));
+}
 
 async function reset() {
     // store the old status to revert if the request fails
@@ -162,6 +170,11 @@ onUnmounted(() => {
         </button>
     </Teleport>
 
+    <MemberUserLink v-model:show="memberUserLinkShow"
+                    v-model:member="memberUserLinkMember"
+                    @close="memberUserLinkMember = null"
+                    @save="memberUserLinkMember = null;"/>
+
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
         <div
             class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
@@ -207,6 +220,7 @@ onUnmounted(() => {
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
                         <RoomMember v-model="room.members[i]"
+                                    @avatarClick="openMemberUserLink(room.members[i])"
                                     :canEdit="canEditThisRoom"
                                     :type="room.type"
                                     :isOnline="onlineUsers.some(x => x.id === room.members[i].user_id)"
@@ -214,8 +228,8 @@ onUnmounted(() => {
                                     v-motion
                                     :initial="{ opacity: 0, x: i%2===0?-100:100 }"
                                     :enter="{ opacity: 1, x: 0 }"
-                                    :delay="(i*80)"
-                                    :duration="1000"/>
+                                    :delay="(i*60)"
+                                    :duration="300"/>
                     </div>
 
                     <div class="flex flex-col items-center gap-2 text-center">

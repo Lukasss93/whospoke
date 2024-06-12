@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\RoomChangedEvent;
+use App\Http\Requests\LinkMemberToUserRequest;
 use App\Http\Requests\UpdateMemberOfflineRequest;
 use App\Http\Requests\UpdateMemberStatusRequest;
 use App\Models\Member;
@@ -101,6 +102,18 @@ class MemberController extends Controller
         $this->authorize('update', $member->room);
 
         $member->decrement('count');
+
+        $member->room->refresh();
+
+        RoomChangedEvent::dispatch($member->room);
+    }
+
+    public function linkUser(LinkMemberToUserRequest $request, Member $member)
+    {
+        $this->authorize('update', $member->room);
+
+        $member->user_id = $request->input('user_id');
+        $member->save();
 
         $member->room->refresh();
 

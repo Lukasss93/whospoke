@@ -30,6 +30,8 @@ const {minutes, seconds} = useTimeCounter(
     () => member.value.ended_at ? new Date(member.value.ended_at) : null
 );
 
+const emit = defineEmits(['avatarClick']);
+
 async function updateStatus(status: boolean) {
     // store the old status to revert if the request fails
     const oldStatus = member.value.status;
@@ -181,6 +183,14 @@ function checkboxChange(e: InputEvent) {
     updateStatus(status);
 }
 
+function avatarClick() {
+    if (!props.canEdit) {
+        return;
+    }
+
+    emit('avatarClick', member.value);
+}
+
 watch(() => member.value.status, (status) => {
     if (status) {
         checkedSound.play();
@@ -193,7 +203,7 @@ watch(() => member.value.status, (status) => {
     <div>
         <div
             :class="{'!opacity-60':member.status || member.offline}"
-            class="flex items-center gap-1 w-full bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
+            class="flex items-center gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
 
             <tippy v-if="canEdit">
                 <template #content>
@@ -216,16 +226,18 @@ watch(() => member.value.status, (status) => {
                 <Avatar icon="pi pi-user"
                         v-if="!member.user?.avatar"
                         class="!bg-gray-400 dark:!bg-gray-900"
+                        :class="{'cursor-pointer':canEdit}"
+                        @click="avatarClick"
                         shape="circle"/>
 
                 <Avatar v-if="member.user?.avatar"
                         :image="member.user?.avatar"
+                        :class="{'cursor-pointer':canEdit}"
+                        @click="avatarClick"
                         shape="circle"/>
 
                 <div v-if="isOnline" class="absolute bottom-[-3px] right-[-3px] inline-block size-3 bg-green-500 rounded-full border-2 border-gray-300 dark:border-gray-800"></div>
             </div>
-
-
 
             <div class="flex-1 text-2xl text-black dark:text-white">
                 {{ member.name }}

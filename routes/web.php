@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RoomController::class, 'index'])->name('home');
@@ -30,6 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::post('member/{member}/count/reset', [MemberController::class, 'resetCount'])->name('member.count.reset');
     Route::post('member/{member}/count/increment', [MemberController::class, 'incrementCount'])->name('member.count.increment');
     Route::post('member/{member}/count/decrement', [MemberController::class, 'decrementCount'])->name('member.count.decrement');
+    Route::post('member/{member}/user', [MemberController::class, 'linkUser'])->name('member.user.link');
+
+    Route::get('users', [UsersController::class, 'search'])->name('users.search');
 });
 
 Route::get('locale/{locale}', function(string $locale){
