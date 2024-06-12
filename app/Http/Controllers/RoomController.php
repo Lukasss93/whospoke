@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use SergiX44\Nutgram\Exception\InvalidDataException;
 use SergiX44\Nutgram\Nutgram;
+use Throwable;
 
 class RoomController extends Controller
 {
@@ -44,10 +45,13 @@ class RoomController extends Controller
 
             // Download the user's profile picture
             if ($loginData->photo_url !== null) {
-                Storage::disk('public')->put(
-                    path: sprintf("avatars/%s.jpg", $loginData->id),
-                    contents: file_get_contents($loginData->photo_url)
-                );
+                try {
+                    $avatarPath = sprintf("avatars/%s.jpg", $loginData->id);
+                    $avatarContent = file_get_contents($loginData->photo_url);
+                    Storage::disk('public')->put($avatarPath, $avatarContent);
+                } catch (Throwable $e) {
+                    // Do not save the avatar if an error occurs
+                }
             }
 
             // Log the user in
