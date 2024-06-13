@@ -46,36 +46,8 @@ function calcTime() {
 </script>
 
 <template>
-    <section class="clock">
-        <div class="clock__col">
-            <Digit :value="time.minutes"/>
-            <div class="clock__unit">
-                {{ trans('app.minutes') }}
-            </div>
-        </div>
-
-        <div class="clock__col">
-            <Digit :value="time.seconds"/>
-            <div class="clock__unit">
-                {{ trans('app.seconds') }}
-            </div>
-        </div>
-    </section>
+    <div class="text-2xl font-bold text-black dark:text-white font-mono">{{time.minutes}}:{{time.seconds}}</div>
 </template>
 
 <style scoped lang="scss">
-.clock {
-    @apply relative grid grid-cols-2 gap-2;
-}
-
-.clock__col {
-    @apply flex flex-col items-center justify-center;
-    @apply bg-gray-300 dark:bg-gray-800;
-    @apply border-gray-400 dark:border-gray-700;
-    @apply border rounded-lg p-2;
-}
-
-.clock__unit {
-    @apply text-gray-600 dark:text-gray-400 uppercase text-xs font-black mt-2;
-}
 </style>
