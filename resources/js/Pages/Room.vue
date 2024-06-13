@@ -320,7 +320,8 @@ onUnmounted(() => {
                     </div>
 
                     <!-- Toolbar -->
-                    <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
+                    <div v-if="room.type==='status'"
+                         class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
                         <div class="md:col-span-2 lg:col-auto">
                             <Widget :title="trans('app.widget.session')">
                                 <tippy :content="trans('app.room.link.copy')">
