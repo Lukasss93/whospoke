@@ -56,12 +56,12 @@ const membersSpoke = computed(() => room.value.members.filter(x => x.status && !
 const nextAvailableMember = ref('-');
 
 const sortTypes = [
-    {value: 'name_asc', label: 'Nome ▲'},
-    {value: 'name_desc', label: 'Nome ▼'},
-    {value: 'time_asc', label: 'Tempo ▲'},
-    {value: 'time_desc', label: 'Tempo ▼'},
-    {value: 'speech_asc', label: 'Intervento ▲'},
-    {value: 'speech_desc', label: 'Intervento ▼'},
+    {value: 'name_asc', label: trans('app.sorting.name')+' ▲'},
+    {value: 'name_desc', label: trans('app.sorting.name')+' ▼'},
+    {value: 'time_asc', label: trans('app.sorting.time')+' ▲'},
+    {value: 'time_desc', label: trans('app.sorting.time')+' ▼'},
+    {value: 'speech_asc', label: trans('app.sorting.speech')+' ▲'},
+    {value: 'speech_desc', label: trans('app.sorting.speech')+' ▼'},
 ];
 const sortType = useStorage('sortType', sortTypes[0]);
 const membersToRender = computed(() => {
@@ -322,7 +322,7 @@ onUnmounted(() => {
                     <!-- Toolbar -->
                     <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
                         <div class="md:col-span-2 lg:col-auto">
-                            <Widget title="Sessione">
+                            <Widget :title="trans('app.widget.session')">
                                 <tippy :content="trans('app.room.link.copy')">
                                 <span class="font-bold text-blue-500 cursor-pointer underline decoration-dotted"
                                       @click="copy(source)">
@@ -332,14 +332,14 @@ onUnmounted(() => {
                             </Widget>
                         </div>
                         <div class="md:col-span-2 lg:col-auto md:col-start-5 lg:col-start-2 lg:row-start-1">
-                            <Widget title="Quanti membri hanno parlato">
+                            <Widget :title="trans('app.widget.counter')">
                                 <div class="text-black dark:text-white text-lg font-bold">
                                     {{ membersSpoke }} / {{ membersTotal }}
                                 </div>
                             </Widget>
                         </div>
                         <div class="md:col-span-2 lg:col-auto md:col-start-3 md:row-start-1 lg:col-start-3 lg:row-start-1">
-                            <Widget title="Tempo trascorso">
+                            <Widget :title="trans('app.widget.time')">
                                 <Stopwatch
                                     :started="room.started_at ? new Date(room.started_at) : null"
                                     :ended="room.ended_at ? new Date(room.ended_at) : null"
@@ -347,14 +347,14 @@ onUnmounted(() => {
                             </Widget>
                         </div>
                         <div class="md:col-span-3 lg:col-auto">
-                            <Widget title="Prossimo membro disponibile">
+                            <Widget :title="trans('app.widget.available')">
                                 <div class="text-black dark:text-white text-lg font-bold">
                                     {{ nextAvailableMember }}
                                 </div>
                             </Widget>
                         </div>
                         <div class="md:col-span-3 lg:col-auto">
-                            <Widget title="Ordinamento membri">
+                            <Widget :title="trans('app.widget.sort')">
                                 <Dropdown v-model="sortType"
                                           :options="sortTypes"
                                           optionLabel="label"

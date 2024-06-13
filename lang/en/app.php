@@ -68,4 +68,16 @@ return [
         'empty' => 'No user found',
         'title' => 'Associate a user to :name',
     ],
+    'sorting' => [
+        'name' => 'Name',
+        'time' => 'Time',
+        'speech' => 'Speech',
+    ],
+    'widget' => [
+        'session' => 'Session',
+        'counter' => 'How many members spoke',
+        'time' => 'Time elapsed',
+        'available' => 'Next available member',
+        'sort' => 'Members sorting',
+    ],
 ];
