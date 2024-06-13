@@ -3,14 +3,19 @@ import {LoginWidget} from "vue-tg";
 import Button from 'primevue/button';
 import {router} from "@inertiajs/vue3";
 import axios from "axios";
+import {computed} from "vue";
 
 const props = withDefaults(defineProps<{
     redirect?: string | null;
     reload?: boolean;
+    size?: "small" | "medium" | "large";
 }>(), {
     redirect: null,
     reload: false,
+    size: "large",
 });
+
+const sizeForButton = computed(() => props.size === "medium" ? undefined : props.size);
 
 async function localLogin() {
     if (!props.reload) {
@@ -30,11 +35,11 @@ async function localLogin() {
                      :bot-username="$page.props.auth.botUsername"
                      :redirect-url="route('access', {redirect: props.redirect})"
                      corner-radius="5"
-                     size="small"
+                     :size="size"
                      :user-photo="false"/>
 
         <Button v-if="$page.props.app.isLocal"
-                size="small"
+                :size="sizeForButton"
                 class="text-xs !py-1 !px-8"
                 label="Local Login"
                 severity="warning"

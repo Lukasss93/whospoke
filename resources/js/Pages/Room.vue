@@ -404,7 +404,7 @@ onUnmounted(() => {
                         </XyzTransitionGroup>
 
                         <!-- Login/Logout Buttons -->
-                        <ButtonLogin v-if="!isLogged" :redirect="route(route().current() ?? '', route().params)"/>
+                        <ButtonLogin v-if="!isLogged" size="small" :redirect="route(route().current() ?? '', route().params)"/>
                         <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
 
                         <!-- Admin Actions -->
