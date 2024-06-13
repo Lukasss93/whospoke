@@ -76,9 +76,9 @@ const membersToRender = computed(() => {
                     return a.ended_at ? -1 : 1;
                 }
 
-                const startA = DateTime.fromJSDate(new Date(a.started_at));
+                const startA = DateTime.fromJSDate(!a.started_at ? new Date(a.ended_at) : new Date(a.started_at));
                 const endA = DateTime.fromJSDate(new Date(a.ended_at));
-                const startB = DateTime.fromJSDate(new Date(b.started_at));
+                const startB = DateTime.fromJSDate(!b.started_at ? new Date(b.ended_at) : new Date(b.started_at));
                 const endB = DateTime.fromJSDate(new Date(b.ended_at));
 
                 const diffA = endA.diff(startA, ['seconds']).seconds;
@@ -96,9 +96,9 @@ const membersToRender = computed(() => {
                     return a.ended_at ? -1 : 1;
                 }
 
-                const startA = DateTime.fromJSDate(new Date(a.started_at));
+                const startA = DateTime.fromJSDate(!a.started_at ? new Date(a.ended_at) : new Date(a.started_at));
                 const endA = DateTime.fromJSDate(new Date(a.ended_at));
-                const startB = DateTime.fromJSDate(new Date(b.started_at));
+                const startB = DateTime.fromJSDate(!b.started_at ? new Date(b.ended_at) : new Date(b.started_at));
                 const endB = DateTime.fromJSDate(new Date(b.ended_at));
 
                 const diffA = endA.diff(startA, ['seconds']).seconds;
