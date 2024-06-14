@@ -57,3 +57,9 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         github: string;
     };
 };
+
+export interface Reaction {
+    emoji: string;
+    code: string;
+    react: () => void;
+}

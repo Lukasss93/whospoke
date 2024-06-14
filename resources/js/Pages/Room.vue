@@ -2,7 +2,7 @@
 import {Head, usePage} from '@inertiajs/vue3';
 import {useClipboard} from '@vueuse/core'
 import {computed, onMounted, onUnmounted, ref, toRaw, watch} from "vue";
-import {Member, Room, User} from "@/types";
+import {Member, Reaction, Room, User} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
@@ -27,7 +27,6 @@ import Dropdown from 'primevue/dropdown';
 import {useStorage} from '@vueuse/core';
 import {DateTime} from "luxon";
 
-
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
 
@@ -37,13 +36,37 @@ const props = defineProps<{
     roomUrl: string;
 }>();
 
-const {reward, isAnimating} = useReward('reaction-panel', 'emoji', {
-    elementCount: 1,
-    emoji: ['❤️'],
-    spread: 0,
-    lifetime: 1200,
-    elementSize: 35,
-});
+const ReactionLove = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['❤️'], spread: 0, lifetime: 1200, elementSize: 25});
+const ReactionPig = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🐷'], spread: 0, lifetime: 1200, elementSize: 25});
+const ReactionBeer = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🍻'], spread: 0, lifetime: 1200, elementSize: 25});
+const ReactionSleep = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['💤'], spread: 0, lifetime: 1200, elementSize: 25});
+const ReactionCool = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['😎'], spread: 0, lifetime: 1200, elementSize: 25});
+const ReactionVomit = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🤮'], spread: 0, lifetime: 1200, elementSize: 25});
+const ReactionFire = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🔥'], spread: 0, lifetime: 1200, elementSize: 25});
+
+const reactions: Reaction[] = [
+    {emoji: '❤️', code: 'love', react: () => ReactionLove.reward()},
+    {emoji: '🐷', code: 'pig', react: () => ReactionPig.reward()},
+    {emoji: '🍻', code: 'beer', react: () => ReactionBeer.reward()},
+    {emoji: '💤', code: 'sleep', react: () => ReactionSleep.reward()},
+    {emoji: '😎', code: 'cool', react: () => ReactionCool.reward()},
+    {emoji: '🤮', code: 'vomit', react: () => ReactionVomit.reward()},
+    {emoji: '🔥', code: 'fire', react: () => ReactionFire.reward()},
+];
+
+function react(code: string) {
+    const reaction = reactions.find(x => x.code === code);
+
+    if (!reaction) {
+        return;
+    }
+
+    reaction.react();
+
+    window.Echo.private(`room.${room.value.id}.online`)
+        //@ts-ignore
+        .whisper(reaction.code);
+}
 
 const canEditThisRoom = ref(props.isMyRoom);
 const room = ref(props.baseRoom);
@@ -144,6 +167,7 @@ const membersToRender = computed(() => {
             return room.value.members;
     }
 });
+const apply = ref(null)
 
 watch(()=>room.value.members.filter(x => !x.status && !x.offline && !(x.started_at!==null && x.ended_at===null)), (newValue, oldValue) => {
     if(newValue.length === 0) {
@@ -231,14 +255,6 @@ async function stopRoom() {
     }
 }
 
-function whisper() {
-    reward();
-
-    window.Echo.private(`room.${room.value.id}.online`)
-        //@ts-ignore
-        .whisper('love');
-}
-
 onMounted(() => {
     window.Echo
         .channel(`room.${room.value.id}`)
@@ -258,10 +274,10 @@ onMounted(() => {
             onlineUsers.value = onlineUsers.value.filter(x => x.id !== user.id);
         });
 
-    window.Echo.private(`room.${room.value.id}.online`)
-        .listenForWhisper('love', () => {
-            reward();
-        });
+    const likesChannel = window.Echo.private(`room.${room.value.id}.online`);
+    for(const reaction of reactions) {
+        likesChannel.listenForWhisper(reaction.code, reaction.react);
+    }
 });
 
 onUnmounted(() => {
@@ -275,11 +291,12 @@ onUnmounted(() => {
     <Head :title="room.code"/>
 
     <Teleport to="body">
-        <div id="reaction-panel" class="size-[70px] fixed bottom-0 right-0 pointer-events-none"></div>
-        <button @click="whisper"
-                class="fixed bottom-3 right-3 text-2xl bg-gray-300 dark:bg-gray-800 border border-gray-400 dark:border-gray-700 rounded-full p-1 aspect-square transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 opacity-40 hover:opacity-100">
-            ❤️
-        </button>
+        <div id="reaction-panel" class="size-[70px] fixed bottom-0 right-14 pointer-events-none"></div>
+        <div class="flex flex-col gap-2 fixed bottom-3 right-3">
+            <button @click="() => react(reaction.code)" class="like-button" v-for="reaction in reactions" :key="reaction.code">
+                {{ reaction.emoji }}
+            </button>
+        </div>
     </Teleport>
 
     <MemberUserLink v-model:show="memberUserLinkShow"
@@ -436,5 +453,13 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .live-badge {
     @apply font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse;
+}
+
+.like-button {
+    @apply select-none p-1 aspect-square;
+    @apply bg-gray-300 dark:bg-gray-800;
+    @apply border border-gray-400 dark:border-gray-700 rounded-full;
+    @apply opacity-40 hover:opacity-100;
+    @apply transition-all duration-300 ease-in-out hover:scale-110 active:scale-95;
 }
 </style>
