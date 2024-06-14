@@ -325,7 +325,7 @@ onUnmounted(() => {
                         <div class="md:col-span-2 lg:col-auto">
                             <Widget :title="trans('app.widget.session')">
                                 <tippy :content="trans('app.room.link.copy')">
-                                <span class="font-bold text-blue-500 cursor-pointer underline decoration-dotted"
+                                <span class="font-bold text-blue-500 cursor-pointer underline underline-offset-2 decoration-dotted"
                                       @click="copy(source)">
                                     {{ room.code }}
                                 </span>
