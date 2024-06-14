@@ -75,7 +75,7 @@ function updateAutoCompleteValue(value) {
                       pt:input:class="w-full"
                       :model-value="member?.user"
                       @update:model-value="updateAutoCompleteValue"
-                      :optionLabel="x => (x.first_name+' '+x.last_name).trim()"
+                      :optionLabel="x => (x.first_name+' '+(x.last_name ?? '')).trim()"
                       forceSelection
                       dropdown
                       :suggestions="suggestions"
@@ -92,7 +92,7 @@ function updateAutoCompleteValue(value) {
                                 :image="option.avatar"
                                 shape="circle"/>
                     </div>
-                    <p>{{ (option.first_name + ' ' + option.last_name).trim() }}</p>
+                    <p>{{ (option.first_name + ' ' + (option.last_name ?? '')).trim() }}</p>
                 </div>
             </template>
             <template #empty>
