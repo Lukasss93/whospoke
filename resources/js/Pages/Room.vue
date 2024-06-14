@@ -145,7 +145,7 @@ const membersToRender = computed(() => {
     }
 });
 
-watch(()=>room.value.members.filter(x => !x.status && !x.offline), (newValue, oldValue) => {
+watch(()=>room.value.members.filter(x => !x.status && !x.offline && !(x.started_at!==null && x.ended_at===null)), (newValue, oldValue) => {
     if(newValue.length === 0) {
         nextAvailableMember.value = '-';
         return;
