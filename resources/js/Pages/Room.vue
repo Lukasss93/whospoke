@@ -167,7 +167,6 @@ const membersToRender = computed(() => {
             return room.value.members;
     }
 });
-const apply = ref(null)
 
 watch(()=>room.value.members.filter(x => !x.status && !x.offline && !(x.started_at!==null && x.ended_at===null)), (newValue, oldValue) => {
     if(newValue.length === 0) {
