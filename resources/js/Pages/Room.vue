@@ -74,8 +74,8 @@ const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
 
-const membersTotal = computed(() => room.value.members.filter(x => !x.offline).length);
-const membersSpoke = computed(() => room.value.members.filter(x => x.status && !x.offline).length);
+const membersTotal = computed(() => room.value.members.filter(x => x.type==='default').length);
+const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
 const nextAvailableMember = ref('-');
 
 const sortTypes = [
@@ -168,7 +168,7 @@ const membersToRender = computed(() => {
     }
 });
 
-watch(()=>room.value.members.filter(x => !x.status && !x.offline && !(x.started_at!==null && x.ended_at===null)), (newValue, oldValue) => {
+watch(()=>room.value.members.filter(x => !x.status && x.type==='default' && !(x.started_at!==null && x.ended_at===null)), (newValue, oldValue) => {
     if(newValue.length === 0) {
         nextAvailableMember.value = '-';
         return;
