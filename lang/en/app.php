@@ -56,9 +56,18 @@ return [
     'seconds' => 'seconds',
     'member' => [
         'status' => [
-            'offline' => 'Offline',
-            'set' => 'Set offline',
-            'unset' => 'Set online',
+            'default' => [
+                'title' => 'Default',
+                'set' => 'Set as default',
+            ],
+            'offline' => [
+                'title' => 'Offline',
+                'set' => 'Set as offline',
+            ],
+            'guest' => [
+                'title' => 'Guest',
+                'set' => 'Set as guest',
+            ],
         ],
     ],
     'show_as_owner' => 'Show as owner',

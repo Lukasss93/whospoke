@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Member} from "@/types";
+import {Member, MemberType} from "@/types";
 import Checkbox from "@/Components/Checkbox.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";
@@ -12,7 +12,9 @@ import Counter from "@/Components/Counter.vue";
 import Avatar from "primevue/avatar";
 import {useSound} from '@vueuse/sound';
 import bellSound from "@sound/bell.mp3";
-import {watch} from "vue";
+import {computed, ref, watch} from "vue";
+import SelectButton from 'primevue/selectbutton';
+import AutoComplete from "primevue/autocomplete";
 
 const props = defineProps<{
     canEdit: boolean;
@@ -29,6 +31,15 @@ const {minutes, seconds} = useTimeCounter(
     () => member.value.started_at ? new Date(member.value.started_at) : null,
     () => member.value.ended_at ? new Date(member.value.ended_at) : null
 );
+
+const isDefault = computed(() => member.value.type === 'default');
+const isOffline = computed(() => member.value.type === 'offline');
+const isGuest = computed(() => member.value.type === 'guest');
+const allowedTypes = ref([
+    {value: 'default', icon: 'pi pi-eye', tooltip: trans('app.member.status.default.set')},
+    {value: 'offline', icon: 'pi pi-eye-slash', tooltip: trans('app.member.status.offline.set')},
+    {value: 'guest', icon: 'pi pi-comment', tooltip: trans('app.member.status.guest.set')},
+]);
 
 const emit = defineEmits(['avatarClick']);
 
@@ -51,21 +62,21 @@ async function updateStatus(status: boolean) {
     }
 }
 
-async function updateOffline() {
+async function updateType(type: MemberType) {
     // store the old status to revert if the request fails
-    const oldOffline = member.value.offline;
+    const oldType = member.value.type;
 
     // update the status in the frontend
-    member.value.offline = !member.value.offline;
+    member.value.type = type;
 
     try {
         // send the request to the server
-        await axios.post(route('member.offline.update', {member: member.value.id}), {
-            offline: member.value.offline,
+        await axios.post(route('member.type.update', {member: member.value.id}), {
+            type: type,
         });
     } catch (e) {
         // revert the status if the request fails
-        member.value.offline = oldOffline;
+        member.value.type = oldType;
         toast.error(trans('app.error'));
     }
 }
@@ -202,25 +213,23 @@ watch(() => member.value.status, (status) => {
 <template>
     <div>
         <div
-            :class="{'!opacity-60':member.status || member.offline}"
+            :class="{'!opacity-60':member.status || !isDefault}"
             class="flex items-center gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
 
-            <tippy v-if="canEdit">
-                <template #content>
-                <span v-if="member.offline" class="text-green-500 font-bold">
-                    {{ trans('app.member.status.unset') }}
-                </span>
-                    <span v-if="!member.offline" class="text-red-500 font-bold">
-                    {{ trans('app.member.status.set') }}
-                </span>
+            <SelectButton v-if="canEdit"
+                          :model-value="member.type"
+                          @update:model-value="updateType"
+                          :options="allowedTypes"
+                          optionLabel="value"
+                          optionValue="value"
+                          pt:button:class="!px-2 !text-xs"
+                          dataKey="value">
+                <template #option="slotProps">
+                    <tippy :content="slotProps.option.tooltip">
+                        <i :class="slotProps.option.icon"></i>
+                    </tippy>
                 </template>
-
-                <button v-if="canEdit" @click="updateOffline"
-                        class="text-black dark:text-white bg-black/20 dark:bg-black/50 p-1 rounded">
-                    <font-awesome-icon v-if="member.offline" fixed-width icon="fa-solid fa-eye"/>
-                    <font-awesome-icon v-if="!member.offline" fixed-width icon="fa-solid fa-eye-slash"/>
-                </button>
-            </tippy>
+            </SelectButton>
 
             <div class="inline-flex relative">
                 <Avatar icon="pi pi-user"
@@ -243,7 +252,7 @@ watch(() => member.value.status, (status) => {
                 {{ member.name }}
             </div>
 
-            <div class="flex gap-1" v-if="canEdit && !member.offline">
+            <div class="flex gap-1" v-if="canEdit && isDefault">
                 <DangerButton class="!px-1" @click="resetTime">
                     <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
                 </DangerButton>
@@ -257,7 +266,7 @@ watch(() => member.value.status, (status) => {
             </div>
 
             <div class="font-mono text-xl"
-                 v-show="!member.offline && (!(minutes==='00' && seconds==='00') || canEdit)">
+                 v-show="isDefault && (!(minutes==='00' && seconds==='00') || canEdit)">
                 {{ minutes }}:{{ seconds }}
             </div>
 
@@ -265,19 +274,23 @@ watch(() => member.value.status, (status) => {
                       :checked="member.status"
                       :disabled="!canEdit"
                       :loadingWhenUnchecked="member.started_at!==null && member.ended_at===null"
-                      v-if="!member.offline && type==='status'"
+                      v-if="isDefault && type==='status'"
                       @change="checkboxChange"/>
 
-            <Counter v-if="!member.offline && type==='counter'"
+            <Counter v-if="isDefault && type==='counter'"
                      @reset="resetCount"
                      @decrement="decrementCount"
                      @increment="incrementCount"
                      v-model="member.count"
                      :canEdit="canEdit"/>
 
-            <span v-if="member.offline" class="uppercase text-red-600 font-bold">
-            {{ trans('app.member.status.offline') }}
-        </span>
+            <span v-if="isOffline" class="uppercase text-red-600 font-bold text-2xl">
+                {{ trans('app.member.status.offline.title') }}
+            </span>
+
+            <span v-if="isGuest" class="uppercase text-green-600 font-bold text-2xl">
+                {{ trans('app.member.status.guest.title') }}
+            </span>
         </div>
     </div>
 </template>

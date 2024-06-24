@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MemberType;
 use App\Events\RoomChangedEvent;
 use App\Http\Requests\LinkMemberToUserRequest;
-use App\Http\Requests\UpdateMemberOfflineRequest;
+use App\Http\Requests\UpdateMemberTypeRequest;
 use App\Http\Requests\UpdateMemberStatusRequest;
 use App\Models\Member;
 
@@ -24,11 +25,11 @@ class MemberController extends Controller
         RoomChangedEvent::dispatch($member->room);
     }
 
-    public function setMemberOffline(UpdateMemberOfflineRequest $request, Member $member)
+    public function setMemberType(UpdateMemberTypeRequest $request, Member $member)
     {
         $this->authorize('update', $member->room);
 
-        $member->offline = $request->boolean('offline');
+        $member->type = $request->enum('type', MemberType::class);
         $member->save();
 
         $member->room->refresh();

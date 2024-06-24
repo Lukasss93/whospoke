@@ -14,16 +14,18 @@ export interface User {
     color: string;
 }
 
+export type MemberType = "default" | "offline" | "guest";
+
 export interface Member {
     id: number;
     room_id: number;
     user_id: number | null;
+    type: MemberType;
     name: string;
     status: boolean;
     count: number;
     started_at: string | null;
     ended_at: string | null;
-    offline: boolean;
     created_at: string | null;
     updated_at: string | null;
     user: User | null;
