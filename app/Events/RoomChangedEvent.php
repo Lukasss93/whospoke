@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\RoomResource;
 use App\Models\Room;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -22,8 +23,10 @@ class RoomChangedEvent implements ShouldBroadcastNow
         return new Channel('room.' . $this->room->id);
     }
 
-    /*public function broadcastWith(): array
+    public function broadcastWith(): array
     {
-        return ['members' => $this->room->members];
-    }*/
+        return [
+            'room' => new RoomResource($this->room),
+        ];
+    }
 }

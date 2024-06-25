@@ -69,6 +69,7 @@ return [
                 'set' => 'Set as guest',
             ],
         ],
+        'canEdit' => 'Can edit this session',
     ],
     'show_as_owner' => 'Show as owner',
     'show_as_guest' => 'Show as guest',

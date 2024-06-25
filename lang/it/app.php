@@ -69,6 +69,7 @@ return [
                 'set' => 'Imposta come guest',
             ],
         ],
+        'canEdit' => 'Può modificare questa sessione',
     ],
     'show_as_owner' => 'Mostra come proprietario',
     'show_as_guest' => 'Mostra come ospite',

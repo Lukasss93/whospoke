@@ -248,8 +248,16 @@ watch(() => member.value.status, (status) => {
                 <div v-if="isOnline" class="absolute bottom-[-3px] right-[-3px] inline-block size-3 bg-green-500 rounded-full border-2 border-gray-300 dark:border-gray-800"></div>
             </div>
 
-            <div class="flex-1 text-2xl text-black dark:text-white">
-                {{ member.name }}
+            <div class="flex-1">
+                <tippy :content="trans('app.member.canEdit')" v-if="member.user?.canEdit">
+                    <span class="text-2xl text-yellow-700 dark:text-yellow-500 cursor-help underline underline-offset-2 decoration-dotted">
+                        {{ member.name }}
+                    </span>
+                </tippy>
+
+                <span v-if="!member.user?.canEdit" class="text-2xl text-black dark:text-white">
+                    {{ member.name }}
+                </span>
             </div>
 
             <div class="flex gap-1" v-if="canEdit && isDefault">

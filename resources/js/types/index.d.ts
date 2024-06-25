@@ -12,6 +12,7 @@ export interface User {
     initials: string;
     full_name: string;
     color: string;
+    canEdit: boolean;
 }
 
 export type MemberType = "default" | "offline" | "guest";

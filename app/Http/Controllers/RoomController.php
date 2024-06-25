@@ -6,6 +6,7 @@ use App\Enums\MemberType;
 use App\Enums\RoomType;
 use App\Events\RoomChangedEvent;
 use App\Http\Requests\CreateRoomRequest;
+use App\Http\Resources\RoomResource;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -89,7 +90,7 @@ class RoomController extends Controller
     public function showRoom(Room $room)
     {
         return Inertia::render('Room', [
-            'baseRoom' => $room,
+            'baseRoom' => new RoomResource($room),
             'isMyRoom' => auth()->id() === $room->user_id,
             'roomUrl' => route('room.show', $room->code),
         ]);
