@@ -3,7 +3,7 @@ import {trans} from "laravel-translator";
 import SelectButton from 'primevue/selectbutton';
 import { useColorMode } from '@vueuse/core';
 import {Tippy} from "vue-tippy";
-import {ref, watch} from "vue";
+import {ref} from "vue";
 
 const locale = document.getElementsByTagName('html')[0].getAttribute('lang');
 
@@ -19,16 +19,6 @@ const allowedThemes = ref([
     {value: 'dark', icon: 'pi pi-moon', tooltip: trans('app.theme.dark')},
 ]);
 const { system, store } = useColorMode();
-
-console.log('system', system.value);
-console.log('store', store.value);
-
-watch(system, (value) => {
-    console.log('system', value);
-});
-watch(store, (value) => {
-    console.log('store', value);
-});
 </script>
 
 <template>
