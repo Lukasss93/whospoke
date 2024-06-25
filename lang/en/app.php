@@ -89,4 +89,9 @@ return [
         'available' => 'Next available member',
         'sort' => 'Members sorting',
     ],
+    'theme' => [
+        'auto' => 'Auto',
+        'light' => 'Light',
+        'dark' => 'Dark',
+    ],
 ];

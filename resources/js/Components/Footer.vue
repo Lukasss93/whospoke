@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import {trans} from "laravel-translator";
+import SelectButton from 'primevue/selectbutton';
+import { useColorMode } from '@vueuse/core';
+import {Tippy} from "vue-tippy";
+import {ref, watch} from "vue";
 
 const locale = document.getElementsByTagName('html')[0].getAttribute('lang');
 
@@ -8,9 +12,45 @@ const langs = [
     {code: 'en', name: '🇺🇸 English'},
 ];
 
+
+const allowedThemes = ref([
+    {value: 'auto', icon: 'pi pi-desktop', tooltip: trans('app.theme.auto')},
+    {value: 'light', icon: 'pi pi-sun', tooltip: trans('app.theme.light')},
+    {value: 'dark', icon: 'pi pi-moon', tooltip: trans('app.theme.dark')},
+]);
+const { system, store } = useColorMode();
+
+console.log('system', system.value);
+console.log('store', store.value);
+
+watch(system, (value) => {
+    console.log('system', value);
+});
+watch(store, (value) => {
+    console.log('store', value);
+});
 </script>
 
 <template>
+
+    <Teleport to="body">
+        <SelectButton :model-value="store"
+                      @update:model-value="store = $event"
+                      :options="allowedThemes"
+                      optionLabel="value"
+                      optionValue="value"
+                      class="absolute top-0 right-0 m-2"
+                      pt:button:class="!px-3 border-y first:border-l first:border-tr-none first:border-br-none last:border-tl-none last:border-bl-none last:border-r border-red-500 !border-surface-0 dark:!border-surface-800"
+                      dataKey="value">
+            <template #option="slotProps">
+                <tippy :content="slotProps.option.tooltip" placement="bottom">
+                    <i :class="slotProps.option.icon"></i>
+                </tippy>
+            </template>
+        </SelectButton>
+    </Teleport>
+
+
     <footer class="pt-5 text-center text-sm text-black dark:text-white">
         <p>
             <a :href="$page.props.developer.github" target="_blank" class="text-blue-500 hover:underline">

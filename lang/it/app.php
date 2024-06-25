@@ -89,4 +89,9 @@ return [
         'available' => 'Prossimo membro disponibile',
         'sort' => 'Ordinamento membri',
     ],
+    'theme' => [
+        'auto' => 'Auto',
+        'light' => 'Chiaro',
+        'dark' => 'Scuro',
+    ],
 ];

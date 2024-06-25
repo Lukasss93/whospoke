@@ -11,7 +11,7 @@ export default {
         './resources/**/*.ts',
         './resources/**/*.vue',
     ],
-
+    darkMode: 'selector',
     theme: {
         extend: {
             fontFamily: {
