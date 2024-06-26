@@ -313,29 +313,31 @@ onUnmounted(() => {
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                 <Header :title="room.title"/>
 
-                <main>
-                    <div class="flex flex-col items-center gap-1 text-center mb-2">
-                        <p class="text-xl text-gray-600 dark:text-gray-400" v-if="room.type==='counter'">
-                            {{ trans('app.room.welcome') }}
-                            <tippy :content="trans('app.room.link.copy')">
+                <main class="container mx-auto">
+
+                    <!-- SESSION NAME (WHEN ROOM TYPE = COUNTER) -->
+                    <div class="text-center text-xl text-gray-600 dark:text-gray-400" v-if="room.type==='counter'">
+                        {{ trans('app.room.welcome') }}
+                        <tippy :content="trans('app.room.link.copy')">
                                 <span class="font-bold text-blue-500 cursor-pointer underline decoration-dotted"
                                       @click="copy(source)">
                                     {{ room.code }}
                                 </span>
-                            </tippy>
-                        </p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            <Interpolator :message="trans('app.room.live')">
-                                <template v-slot:live>
-                                    <span class="live-badge">{{ trans('app.live') }}</span>
-                                </template>
-                            </Interpolator>
-                        </p>
+                        </tippy>
                     </div>
 
-                    <!-- Toolbar -->
+                    <!-- REALTIME LABEL -->
+                    <div class="text-center text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        <Interpolator :message="trans('app.room.live')">
+                            <template v-slot:live>
+                                <span class="live-badge">{{ trans('app.live') }}</span>
+                            </template>
+                        </Interpolator>
+                    </div>
+
+                    <!-- ROOM TOOLBAR (WHEN ROOM TYPE = STATUS) -->
                     <div v-if="room.type==='status'"
-                         class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
+                         class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 items-center gap-2 mb-2">
                         <div class="md:col-span-2 lg:col-auto">
                             <Widget :title="trans('app.widget.session')">
                                 <tippy :content="trans('app.room.link.copy')">
@@ -383,8 +385,8 @@ onUnmounted(() => {
                         </div>
                     </div>
 
-                    <!-- Members -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 sm:mx-10 lg:mx-32 mb-2">
+                    <!-- MEMBERS -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">
                         <RoomMember v-model="room.members[i]"
                                     @avatarClick="openMemberUserLink(room.members[i])"
                                     :canEdit="canEditThisRoom"
@@ -404,13 +406,13 @@ onUnmounted(() => {
                         </div>
                     </div>
 
-                    <div class="flex flex-col items-center gap-2 text-center">
-                        <!-- Online Users -->
-                        <p :class="{'text-red-500': onlineUsers.length===0, 'text-green-500': onlineUsers.length>0}">
-                            {{ trans_choice('app.room.online', onlineUsers.length) }}
-                        </p>
+                    <!-- ONLINE USERS -->
+                    <div class="text-center" :class="{'text-red-500': onlineUsers.length===0, 'text-green-500': onlineUsers.length>0}">
+                        {{ trans_choice('app.room.online', onlineUsers.length) }}
+                    </div>
 
-                        <!-- Online Avatars -->
+                    <!-- ONLINE AVATARS -->
+                    <div class="flex flex-col items-center">
                         <XyzTransitionGroup
                             tag="div" class="flex" v-for="users in chunk(onlineUsers, 8)"
                             xyz="fade small duration-1" appear
@@ -422,15 +424,17 @@ onUnmounted(() => {
                                     class="m-0.5 text-white" :style="{'background-color':user.color}"
                                     shape="circle"/>
                         </XyzTransitionGroup>
-
-                        <!-- Login/Logout Buttons -->
-                        <ButtonLogin v-if="!isLogged" size="small" :redirect="route(route().current() ?? '', route().params)"/>
-                        <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
                     </div>
 
-                </main>
+                    <!-- LOGIN BUTTON -->
+                    <div class="text-center">
+                        <ButtonLogin v-if="!isLogged" size="small" :redirect="route(route().current() ?? '', route().params)"/>
+                    </div>
 
-                <div class="container mx-auto">
+                    <!-- LOGOUT BUTTON -->
+                    <div class="text-center">
+                        <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
+                    </div>
 
                     <!-- ADMIN TOOLBAR -->
                     <div v-if="isMyRoom"
@@ -458,7 +462,7 @@ onUnmounted(() => {
                         </div>
                     </div>
 
-                </div>
+                </main>
 
                 <Footer/>
             </div>
