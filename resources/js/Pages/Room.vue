@@ -69,7 +69,7 @@ function react(code: string) {
         .whisper(reaction.code);
 }
 
-const canEditThisRoom = ref(props.isMyRoom);
+const canEditThisRoom = useStorage('canEdit', props.isMyRoom);
 const room = ref(props.baseRoom);
 const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
