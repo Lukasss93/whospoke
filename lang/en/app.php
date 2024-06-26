@@ -37,7 +37,7 @@ return [
         'welcome' => 'Welcome to the session:',
         'info' => 'Members who spoke: :current out of :total',
         'live' => 'Data is updated in :live by the session owner.',
-        'owner' => 'As the owner, you can modify the status of the session.',
+        'owner' => 'You are the session owner',
         'reset' => 'Reset',
         'online' => ':count user is watching this session|:count users are watching this session',
         'link' => [
@@ -71,8 +71,7 @@ return [
         ],
         'canEdit' => 'Can edit this session',
     ],
-    'show_as_owner' => 'Show as owner',
-    'show_as_guest' => 'Show as guest',
+    'show_as_member' => 'Show as member',
     'member_user' => [
         'detach' => 'Remove association',
         'empty' => 'No user found',
@@ -94,5 +93,10 @@ return [
         'auto' => 'Auto',
         'light' => 'Light',
         'dark' => 'Dark',
+    ],
+    'time' => [
+        'reset' => 'Reset',
+        'play' => 'Play',
+        'stop' => 'Stop',
     ],
 ];

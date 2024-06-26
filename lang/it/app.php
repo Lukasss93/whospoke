@@ -37,7 +37,7 @@ return [
         'welcome' => 'Benvenuto nella sessione:',
         'info' => 'Membri che hanno parlato: :current su :total',
         'live' => 'I dati vengono aggiornati in :live dal proprietario della sessione.',
-        'owner' => 'Come proprietario, puoi modificare lo stato della sessione.',
+        'owner' => 'Sei il proprietario della sessione',
         'reset' => 'Reset',
         'online' => ':count utente sta guardando questa sessione|:count utenti stanno guardando questa sessione',
         'link' => [
@@ -71,8 +71,7 @@ return [
         ],
         'canEdit' => 'Può modificare questa sessione',
     ],
-    'show_as_owner' => 'Mostra come proprietario',
-    'show_as_guest' => 'Mostra come ospite',
+    'show_as_member' => 'Mostra come membro',
     'member_user' => [
         'detach' => 'Rimuovi associazione',
         'empty' => 'Nessun utente trovato',
@@ -94,5 +93,10 @@ return [
         'auto' => 'Auto',
         'light' => 'Chiaro',
         'dark' => 'Scuro',
+    ],
+    'time' => [
+        'reset' => 'Reset',
+        'play' => 'Avvia',
+        'stop' => 'Ferma',
     ],
 ];

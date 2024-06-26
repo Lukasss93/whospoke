@@ -20,12 +20,13 @@ import {chunk} from "@/Support/Helpers";
 import {useReward} from 'vue-rewards';
 import ButtonLogout from "@/Components/ButtonLogout.vue";
 import ButtonLogin from "@/Components/ButtonLogin.vue";
-import ToggleButton from 'primevue/togglebutton';
 import MemberUserLink from "@/Modals/MemberUserLink.vue";
 import Widget from "@/Components/Widget.vue";
 import Dropdown from 'primevue/dropdown';
 import {useStorage} from '@vueuse/core';
 import {DateTime} from "luxon";
+import InputSwitch from 'primevue/inputswitch';
+import Button from 'primevue/button';
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -330,9 +331,6 @@ onUnmounted(() => {
                                 </template>
                             </Interpolator>
                         </p>
-                        <p class="text-sm text-green-600" v-if="canEditThisRoom">
-                            {{ trans('app.room.owner') }}
-                        </p>
                     </div>
 
                     <!-- Toolbar -->
@@ -428,26 +426,39 @@ onUnmounted(() => {
                         <!-- Login/Logout Buttons -->
                         <ButtonLogin v-if="!isLogged" size="small" :redirect="route(route().current() ?? '', route().params)"/>
                         <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
-
-                        <!-- Admin Actions -->
-                        <div class="flex gap-2" v-if="canEditThisRoom">
-                            <DangerButton @click="reset">
-                                <font-awesome-icon icon="fa-solid fa-rotate-left"/>
-                            </DangerButton>
-                            <SuccessButton @click="startRoom" :disabled="room.started_at!==null">
-                                <font-awesome-icon icon="fa-solid fa-play"/>
-                            </SuccessButton>
-                            <DangerButton @click="stopRoom"
-                                          :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
-                                <font-awesome-icon icon="fa-solid fa-stop"/>
-                            </DangerButton>
-                        </div>
-                        <ToggleButton v-model="canEditThisRoom" class="text-xs" pt:box:class="!py-1"
-                                      v-if="isMyRoom"
-                                      :offLabel="trans('app.show_as_owner')"
-                                      :onLabel="trans('app.show_as_guest')"/>
                     </div>
+
                 </main>
+
+                <div class="container mx-auto">
+
+                    <!-- ADMIN TOOLBAR -->
+                    <div v-if="isMyRoom"
+                         :class="{'opacity-70': !canEditThisRoom}"
+                         class="my-2 grid lg:grid-cols-3 gap-2 *:p-2 *:rounded-lg *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
+                        <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
+                            {{ trans('app.room.owner') }}
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <Button severity="info" size="small" @click="reset">
+                                <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
+                            </Button>
+                            <Button severity="success" size="small" @click="startRoom" :disabled="room.started_at!==null">
+                                <font-awesome-icon fixed-width icon="fa-solid fa-play"/> {{trans('app.time.play')}}
+                            </Button>
+                            <Button severity="danger" size="small" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
+                                <font-awesome-icon fixed-width icon="fa-solid fa-stop"/> {{trans('app.time.stop')}}
+                            </Button>
+                        </div>
+                        <div class="flex items-center">
+                            <label class="flex-1">{{trans('app.show_as_member')}}</label>
+                            <InputSwitch :pt:slider="({props}) => ({class: [{'!bg-surface-400 dark:!bg-surface-900': props.modelValue == props.falseValue}]})"
+                                         :model-value="!canEditThisRoom"
+                                         @update:model-value="canEditThisRoom = !$event"/>
+                        </div>
+                    </div>
+
+                </div>
 
                 <Footer/>
             </div>
