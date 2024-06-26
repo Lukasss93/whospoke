@@ -398,6 +398,12 @@ onUnmounted(() => {
                                     :enter="{ opacity: 1, scale: 1 }"
                                     :delay="(i*60)"
                                     :duration="300"/>
+
+                        <div v-if="room.members.length%2===1">
+                            <div class="hidden h-[42px] lg:flex justify-center items-center gap-1 w-full opacity-20 font-bold text-black dark:text-white border-dashed border-2 border-black dark:border-white p-1 rounded-md">
+                                ＞︿＜
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex flex-col items-center gap-2 text-center">
