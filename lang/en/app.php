@@ -38,6 +38,7 @@ return [
         'info' => 'Members who spoke: :current out of :total',
         'live' => 'Data is updated in :live by the session owner.',
         'owner' => 'You are the session owner',
+        'editor' => 'You are the session moderator',
         'reset' => 'Reset',
         'online' => ':count user is watching this session|:count users are watching this session',
         'link' => [

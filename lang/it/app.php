@@ -38,6 +38,7 @@ return [
         'info' => 'Membri che hanno parlato: :current su :total',
         'live' => 'I dati vengono aggiornati in :live dal proprietario della sessione.',
         'owner' => 'Sei il proprietario della sessione',
+        'editor' => 'Sei il moderatore della sessione',
         'reset' => 'Reset',
         'online' => ':count utente sta guardando questa sessione|:count utenti stanno guardando questa sessione',
         'link' => [

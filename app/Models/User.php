@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -36,6 +37,11 @@ class User extends Authenticatable
     public function members(): HasMany
     {
         return $this->hasMany(Member::class);
+    }
+
+    public function managedRooms(): BelongsToMany
+    {
+        return $this->belongsToMany(Room::class, 'room_editors', 'user_id', 'room_id');
     }
 
     /**

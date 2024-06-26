@@ -16,6 +16,7 @@ export interface User {
 }
 
 export type MemberType = "default" | "offline" | "guest";
+export type MemberRole = "default" | "owner" | "editor";
 
 export interface Member {
     id: number;

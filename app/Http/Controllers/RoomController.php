@@ -91,7 +91,8 @@ class RoomController extends Controller
     {
         return Inertia::render('Room', [
             'baseRoom' => new RoomResource($room),
-            'isMyRoom' => auth()->id() === $room->user_id,
+            'isMyRoom' => $room->canManage(auth()->user()),
+            'userRole' => $room->getUserRole(auth()->user()),
             'roomUrl' => route('room.show', $room->code),
         ]);
     }

@@ -17,7 +17,7 @@ class RoomPolicy
 
     public function update(User $user, Room $room): bool
     {
-        return $user->id === $room->user_id;
+        return $room->canManage($user);
     }
 
     public function delete(User $user, Room $room): bool

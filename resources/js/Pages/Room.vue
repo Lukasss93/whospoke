@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import {Head, usePage} from '@inertiajs/vue3';
-import {useClipboard} from '@vueuse/core'
+import {useClipboard, useStorage} from '@vueuse/core'
 import {computed, onMounted, onUnmounted, ref, toRaw, watch} from "vue";
-import {Member, Reaction, Room, User} from "@/types";
+import {Member, MemberRole, Reaction, Room, User} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 import {toast} from "vue3-toastify";
 import {Tippy} from 'vue-tippy';
 import axios from "axios";
-import DangerButton from "@/Components/DangerButton.vue";
 import Interpolator from "@/Components/Interpolator.vue";
 import {trans, trans_choice} from "laravel-translator";
 import Stopwatch from "@/Components/Stopwatch.vue";
-import SuccessButton from "@/Components/SuccessButton.vue";
 import RoomMember from "@/Components/RoomMember.vue";
 import Avatar from 'primevue/avatar';
 import {chunk} from "@/Support/Helpers";
@@ -23,7 +21,6 @@ import ButtonLogin from "@/Components/ButtonLogin.vue";
 import MemberUserLink from "@/Modals/MemberUserLink.vue";
 import Widget from "@/Components/Widget.vue";
 import Dropdown from 'primevue/dropdown';
-import {useStorage} from '@vueuse/core';
 import {DateTime} from "luxon";
 import InputSwitch from 'primevue/inputswitch';
 import Button from 'primevue/button';
@@ -34,6 +31,7 @@ const isLogged = computed(() => page.props.auth.user !== null);
 const props = defineProps<{
     baseRoom: Room;
     isMyRoom: boolean;
+    userRole: MemberRole;
     roomUrl: string;
 }>();
 
@@ -69,8 +67,9 @@ function react(code: string) {
         .whisper(reaction.code);
 }
 
-const canEditThisRoom = useStorage('canEdit', props.isMyRoom);
 const room = ref(props.baseRoom);
+const editMode = useStorage('canEdit', true);
+const canEditThisRoom = computed(() => editMode.value && props.isMyRoom);
 const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
@@ -78,6 +77,16 @@ const {text, copy, copied, isSupported} = useClipboard({source});
 const membersTotal = computed(() => room.value.members.filter(x => x.type==='default').length);
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
 const nextAvailableMember = ref('-');
+
+const userRole = computed(() => {
+    if(props.userRole === 'owner') {
+        return trans('app.room.owner');
+    }
+    if(props.userRole === 'editor'){
+        return trans('app.room.editor');
+    }
+    return '-';
+});
 
 const sortTypes = [
     {value: 'name_asc', label: trans('app.sorting.name')+' ▲'},
@@ -441,7 +450,7 @@ onUnmounted(() => {
                          :class="{'opacity-70': !canEditThisRoom}"
                          class="my-2 grid lg:grid-cols-3 gap-2 *:p-2 *:rounded-lg *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
                         <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
-                            {{ trans('app.room.owner') }}
+                            {{ userRole }}
                         </div>
                         <div class="grid grid-cols-3 gap-2">
                             <Button severity="info" size="small" @click="reset">
@@ -457,8 +466,8 @@ onUnmounted(() => {
                         <div class="flex items-center">
                             <label class="flex-1">{{trans('app.show_as_member')}}</label>
                             <InputSwitch :pt:slider="({props}) => ({class: [{'!bg-surface-400 dark:!bg-surface-900': props.modelValue == props.falseValue}]})"
-                                         :model-value="!canEditThisRoom"
-                                         @update:model-value="canEditThisRoom = !$event"/>
+                                         :model-value="!editMode"
+                                         @update:model-value="editMode = !$event"/>
                         </div>
                     </div>
 
