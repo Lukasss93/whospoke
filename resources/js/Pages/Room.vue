@@ -385,6 +385,32 @@ onUnmounted(() => {
                         </div>
                     </div>
 
+                    <!-- ADMIN TOOLBAR -->
+                    <div v-if="isMyRoom"
+                         :class="{'opacity-70': !canEditThisRoom}"
+                         class="my-2 grid lg:grid-cols-3 gap-2 *:p-2 *:rounded *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
+                        <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
+                            {{ trans('app.room.owner') }}
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <Button severity="info" size="small" @click="reset">
+                                <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
+                            </Button>
+                            <Button severity="success" size="small" @click="startRoom" :disabled="room.started_at!==null">
+                                <font-awesome-icon fixed-width icon="fa-solid fa-play"/> {{trans('app.time.play')}}
+                            </Button>
+                            <Button severity="danger" size="small" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
+                                <font-awesome-icon fixed-width icon="fa-solid fa-stop"/> {{trans('app.time.stop')}}
+                            </Button>
+                        </div>
+                        <div class="flex items-center">
+                            <label class="flex-1">{{trans('app.show_as_member')}}</label>
+                            <InputSwitch :pt:slider="({props}) => ({class: [{'!bg-surface-400 dark:!bg-surface-900': props.modelValue == props.falseValue}]})"
+                                         :model-value="!canEditThisRoom"
+                                         @update:model-value="canEditThisRoom = !$event"/>
+                        </div>
+                    </div>
+
                     <!-- MEMBERS -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">
                         <RoomMember v-model="room.members[i]"
@@ -434,32 +460,6 @@ onUnmounted(() => {
                     <!-- LOGOUT BUTTON -->
                     <div class="text-center">
                         <ButtonLogout v-if="isLogged" :redirect="route(route().current() ?? '', route().params)"/>
-                    </div>
-
-                    <!-- ADMIN TOOLBAR -->
-                    <div v-if="isMyRoom"
-                         :class="{'opacity-70': !canEditThisRoom}"
-                         class="my-2 grid lg:grid-cols-3 gap-2 *:p-2 *:rounded-lg *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
-                        <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
-                            {{ trans('app.room.owner') }}
-                        </div>
-                        <div class="grid grid-cols-3 gap-2">
-                            <Button severity="info" size="small" @click="reset">
-                                <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
-                            </Button>
-                            <Button severity="success" size="small" @click="startRoom" :disabled="room.started_at!==null">
-                                <font-awesome-icon fixed-width icon="fa-solid fa-play"/> {{trans('app.time.play')}}
-                            </Button>
-                            <Button severity="danger" size="small" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
-                                <font-awesome-icon fixed-width icon="fa-solid fa-stop"/> {{trans('app.time.stop')}}
-                            </Button>
-                        </div>
-                        <div class="flex items-center">
-                            <label class="flex-1">{{trans('app.show_as_member')}}</label>
-                            <InputSwitch :pt:slider="({props}) => ({class: [{'!bg-surface-400 dark:!bg-surface-900': props.modelValue == props.falseValue}]})"
-                                         :model-value="!canEditThisRoom"
-                                         @update:model-value="canEditThisRoom = !$event"/>
-                        </div>
                     </div>
 
                 </main>
