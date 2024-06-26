@@ -30,7 +30,7 @@ async function localLogin() {
 </script>
 
 <template>
-    <div>
+    <div class="inline-block">
         <LoginWidget v-if="!$page.props.app.isLocal"
                      :bot-username="$page.props.auth.botUsername"
                      :redirect-url="route('access', {redirect: props.redirect})"

@@ -412,7 +412,7 @@ onUnmounted(() => {
                     </div>
 
                     <!-- ONLINE AVATARS -->
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center mb-2">
                         <XyzTransitionGroup
                             tag="div" class="flex" v-for="users in chunk(onlineUsers, 8)"
                             xyz="fade small duration-1" appear
