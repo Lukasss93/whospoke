@@ -4,6 +4,7 @@ import SelectButton from 'primevue/selectbutton';
 import { useColorMode } from '@vueuse/core';
 import {Tippy} from "vue-tippy";
 import {ref} from "vue";
+import Tag from 'primevue/tag';
 
 const locale = document.getElementsByTagName('html')[0].getAttribute('lang');
 
@@ -42,24 +43,26 @@ const { system, store } = useColorMode();
 
 
     <footer class="pt-5 text-center text-sm text-black dark:text-white">
-        <p>
+        <div class="flex justify-center gap-1">
             <a :href="$page.props.developer.github" target="_blank" class="text-blue-500 hover:underline">
                 {{ $page.props.app.name }}
             </a>
-            v{{ $page.props.app.version }}
-            -
-            {{ trans('app.developed') }}
-            <a href="https://www.lucapatera.it" target="_blank" class="text-blue-500 hover:underline">
-                {{ $page.props.developer.name }}
-            </a>
-        </p>
+            <Tag severity="info">v{{ $page.props.app.version }}</Tag>
+            <span>·</span>
+            <span>
+                {{ trans('app.developed') }}
+                <a href="https://www.lucapatera.it" target="_blank" class="text-blue-500 hover:underline">
+                    {{ $page.props.developer.name }}
+                </a>
+            </span>
+        </div>
         <p>
             <span v-for="({code, name}, index) in langs">
                 <a :href="route('locale.set', {locale: code})"
                    class="lang-button" :data-active="locale===code">
                     {{ name }}
                 </a>
-                 <span v-if="index+1 !== langs.length">&nbsp;|&nbsp;</span>
+                <span v-if="index+1 !== langs.length">&nbsp;·&nbsp;</span>
             </span>
         </p>
     </footer>
