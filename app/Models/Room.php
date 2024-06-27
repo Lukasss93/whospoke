@@ -35,7 +35,8 @@ class Room extends Model
 
     public function editors(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'room_editors', 'room_id', 'user_id');
+        return $this->belongsToMany(User::class, 'room_editors', 'room_id', 'user_id')
+            ->using(RoomEditor::class);
     }
 
     public function canManage(?User $user): bool

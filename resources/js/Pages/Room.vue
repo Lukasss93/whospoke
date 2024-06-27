@@ -30,8 +30,8 @@ const isLogged = computed(() => page.props.auth.user !== null);
 
 const props = defineProps<{
     baseRoom: Room;
-    isMyRoom: boolean;
-    userRole: MemberRole;
+    baseIsMyRoom: boolean;
+    baseUserRole: MemberRole;
     roomUrl: string;
 }>();
 
@@ -68,6 +68,9 @@ function react(code: string) {
 }
 
 const room = ref(props.baseRoom);
+const isMyRoom = ref(props.baseIsMyRoom);
+const userRole = ref(props.baseUserRole);
+
 const editMode = useStorage('canEdit', true);
 const canEditThisRoom = computed(() => editMode.value && props.isMyRoom);
 const onlineUsers = ref<User[]>([]);
@@ -78,11 +81,11 @@ const membersTotal = computed(() => room.value.members.filter(x => x.type==='def
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
 const nextAvailableMember = ref('-');
 
-const userRole = computed(() => {
-    if(props.userRole === 'owner') {
+const userRoleLabel = computed(() => {
+    if(userRole.value === 'owner') {
         return trans('app.room.owner');
     }
-    if(props.userRole === 'editor'){
+    if(userRole.value === 'editor'){
         return trans('app.room.editor');
     }
     return '-';
@@ -271,6 +274,16 @@ onMounted(() => {
             room.value = data.room;
         });
 
+    if(page.props.auth.user !== null){
+        window.Echo
+            .channel(`room.${room.value.id}.editor.${page.props.auth.user.id}`)
+            .listen('EditorChangedEvent', (data: { room: Room, isMyRoom: boolean, userRole: MemberRole }) => {
+                room.value = data.room;
+                isMyRoom.value = data.isMyRoom;
+                userRole.value = data.userRole;
+            });
+    }
+
     window.Echo
         .join(`room.${room.value.id}.online`)
         .here((users: User[]) => {
@@ -399,7 +412,7 @@ onUnmounted(() => {
                          :class="{'opacity-70': !canEditThisRoom}"
                          class="my-2 grid lg:grid-cols-3 gap-2 *:p-2 *:rounded *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
                         <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
-                            {{ trans('app.room.owner') }}
+                            {{ userRoleLabel }}
                         </div>
                         <div class="grid grid-cols-3 gap-2">
                             <Button severity="info" size="small" @click="reset">

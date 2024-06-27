@@ -41,7 +41,8 @@ class User extends Authenticatable
 
     public function managedRooms(): BelongsToMany
     {
-        return $this->belongsToMany(Room::class, 'room_editors', 'user_id', 'room_id');
+        return $this->belongsToMany(Room::class, 'room_editors', 'user_id', 'room_id')
+            ->using(RoomEditor::class);
     }
 
     /**
