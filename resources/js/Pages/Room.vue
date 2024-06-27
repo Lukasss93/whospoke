@@ -447,8 +447,13 @@ onUnmounted(() => {
                                     :delay="(i*60)"
                                     :duration="300"/>
 
-                        <div v-if="room.members.length%2===1">
-                            <div class="hidden h-[42px] lg:flex justify-center items-center gap-1 w-full opacity-20 font-bold text-black dark:text-white border-dashed border-2 border-black dark:border-white p-1 rounded-md">
+                        <div v-if="room.members.length%2===1"
+                             v-motion
+                             :initial="{ opacity: 0, scale:0.8 }"
+                             :enter="{ opacity: 1, scale: 1 }"
+                             :delay="(room.members.length*60)"
+                             :duration="300">
+                            <div class="hidden h-[42px] lg:flex justify-center items-center gap-1 w-full opacity-15 font-bold text-black dark:text-white border-dashed border-2 border-black dark:border-white p-1 rounded-md">
                                 ＞︿＜
                             </div>
                         </div>
