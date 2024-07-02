@@ -14,7 +14,7 @@ import {trans, trans_choice} from "laravel-translator";
 import Stopwatch from "@/Components/Stopwatch.vue";
 import RoomMember from "@/Components/RoomMember.vue";
 import Avatar from 'primevue/avatar';
-import {chunk} from "@/Support/Helpers";
+import {chunk, mapRange} from "@/Support/Helpers";
 import {useReward} from 'vue-rewards';
 import ButtonLogout from "@/Components/ButtonLogout.vue";
 import ButtonLogin from "@/Components/ButtonLogin.vue";
@@ -24,6 +24,7 @@ import Dropdown from 'primevue/dropdown';
 import {DateTime} from "luxon";
 import Button from 'primevue/button';
 import ToggleButton from 'primevue/togglebutton';
+import ProgressBar from 'primevue/progressbar';
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -79,6 +80,7 @@ const {text, copy, copied, isSupported} = useClipboard({source});
 
 const membersTotal = computed(() => room.value.members.filter(x => x.type==='default' || x.type==='pending').length);
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
+const membersSpokePercentual = computed(() => mapRange(membersSpoke.value, 0, membersTotal.value, 0, 100));
 const nextAvailableMember = ref('-');
 
 const userRoleLabel = computed(() => {
@@ -490,6 +492,9 @@ onUnmounted(() => {
                             </Widget>
                         </div>
                     </div>
+
+                    <!-- PROGRESS BAR -->
+                    <ProgressBar :value="membersSpokePercentual" class="mb-2 !h-1 !rounded-sm" :showValue="false"/>
 
                     <!-- MEMBERS -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">

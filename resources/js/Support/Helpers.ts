@@ -8,3 +8,7 @@ export function chunk(array: any[], size: number) {
         return chunks
     }, []);
 }
+
+export function mapRange (number: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
