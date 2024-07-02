@@ -60,6 +60,7 @@ return [
             'default' => [
                 'title' => 'Default',
                 'set' => 'Set as default',
+                'all' => 'Set all as online',
             ],
             'offline' => [
                 'title' => 'Offline',
@@ -72,7 +73,9 @@ return [
             'pending' => [
                 'title' => 'Pending',
                 'set' => 'Set as pending',
+                'all' => 'Set all as pending',
             ],
+            'except' => 'Except offline or guest members',
         ],
         'canEdit' => 'Can edit this session',
     ],

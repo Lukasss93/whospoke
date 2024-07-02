@@ -11,7 +11,6 @@ import * as faSolidIcons from '@fortawesome/free-solid-svg-icons';
 import {MotionPlugin} from '@vueuse/motion';
 import VueAnimXYZ from '@animxyz/vue3';
 import PrimeVue from 'primevue/config';
-import Lara from '@/presets/lara';
 import Aura from '@/presets/aura';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
@@ -24,6 +23,8 @@ import 'tippy.js/themes/light.css';
 import '@animxyz/core';
 import 'primeicons/primeicons.css';
 import '../css/app.scss';
+import Tooltip from 'primevue/tooltip';
+import { usePassThrough } from "primevue/passthrough";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -39,11 +40,28 @@ library.add(faSolidIcons.faMinus);
 library.add(faSolidIcons.faCircleNotch);
 library.add(faSolidIcons.faUser);
 
+const CustomPreset = usePassThrough(
+    Aura,
+    {
+        directives: {
+            tooltip: {
+                text: {
+                    class: ['!text-xs !py-1 !px-2']
+                }
+            }
+        }
+    },
+    {
+        mergeSections: true,
+        mergeProps: true,
+    }
+);
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
+        const app = createApp({ render: () => h(App, props) })
             .component('font-awesome-icon', FontAwesomeIcon)
             .use(plugin)
             .use(MotionPlugin)
@@ -56,15 +74,20 @@ createInertiaApp({
             .use(VueTippy)
             .use(PrimeVue, {
                 unstyled: true,
-                pt: Aura,
+                pt: CustomPreset,
                 ptOptions: {
                     mergeSections: true,
                     mergeProps: true,
                 }
             })
             .use(ConfirmationService)
-            .use(ToastService)
-            .mount(el);
+            .use(ToastService);
+
+        app.directive('tooltip', Tooltip);
+
+        app.mount(el);
+
+        return app;
     },
     progress: {
         color: '#005cd5',

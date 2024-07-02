@@ -149,4 +149,34 @@ class RoomController extends Controller
 
         RoomChangedEvent::dispatch($room);
     }
+
+    public function setMembersOnline(Room $room)
+    {
+        $this->authorize('update', $room);
+
+        $room->members()
+            ->whereNotIn('type', [MemberType::OFFLINE, MemberType::GUEST])
+            ->update([
+                'type' => MemberType::DEFAULT,
+            ]);
+
+        $room->refresh();
+
+        RoomChangedEvent::dispatch($room);
+    }
+
+    public function setMembersPending(Room $room)
+    {
+        $this->authorize('update', $room);
+
+        $room->members()
+            ->whereNotIn('type', [MemberType::OFFLINE, MemberType::GUEST])
+            ->update([
+                'type' => MemberType::PENDING,
+            ]);
+
+        $room->refresh();
+
+        RoomChangedEvent::dispatch($room);
+    }
 }

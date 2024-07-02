@@ -22,8 +22,8 @@ import MemberUserLink from "@/Modals/MemberUserLink.vue";
 import Widget from "@/Components/Widget.vue";
 import Dropdown from 'primevue/dropdown';
 import {DateTime} from "luxon";
-import InputSwitch from 'primevue/inputswitch';
 import Button from 'primevue/button';
+import ToggleButton from 'primevue/togglebutton';
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -77,7 +77,7 @@ const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
 
-const membersTotal = computed(() => room.value.members.filter(x => x.type==='default').length);
+const membersTotal = computed(() => room.value.members.filter(x => x.type==='default' || x.type==='pending').length);
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
 const nextAvailableMember = ref('-');
 
@@ -233,6 +233,52 @@ async function reset() {
     }
 }
 
+async function setMembersOnline() {
+    // store the old status to revert if the request fails
+    const oldMembers = room.value.members;
+
+    // update the status in the frontend
+    room.value.members.forEach(function (member) {
+        if(member.type === 'offline' || member.type === 'guest'){
+            return;
+        }
+
+        return member.type = 'default';
+    });
+
+    try {
+        // send the request to the server
+        await axios.patch(route('room.members.online', {room: room.value.code}));
+    } catch (e) {
+        // revert the status if the request fails
+        room.value.members = oldMembers;
+        toast.error(trans('app.error'));
+    }
+}
+
+async function setMembersPending() {
+    // store the old status to revert if the request fails
+    const oldMembers = room.value.members;
+
+    // update the status in the frontend
+    room.value.members.forEach(function (member) {
+        if(member.type === 'offline' || member.type === 'guest'){
+            return;
+        }
+
+        return member.type = 'pending';
+    });
+
+    try {
+        // send the request to the server
+        await axios.patch(route('room.members.pending', {room: room.value.code}));
+    } catch (e) {
+        // revert the status if the request fails
+        room.value.members = oldMembers;
+        toast.error(trans('app.error'));
+    }
+}
+
 async function startRoom() {
     // store the old status to revert if the request fails
     const oldStatus = room.value.started_at;
@@ -359,27 +405,39 @@ onUnmounted(() => {
 
                     <!-- ADMIN TOOLBAR -->
                     <div v-if="isMyRoom"
-                         :class="{'opacity-70': !canEditThisRoom}"
-                         class="my-2 grid lg:grid-cols-3 gap-2 *:p-2 *:rounded *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
+                         class="my-2 grid lg:grid-cols-3 gap-2 *:p-1 *:rounded-md *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
                         <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
                             {{ userRoleLabel }}
                         </div>
-                        <div class="grid grid-cols-3 gap-2">
-                            <Button severity="info" size="small" @click="reset">
+                        <div class="grid grid-cols-3 gap-1">
+                            <Button severity="info" size="small" outlined class="font-bold" @click="reset">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
                             </Button>
-                            <Button severity="success" size="small" @click="startRoom" :disabled="room.started_at!==null">
+                            <Button severity="success" size="small" outlined class="font-bold" @click="startRoom" :disabled="room.started_at!==null">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-play"/> {{trans('app.time.play')}}
                             </Button>
-                            <Button severity="danger" size="small" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
+                            <Button severity="danger" size="small" outlined class="font-bold" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-stop"/> {{trans('app.time.stop')}}
                             </Button>
                         </div>
-                        <div class="flex items-center">
-                            <label class="flex-1">{{trans('app.show_as_member')}}</label>
-                            <InputSwitch :pt:slider="({props}) => ({class: [{'!bg-surface-400 dark:!bg-surface-900': props.modelValue == props.falseValue}]})"
-                                         :model-value="!editMode"
-                                         @update:model-value="editMode = !$event"/>
+                        <div class="grid grid-cols-3 gap-1">
+                            <Button :label="trans('app.member.status.default.all')"
+                                    v-tooltip.top="trans('app.member.status.except')"
+                                    class="text-xs !p-1 text-balance"
+                                    @click="setMembersOnline"
+                                    severity="secondary" outlined />
+                            <Button :label="trans('app.member.status.pending.all')"
+                                    v-tooltip.top="trans('app.member.status.except')"
+                                    class="text-xs !p-1 text-balance"
+                                    @click="setMembersPending"
+                                    severity="secondary" outlined />
+                            <ToggleButton :model-value="!editMode"
+                                          @update:model-value="editMode = !$event"
+                                          class="text-xs"
+                                          :pt:box="({props}) => ({class: [{'text-white before:bg-blue-600 dark:before:bg-blue-600': props.modelValue}]})"
+                                          pt:box:class="!p-1 text-balance"
+                                          :onLabel="trans('app.show_as_member')"
+                                          :offLabel="trans('app.show_as_member')" />
                         </div>
                     </div>
 

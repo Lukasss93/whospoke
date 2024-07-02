@@ -20,6 +20,8 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('@{room:code}', [RoomController::class, 'deleteRoom'])->name('room.delete');
     Route::delete('@{room:code}/reset', [RoomController::class, 'reset'])->name('room.reset');
+    Route::patch('@{room:code}/members/online', [RoomController::class, 'setMembersOnline'])->name('room.members.online');
+    Route::patch('@{room:code}/members/pending', [RoomController::class, 'setMembersPending'])->name('room.members.pending');
     Route::post('@{room:code}/start', [RoomController::class, 'start'])->name('room.time.start');
     Route::post('@{room:code}/stop', [RoomController::class, 'stop'])->name('room.time.stop');
 
