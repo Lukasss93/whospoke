@@ -15,7 +15,7 @@ export interface User {
     canEdit: boolean;
 }
 
-export type MemberType = "default" | "offline" | "guest";
+export type MemberType = "default" | "offline" | "guest" | "pending";
 export type MemberRole = "default" | "owner" | "editor";
 
 export interface Member {

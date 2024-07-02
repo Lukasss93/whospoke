@@ -69,6 +69,10 @@ return [
                 'title' => 'Guest',
                 'set' => 'Set as guest',
             ],
+            'pending' => [
+                'title' => 'Pending',
+                'set' => 'Set as pending',
+            ],
         ],
         'canEdit' => 'Can edit this session',
     ],

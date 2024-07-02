@@ -69,6 +69,10 @@ return [
                 'title' => 'Guest',
                 'set' => 'Imposta come guest',
             ],
+            'pending' => [
+                'title' => 'In attesa',
+                'set' => 'Imposta come in attesa',
+            ],
         ],
         'canEdit' => 'Può modificare questa sessione',
     ],

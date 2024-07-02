@@ -35,10 +35,12 @@ const {minutes, seconds} = useTimeCounter(
 const isDefault = computed(() => member.value.type === 'default');
 const isOffline = computed(() => member.value.type === 'offline');
 const isGuest = computed(() => member.value.type === 'guest');
+const isPending = computed(() => member.value.type === 'pending');
 const allowedTypes = ref([
     {value: 'default', icon: 'pi pi-eye', tooltip: trans('app.member.status.default.set')},
     {value: 'offline', icon: 'pi pi-eye-slash', tooltip: trans('app.member.status.offline.set')},
     {value: 'guest', icon: 'pi pi-comment', tooltip: trans('app.member.status.guest.set')},
+    {value: 'pending', icon: 'pi pi-pause-circle', tooltip: trans('app.member.status.pending.set')},
 ]);
 
 const emit = defineEmits(['avatarClick']);
@@ -62,7 +64,11 @@ async function updateStatus(status: boolean) {
     }
 }
 
-async function updateType(type: MemberType) {
+async function updateType(type: MemberType|null) {
+    if(type === null) {
+        return;
+    }
+
     // store the old status to revert if the request fails
     const oldType = member.value.type;
 
@@ -298,6 +304,10 @@ watch(() => member.value.status, (status) => {
 
             <span v-if="isGuest" class="uppercase text-green-600 font-bold text-2xl">
                 {{ trans('app.member.status.guest.title') }}
+            </span>
+
+            <span v-if="isPending" class="uppercase text-yellow-600 font-bold text-2xl">
+                {{ trans('app.member.status.pending.title') }}
             </span>
         </div>
     </div>
