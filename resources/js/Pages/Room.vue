@@ -72,7 +72,7 @@ const isMyRoom = ref(props.baseIsMyRoom);
 const userRole = ref(props.baseUserRole);
 
 const editMode = useStorage('canEdit', true);
-const canEditThisRoom = computed(() => editMode.value && props.isMyRoom);
+const canEditThisRoom = computed(() => editMode.value && isMyRoom.value);
 const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
@@ -378,8 +378,8 @@ onUnmounted(() => {
                         <div class="flex items-center">
                             <label class="flex-1">{{trans('app.show_as_member')}}</label>
                             <InputSwitch :pt:slider="({props}) => ({class: [{'!bg-surface-400 dark:!bg-surface-900': props.modelValue == props.falseValue}]})"
-                                         :model-value="!canEditThisRoom"
-                                         @update:model-value="canEditThisRoom = !$event"/>
+                                         :model-value="!editMode"
+                                         @update:model-value="editMode = !$event"/>
                         </div>
                     </div>
 
