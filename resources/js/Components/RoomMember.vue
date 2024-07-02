@@ -219,7 +219,7 @@ watch(() => member.value.status, (status) => {
 <template>
     <div>
         <div
-            :class="{'!opacity-60':member.status || !isDefault}"
+            :class="{'!opacity-60':member.status || isOffline || isGuest}"
             class="flex items-center gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
 
             <SelectButton v-if="canEdit"
