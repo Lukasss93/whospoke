@@ -49,6 +49,7 @@ return [
             'question' => 'Are you sure you want to delete this session?',
             'success' => 'Session deleted!',
         ],
+        'completed' => 'Everyone spoke!',
     ],
     'your_rooms' => 'Your sessions',
     'live' => 'real time',

@@ -25,6 +25,7 @@ import {DateTime} from "luxon";
 import Button from 'primevue/button';
 import ToggleButton from 'primevue/togglebutton';
 import ProgressBar from 'primevue/progressbar';
+import Tag from 'primevue/tag';
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -81,6 +82,7 @@ const {text, copy, copied, isSupported} = useClipboard({source});
 const membersTotal = computed(() => room.value.members.filter(x => x.type==='default' || x.type==='pending').length);
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
 const membersSpokePercentual = computed(() => mapRange(membersSpoke.value, 0, membersTotal.value, 0, 100));
+const isSessionCompleted = computed(() => membersSpoke.value === membersTotal.value);
 const nextAvailableMember = ref('-');
 
 const userRoleLabel = computed(() => {
@@ -473,9 +475,12 @@ onUnmounted(() => {
                         </div>
                         <div class="md:col-span-3 lg:col-auto">
                             <Widget :title="trans('app.widget.available')">
-                                <div class="text-black dark:text-white text-lg font-bold">
+                                <div v-if="!isSessionCompleted" class="text-black dark:text-white text-lg font-bold">
                                     {{ nextAvailableMember }}
                                 </div>
+                                <Tag v-if="isSessionCompleted"
+                                     severity="success" class="!py-0.5"
+                                     :value="trans('app.room.completed')" />
                             </Widget>
                         </div>
                         <div class="md:col-span-3 lg:col-auto">

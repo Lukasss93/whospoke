@@ -49,6 +49,7 @@ return [
             'question' => 'Sei sicuro di voler cancellare questa sessione?',
             'success' => 'Sessione cancellata!',
         ],
+        'completed' => 'Hanno parlato tutti!',
     ],
     'your_rooms' => 'Le tue sessioni',
     'live' => 'tempo reale',
