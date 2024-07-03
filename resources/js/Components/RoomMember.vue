@@ -218,97 +218,141 @@ watch(() => member.value.status, (status) => {
 
 <template>
     <div>
-        <div
-            :class="{'!opacity-60':member.status || isOffline || isGuest}"
-            class="flex items-center gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
+        <div :class="{'!opacity-60':member.status || isOffline || isGuest}"
+             class="flex flex-col gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
+            <div class="flex items-center gap-1">
 
-            <SelectButton v-if="canEdit"
-                          :model-value="member.type"
-                          @update:model-value="updateType"
-                          :options="allowedTypes"
-                          optionLabel="value"
-                          optionValue="value"
-                          pt:button:class="!px-2 !text-xs"
-                          dataKey="value">
-                <template #option="slotProps">
-                    <tippy :content="slotProps.option.tooltip">
-                        <i :class="slotProps.option.icon"></i>
-                    </tippy>
-                </template>
-            </SelectButton>
+                <!-- Type Selector -->
+                <SelectButton v-if="canEdit"
+                              class="hidden sm:inline-flex"
+                              :model-value="member.type"
+                              @update:model-value="updateType"
+                              :options="allowedTypes"
+                              optionLabel="value"
+                              optionValue="value"
+                              pt:button:class="!px-2 !text-xs"
+                              dataKey="value">
+                    <template #option="slotProps">
+                        <tippy :content="slotProps.option.tooltip">
+                            <i :class="slotProps.option.icon"></i>
+                        </tippy>
+                    </template>
+                </SelectButton>
 
-            <div class="inline-flex relative">
-                <Avatar icon="pi pi-user"
-                        v-if="!member.user?.avatar"
-                        class="!bg-gray-400 dark:!bg-gray-900"
-                        :class="{'cursor-pointer':canEdit}"
-                        @click="avatarClick"
-                        shape="circle"/>
+                <!-- Avatar -->
+                <div class="inline-flex relative">
+                    <Avatar icon="pi pi-user"
+                            v-if="!member.user?.avatar"
+                            class="!bg-gray-400 dark:!bg-gray-900"
+                            :class="{'cursor-pointer':canEdit}"
+                            @click="avatarClick"
+                            shape="circle"/>
 
-                <Avatar v-if="member.user?.avatar"
-                        :image="member.user?.avatar"
-                        :class="{'cursor-pointer':canEdit}"
-                        @click="avatarClick"
-                        shape="circle"/>
+                    <Avatar v-if="member.user?.avatar"
+                            :image="member.user?.avatar"
+                            :class="{'cursor-pointer':canEdit}"
+                            @click="avatarClick"
+                            shape="circle"/>
 
-                <div v-if="isOnline" class="absolute bottom-[-3px] right-[-3px] inline-block size-3 bg-green-500 rounded-full border-2 border-gray-300 dark:border-gray-800"></div>
-            </div>
+                    <div v-if="isOnline" class="absolute bottom-[-3px] right-[-3px] inline-block size-3 bg-green-500 rounded-full border-2 border-gray-300 dark:border-gray-800"></div>
+                </div>
 
-            <div class="flex-1">
-                <tippy :content="trans('app.member.canEdit')" v-if="member.user?.canEdit">
+                <!-- Name -->
+                <div class="flex-1">
+                    <tippy :content="trans('app.member.canEdit')" v-if="member.user?.canEdit">
                     <span class="text-2xl text-yellow-700 dark:text-yellow-500 cursor-help underline underline-offset-2 decoration-dotted">
                         {{ member.name }}
                     </span>
-                </tippy>
+                    </tippy>
 
-                <span v-if="!member.user?.canEdit" class="text-2xl text-black dark:text-white">
+                    <span v-if="!member.user?.canEdit" class="text-2xl text-black dark:text-white">
                     {{ member.name }}
                 </span>
-            </div>
+                </div>
 
-            <div class="flex gap-1" v-if="canEdit && isDefault">
-                <DangerButton class="!px-1" @click="resetTime">
-                    <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
-                </DangerButton>
-                <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
-                    <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
-                </SuccessButton>
-                <DangerButton class="!px-1" @click="stopTime"
-                              :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
-                    <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
-                </DangerButton>
-            </div>
+                <!-- Time Controls -->
+                <div class="hidden sm:flex gap-1" v-if="canEdit && isDefault">
+                    <DangerButton class="!px-1" @click="resetTime">
+                        <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
+                    </DangerButton>
+                    <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
+                        <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
+                    </SuccessButton>
+                    <DangerButton class="!px-1" @click="stopTime"
+                                  :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
+                        <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
+                    </DangerButton>
+                </div>
 
-            <div class="font-mono text-xl"
-                 v-show="isDefault && (!(minutes==='00' && seconds==='00') || canEdit)">
-                {{ minutes }}:{{ seconds }}
-            </div>
+                <!-- Time Display -->
+                <div class="font-mono text-xl"
+                     v-show="isDefault && (!(minutes==='00' && seconds==='00') || canEdit)">
+                    {{ minutes }}:{{ seconds }}
+                </div>
 
-            <Checkbox class="size-8"
-                      :checked="member.status"
-                      :disabled="!canEdit"
-                      :loadingWhenUnchecked="member.started_at!==null && member.ended_at===null"
-                      v-if="isDefault && type==='status'"
-                      @change="checkboxChange"/>
+                <!-- Status -->
+                <Checkbox class="size-8"
+                          :checked="member.status"
+                          :disabled="!canEdit"
+                          :loadingWhenUnchecked="member.started_at!==null && member.ended_at===null"
+                          v-if="isDefault && type==='status'"
+                          @change="checkboxChange"/>
 
-            <Counter v-if="isDefault && type==='counter'"
-                     @reset="resetCount"
-                     @decrement="decrementCount"
-                     @increment="incrementCount"
-                     v-model="member.count"
-                     :canEdit="canEdit"/>
+                <!-- Counter -->
+                <Counter v-if="isDefault && type==='counter'"
+                         @reset="resetCount"
+                         @decrement="decrementCount"
+                         @increment="incrementCount"
+                         v-model="member.count"
+                         :canEdit="canEdit"/>
 
-            <span v-if="isOffline" class="uppercase text-red-600 font-bold text-2xl">
+                <!-- Offline Status -->
+                <span v-if="isOffline" class="uppercase text-red-600 font-bold text-2xl">
                 {{ trans('app.member.status.offline.title') }}
             </span>
 
-            <span v-if="isGuest" class="uppercase text-green-600 font-bold text-2xl">
+                <!-- Guest Status -->
+                <span v-if="isGuest" class="uppercase text-green-600 font-bold text-2xl">
                 {{ trans('app.member.status.guest.title') }}
             </span>
 
-            <span v-if="isPending" class="uppercase text-yellow-600 font-bold text-2xl">
+                <!-- Pending Status -->
+                <span v-if="isPending" class="uppercase text-yellow-600 font-bold text-2xl">
                 {{ trans('app.member.status.pending.title') }}
             </span>
+            </div>
+            <div v-if="canEdit" class="flex items-center gap-1 sm:hidden">
+                <!-- Type Selector -->
+                <SelectButton v-if="canEdit"
+                              class="flex-1"
+                              :model-value="member.type"
+                              @update:model-value="updateType"
+                              :options="allowedTypes"
+                              optionLabel="value"
+                              optionValue="value"
+                              pt:button:class="!px-2 !text-xs"
+                              dataKey="value">
+                    <template #option="slotProps">
+                        <tippy :content="slotProps.option.tooltip">
+                            <i :class="slotProps.option.icon"></i>
+                        </tippy>
+                    </template>
+                </SelectButton>
+
+                <!-- Time Controls -->
+                <div class="flex gap-1" v-if="canEdit && isDefault">
+                    <DangerButton class="!px-1" @click="resetTime">
+                        <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
+                    </DangerButton>
+                    <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
+                        <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
+                    </SuccessButton>
+                    <DangerButton class="!px-1" @click="stopTime"
+                                  :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
+                        <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
+                    </DangerButton>
+                </div>
+            </div>
         </div>
     </div>
 </template>
