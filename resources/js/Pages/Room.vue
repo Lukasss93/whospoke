@@ -438,7 +438,7 @@ onUnmounted(() => {
                             <ToggleButton :model-value="!editMode"
                                           @update:model-value="editMode = !$event"
                                           class="text-xs"
-                                          :pt:box="({props}) => ({class: [{'text-white before:bg-blue-600 dark:before:bg-blue-600': props.modelValue}]})"
+                                          :pt:box="({props}) => ({class: [{'!text-white before:!bg-blue-600 dark:before:!bg-blue-600': props.modelValue}]})"
                                           pt:box:class="!p-1 text-balance"
                                           :onLabel="trans('app.show_as_member')"
                                           :offLabel="trans('app.show_as_member')" />
