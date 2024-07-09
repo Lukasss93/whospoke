@@ -448,7 +448,7 @@ onUnmounted(() => {
                     <!-- ROOM TOOLBAR (WHEN ROOM TYPE = STATUS) -->
                     <div v-if="room.type==='status'"
                          class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 items-center gap-2 mb-2">
-                        <div class="md:col-span-2 lg:col-auto">
+                        <div class="h-full md:col-span-2 lg:col-auto">
                             <Widget :title="trans('app.widget.session')">
                                 <tippy :content="trans('app.room.link.copy')">
                                 <span class="font-bold text-blue-500 cursor-pointer underline underline-offset-2 decoration-dotted"
@@ -458,14 +458,14 @@ onUnmounted(() => {
                                 </tippy>
                             </Widget>
                         </div>
-                        <div class="md:col-span-2 lg:col-auto md:col-start-5 lg:col-start-2 lg:row-start-1">
+                        <div class="h-full md:col-span-2 lg:col-auto md:col-start-5 lg:col-start-2 lg:row-start-1">
                             <Widget :title="trans('app.widget.counter')">
                                 <div class="text-black dark:text-white text-lg font-bold">
                                     {{ membersSpoke }} / {{ membersTotal }}
                                 </div>
                             </Widget>
                         </div>
-                        <div class="md:col-span-2 lg:col-auto md:col-start-3 md:row-start-1 lg:col-start-3 lg:row-start-1">
+                        <div class="h-full md:col-span-2 lg:col-auto md:col-start-3 md:row-start-1 lg:col-start-3 lg:row-start-1">
                             <Widget :title="trans('app.widget.time')">
                                 <Stopwatch
                                     :started="room.started_at ? new Date(room.started_at) : null"
@@ -473,7 +473,7 @@ onUnmounted(() => {
                                 />
                             </Widget>
                         </div>
-                        <div class="md:col-span-3 lg:col-auto">
+                        <div class="h-full md:col-span-3 lg:col-auto">
                             <Widget :title="trans('app.widget.available')">
                                 <div v-if="!isSessionCompleted" class="text-black dark:text-white text-lg font-bold">
                                     {{ nextAvailableMember }}
@@ -483,13 +483,13 @@ onUnmounted(() => {
                                      :value="trans('app.room.completed')" />
                             </Widget>
                         </div>
-                        <div class="md:col-span-3 lg:col-auto">
+                        <div class="h-full md:col-span-3 lg:col-auto">
                             <Widget :title="trans('app.widget.sort')">
                                 <Dropdown v-model="sortType"
                                           :options="sortTypes"
                                           optionLabel="label"
                                           pt:input:class="!pl-2 !pr-0"
-                                          class="text-xs w-full text-left">
+                                          class="text-xs w-full text-left mt-1">
                                     <template #value="slotProps">
                                         {{ sortTypes.find(x=>x.value===slotProps.value.value)?.label }}
                                     </template>
