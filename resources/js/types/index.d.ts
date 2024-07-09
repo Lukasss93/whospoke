@@ -1,16 +1,13 @@
 export interface User {
     id: number;
     telegram_id: number;
-    username: string | null;
-    first_name: string;
-    last_name: string | null;
+    name: string;
     email: string | null;
     email_verified_at: string | null;
     created_at: string | null;
     updated_at: string | null;
     avatar: string | null;
     initials: string;
-    full_name: string;
     color: string;
     canEdit: boolean;
 }

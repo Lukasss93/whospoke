@@ -11,13 +11,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use LasseRafn\Initials\Initials;
+use Throwable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected static $unguarded = true;
-    protected $appends = ['avatar', 'initials', 'full_name', 'color'];
+    protected $appends = ['avatar', 'initials', 'color'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -73,17 +74,7 @@ class User extends Authenticatable
     public function initials(): Attribute
     {
         return Attribute::make(
-            get: function () {
-                $fullName = trim($this->first_name . ' ' . $this->last_name);
-                return (new Initials)->name($fullName)->generate();
-            },
-        );
-    }
-
-    public function fullName(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => trim($this->first_name . ' ' . $this->last_name),
+            get: fn() => (new Initials)->name($this->name)->generate(),
         );
     }
 
@@ -114,5 +105,20 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn() => Arr::random($colors),
         );
+    }
+
+    public function saveAvatar(?string $avatarUrl): void
+    {
+        if (empty($avatarUrl)) {
+            return;
+        }
+
+        try {
+            $avatarPath = sprintf("avatars/%s.jpg", $this->id);
+            $avatarContent = file_get_contents($avatarUrl);
+            Storage::disk('public')->put($avatarPath, $avatarContent);
+        } catch (Throwable $e) {
+            // Do not save the avatar if an error occurs
+        }
     }
 }

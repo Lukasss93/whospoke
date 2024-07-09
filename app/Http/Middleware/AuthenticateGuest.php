@@ -14,12 +14,9 @@ class AuthenticateGuest
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::check()) {
-            [$firstName, $lastName] = explode(' ', ucwords(Petname::Generate(2, ' ')));
-
             $user = User::make([
                 'id' => -hrtime(true),
-                'first_name' => $firstName,
-                'last_name' => $lastName,
+                'name' => ucwords(Petname::Generate(2, ' ')),
             ]);
 
             Auth::login($user);

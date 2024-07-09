@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 use SergiX44\Nutgram\Exception\InvalidDataException;
 use SergiX44\Nutgram\Nutgram;
-use Throwable;
 
 class LoginController extends Controller
 {
@@ -17,11 +15,9 @@ class LoginController extends Controller
         $redirectUrl = $request->input('redirect') ?: route('home');
 
         $user = User::firstOrCreate([
-            'telegram_id' => 0,
+            'id' => 0,
         ], [
-            'username' => 'LocalUser',
-            'first_name' => 'Local',
-            'last_name' => 'User',
+            'name' => 'Local User',
         ]);
 
         auth()->login($user, true);
@@ -42,21 +38,11 @@ class LoginController extends Controller
             $user = User::firstOrCreate([
                 'telegram_id' => $loginData->id,
             ], [
-                'username' => $loginData->username,
-                'first_name' => $loginData->first_name,
-                'last_name' => $loginData->last_name,
+                'name' => trim($loginData->first_name . ' ' . $loginData->last_name),
             ]);
 
-            // Download the user's profile picture
-            if ($loginData->photo_url !== null) {
-                try {
-                    $avatarPath = sprintf("avatars/%s.jpg", $loginData->id);
-                    $avatarContent = file_get_contents($loginData->photo_url);
-                    Storage::disk('public')->put($avatarPath, $avatarContent);
-                } catch (Throwable $e) {
-                    // Do not save the avatar if an error occurs
-                }
-            }
+            // Save the user's profile picture
+            $user->saveAvatar($loginData->photo_url);
 
             // Log the user in
             auth()->login($user, true);
@@ -87,20 +73,11 @@ class LoginController extends Controller
         $user = User::firstOrCreate([
             'slack_id' => $slackUser->id,
         ], [
-            'username' => $slackUser->nickname,
-            'first_name' => $slackUser->name,
+            'name' => $slackUser->name,
         ]);
 
-        // Download the user's profile picture
-        if (!empty($slackUser->getAvatar())) {
-            try {
-                $avatarPath = sprintf("avatars/%s.jpg", $user->id);
-                $avatarContent = file_get_contents($slackUser->getAvatar());
-                Storage::disk('public')->put($avatarPath, $avatarContent);
-            } catch (Throwable) {
-                // Do not save the avatar if an error occurs
-            }
-        }
+        // Save the user's profile picture
+        $user->saveAvatar($slackUser->getAvatar());
 
         // Log the user in
         auth()->login($user, true);

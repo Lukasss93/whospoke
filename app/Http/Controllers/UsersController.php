@@ -12,9 +12,7 @@ class UsersController extends Controller
         $search = $request->input('search');
 
         return User::query()
-            ->where('username', 'like', "%$search%")
-            ->orWhere('first_name', 'like', "%$search%")
-            ->orWhere('last_name', 'like', "%$search%")
+            ->where('name', 'like', "%$search%")
             ->limit(10)
             ->get();
     }

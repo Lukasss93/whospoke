@@ -540,7 +540,7 @@ onUnmounted(() => {
                             xyz="fade small duration-1" appear
                         >
                             <Avatar v-for="user in users" :key="user.id"
-                                    v-tippy="user.full_name"
+                                    v-tippy="user.name"
                                     :image="user.avatar || undefined"
                                     :label="user.avatar ? undefined : user.initials"
                                     class="m-0.5 text-white" :style="{'background-color':user.color}"
