@@ -13,7 +13,7 @@ return new class extends Migration {
         });
 
         DB::table('users')->update([
-            'name' => DB::raw('TRIM(CONCAT(first_name, " ", last_name))'),
+            'name' => DB::raw("TRIM(CONCAT(first_name, ' ', IFNULL(last_name, '')))"),
         ]);
 
         Schema::table('users', function (Blueprint $table) {
