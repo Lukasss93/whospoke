@@ -14,10 +14,10 @@ import {useSound} from '@vueuse/sound';
 import bellSound from "@sound/bell.mp3";
 import {computed, ref, watch} from "vue";
 import SelectButton from 'primevue/selectbutton';
-import AutoComplete from "primevue/autocomplete";
 
 const props = defineProps<{
     canEdit: boolean;
+    advancedMode: boolean;
     type: "status" | "counter";
     isOnline: boolean;
 }>();
@@ -223,7 +223,7 @@ watch(() => member.value.status, (status) => {
             <div class="flex items-center gap-1">
 
                 <!-- Type Selector -->
-                <SelectButton v-if="canEdit"
+                <SelectButton v-if="canEdit && advancedMode"
                               class="hidden sm:inline-flex"
                               :model-value="member.type"
                               @update:model-value="updateType"
@@ -271,7 +271,7 @@ watch(() => member.value.status, (status) => {
                 </div>
 
                 <!-- Time Controls -->
-                <div class="hidden sm:flex gap-1" v-if="canEdit && isDefault">
+                <div class="hidden sm:flex gap-1" v-if="canEdit && advancedMode && isDefault">
                     <DangerButton class="!px-1" @click="resetTime">
                         <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
                     </DangerButton>
@@ -286,7 +286,7 @@ watch(() => member.value.status, (status) => {
 
                 <!-- Time Display -->
                 <div class="font-mono text-xl"
-                     v-show="isDefault && (!(minutes==='00' && seconds==='00') || canEdit)">
+                     v-show="isDefault && (!(minutes==='00' && seconds==='00') || (canEdit && advancedMode))">
                     {{ minutes }}:{{ seconds }}
                 </div>
 
@@ -323,7 +323,7 @@ watch(() => member.value.status, (status) => {
             </div>
             <div v-if="canEdit" class="flex items-center gap-1 sm:hidden">
                 <!-- Type Selector -->
-                <SelectButton v-if="canEdit"
+                <SelectButton v-if="canEdit && advancedMode"
                               class="flex-1"
                               :model-value="member.type"
                               @update:model-value="updateType"
@@ -340,7 +340,7 @@ watch(() => member.value.status, (status) => {
                 </SelectButton>
 
                 <!-- Time Controls -->
-                <div class="flex gap-1" v-if="canEdit && isDefault">
+                <div class="flex gap-1" v-if="canEdit && advancedMode && isDefault">
                     <DangerButton class="!px-1" @click="resetTime">
                         <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
                     </DangerButton>

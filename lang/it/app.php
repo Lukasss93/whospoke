@@ -80,7 +80,7 @@ return [
         ],
         'canEdit' => 'Può modificare questa sessione',
     ],
-    'show_as_member' => 'Mostra come membro',
+    'show_advanced' => 'Controlli avanzati',
     'member_user' => [
         'detach' => 'Rimuovi associazione',
         'empty' => 'Nessun utente trovato',

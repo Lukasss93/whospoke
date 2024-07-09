@@ -73,8 +73,7 @@ const room = ref(props.baseRoom);
 const isMyRoom = ref(props.baseIsMyRoom);
 const userRole = ref(props.baseUserRole);
 
-const editMode = useStorage('canEdit', true);
-const canEditThisRoom = computed(() => editMode.value && isMyRoom.value);
+const advancedMode = useStorage('advancedMode', true);
 const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
@@ -435,13 +434,12 @@ onUnmounted(() => {
                                     class="text-xs !p-1 text-balance"
                                     @click="setMembersPending"
                                     severity="secondary" outlined />
-                            <ToggleButton :model-value="!editMode"
-                                          @update:model-value="editMode = !$event"
+                            <ToggleButton v-model="advancedMode"
                                           class="text-xs"
                                           :pt:box="({props}) => ({class: [{'!text-white before:!bg-blue-600 dark:before:!bg-blue-600': props.modelValue}]})"
                                           pt:box:class="!p-1 text-balance"
-                                          :onLabel="trans('app.show_as_member')"
-                                          :offLabel="trans('app.show_as_member')" />
+                                          :onLabel="trans('app.show_advanced')"
+                                          :offLabel="trans('app.show_advanced')" />
                         </div>
                     </div>
 
@@ -506,7 +504,8 @@ onUnmounted(() => {
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">
                         <RoomMember v-model="room.members[i]"
                                     @avatarClick="openMemberUserLink(room.members[i])"
-                                    :canEdit="canEditThisRoom"
+                                    :canEdit="isMyRoom"
+                                    :advancedMode="advancedMode"
                                     :type="room.type"
                                     :isOnline="onlineUsers.some(x => x.id === room.members[i].user_id)"
                                     v-for="(member, i) in membersToRender" :key="member.id"

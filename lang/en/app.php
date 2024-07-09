@@ -80,7 +80,7 @@ return [
         ],
         'canEdit' => 'Can edit this session',
     ],
-    'show_as_member' => 'Show as member',
+    'show_advanced' => 'Advanced controls',
     'member_user' => [
         'detach' => 'Remove association',
         'empty' => 'No user found',
