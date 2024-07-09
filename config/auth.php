@@ -112,4 +112,20 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Modes
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the authentication modes that are available in the
+    | application. You can enable or disable the telegram and slack.
+    | It is recommended to enable at least one of them.
+    |
+    */
+
+    'modes' => [
+        'telegram' => env('AUTH_MODES_TELEGRAM', false),
+        'slack' => env('AUTH_MODES_SLACK', true),
+    ],
+
 ];

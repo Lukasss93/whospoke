@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\LocalController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UsersController;
@@ -11,7 +11,13 @@ Route::get('/', [RoomController::class, 'index'])->name('home');
 Route::get('@{room:code}', [RoomController::class, 'showRoom'])->name('room.show');
 
 Route::middleware('guest')->group(function () {
-    Route::get('access', [RoomController::class, 'access'])->name('access');
+    if (app()->isLocal()) {
+        Route::get('auth/local', [LoginController::class, 'local'])->name('login.local');
+    }
+    Route::get('auth/telegram', [LoginController::class, 'telegramCallback'])->name('login.telegram');
+
+    Route::get('auth/slack/redirect', [LoginController::class, 'slackRedirect'])->name('login.slack.redirect');
+    Route::get('auth/slack/callback', [LoginController::class, 'slackCallback'])->name('login.slack.callback');
 });
 
 Route::middleware('auth')->group(function () {
@@ -42,7 +48,3 @@ Route::get('locale/{locale}', function(string $locale){
     session()->put('locale', $locale);
     return back();
 })->name('locale.set');
-
-if (app()->isLocal()) {
-    Route::get('local/login', [LocalController::class, 'login'])->name('local.login');
-}

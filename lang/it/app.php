@@ -108,4 +108,7 @@ return [
         'play' => 'Avvia',
         'stop' => 'Ferma',
     ],
+    'login' => [
+        'slack' => 'Accedi con Slack',
+    ],
 ];

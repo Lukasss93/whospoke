@@ -34,6 +34,10 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
                 'botUsername' => config('nutgram.config.bot_name'),
+                'modes' => [
+                    'telegram' => config('auth.modes.telegram'),
+                    'slack' => config('auth.modes.slack'),
+                ],
             ],
             'app' => [
                 'name' => config('app.name'),

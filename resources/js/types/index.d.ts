@@ -50,6 +50,10 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
         botUsername: string;
+        modes: {
+            telegram: boolean;
+            slack: boolean;
+        };
     };
     app: {
         name: string;

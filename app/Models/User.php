@@ -62,8 +62,8 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function () {
-                if (Storage::disk('public')->exists("avatars/{$this->telegram_id}.jpg")) {
-                    return asset("storage/avatars/{$this->telegram_id}.jpg");
+                if (Storage::disk('public')->exists("avatars/{$this->id}.jpg")) {
+                    return asset("storage/avatars/{$this->id}.jpg");
                 }
                 return null;
             },

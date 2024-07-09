@@ -108,4 +108,7 @@ return [
         'play' => 'Play',
         'stop' => 'Stop',
     ],
+    'login' => [
+        'slack' => 'Login with Slack',
+    ],
 ];
