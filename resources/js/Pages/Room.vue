@@ -499,7 +499,8 @@ onUnmounted(() => {
                     </div>
 
                     <!-- PROGRESS BAR -->
-                    <ProgressBar :value="membersSpokePercentual" class="mb-2 !h-1 !rounded-sm" :showValue="false"/>
+                    <ProgressBar :value="membersSpokePercentual"
+                                 class="mb-2 !h-1 !rounded-sm !bg-surface-300 dark:!bg-surface-800" :showValue="false"/>
 
                     <!-- MEMBERS -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">
