@@ -86,7 +86,7 @@ const confirmRoomDelete = (event, roomCode) => {
                         </p>
 
                         <p class="text-xl text-gray-600 dark:text-gray-400" v-if="isLogged">
-                            {{ trans('app.welcome', {name: page.props.auth.user?.first_name}) }}
+                            {{ trans('app.welcome', {name: page.props.auth.user?.name}) }}
                         </p>
                         <PrimaryButton v-if="isLogged && canCreateRooms" @click="isCreatingRoom=true">
                             {{ trans('app.create.label') }}
