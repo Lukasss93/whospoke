@@ -48,3 +48,7 @@ Route::get('locale/{locale}', function(string $locale){
     session()->put('locale', $locale);
     return back();
 })->name('locale.set');
+
+Route::get('version', fn() => response()->json([
+    'version' => config('app.version'),
+]))->name('version');
