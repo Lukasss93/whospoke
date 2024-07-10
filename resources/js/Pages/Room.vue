@@ -368,6 +368,11 @@ onUnmounted(() => {
                 {{ reaction.emoji }}
             </button>
         </div>
+
+        <!-- REALTIME LABEL -->
+        <span class="live-badge absolute top-2 left-2">
+            <font-awesome-icon icon="fa-solid fa-tower-broadcast" class="mr-2"/> LIVE
+        </span>
     </Teleport>
 
     <MemberUserLink v-model:show="memberUserLinkShow"
@@ -395,15 +400,6 @@ onUnmounted(() => {
                                     {{ room.code }}
                                 </span>
                         </tippy>
-                    </div>
-
-                    <!-- REALTIME LABEL -->
-                    <div class="text-center text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        <Interpolator :message="trans('app.room.live')">
-                            <template v-slot:live>
-                                <span class="live-badge">{{ trans('app.live') }}</span>
-                            </template>
-                        </Interpolator>
                     </div>
 
                     <!-- ADMIN TOOLBAR -->
@@ -568,7 +564,10 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .live-badge {
-    @apply font-bold bg-red-500 text-white px-1 rounded whitespace-nowrap animate-pulse;
+    @apply inline-block px-4;
+    @apply bg-red-500 text-white;
+    @apply font-bold text-2xl whitespace-nowrap;
+    @apply rounded animate-pulse;
 }
 
 .like-button {

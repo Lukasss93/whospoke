@@ -39,6 +39,7 @@ library.add(faSolidIcons.faPlus);
 library.add(faSolidIcons.faMinus);
 library.add(faSolidIcons.faCircleNotch);
 library.add(faSolidIcons.faUser);
+library.add(faSolidIcons.faBroadcastTower);
 
 const CustomPreset = usePassThrough(
     Aura,
