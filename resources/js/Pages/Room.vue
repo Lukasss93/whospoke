@@ -2,20 +2,18 @@
 import {Head, usePage} from '@inertiajs/vue3';
 import {useClipboard, useStorage} from '@vueuse/core'
 import {computed, onMounted, onUnmounted, ref, toRaw, watch} from "vue";
-import {Member, MemberRole, Reaction, Room, User} from "@/types";
+import {Member, MemberRole, Room, User} from "@/types";
 import Header from "@/Components/Header.vue";
 import Footer from "@/Components/Footer.vue";
 import BackgroundPattern from "@/Components/BackgroundPattern.vue";
 import {toast} from "vue3-toastify";
 import {Tippy} from 'vue-tippy';
 import axios from "axios";
-import Interpolator from "@/Components/Interpolator.vue";
 import {trans, trans_choice} from "laravel-translator";
 import Stopwatch from "@/Components/Stopwatch.vue";
 import RoomMember from "@/Components/RoomMember.vue";
 import Avatar from 'primevue/avatar';
 import {chunk, mapRange} from "@/Support/Helpers";
-import {useReward} from 'vue-rewards';
 import ButtonLogout from "@/Components/ButtonLogout.vue";
 import ButtonLogin from "@/Components/ButtonLogin.vue";
 import MemberUserLink from "@/Modals/MemberUserLink.vue";
@@ -36,38 +34,6 @@ const props = defineProps<{
     baseUserRole: MemberRole;
     roomUrl: string;
 }>();
-
-const ReactionLove = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['❤️'], spread: 0, lifetime: 1200, elementSize: 25});
-const ReactionPig = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🐷'], spread: 0, lifetime: 1200, elementSize: 25});
-const ReactionBeer = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🍻'], spread: 0, lifetime: 1200, elementSize: 25});
-const ReactionSleep = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['💤'], spread: 0, lifetime: 1200, elementSize: 25});
-const ReactionCool = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['😎'], spread: 0, lifetime: 1200, elementSize: 25});
-const ReactionVomit = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🤮'], spread: 0, lifetime: 1200, elementSize: 25});
-const ReactionFire = useReward('reaction-panel', 'emoji', {elementCount: 1, emoji: ['🔥'], spread: 0, lifetime: 1200, elementSize: 25});
-
-const reactions: Reaction[] = [
-    {emoji: '❤️', code: 'love', react: () => ReactionLove.reward()},
-    {emoji: '🐷', code: 'pig', react: () => ReactionPig.reward()},
-    {emoji: '🍻', code: 'beer', react: () => ReactionBeer.reward()},
-    {emoji: '💤', code: 'sleep', react: () => ReactionSleep.reward()},
-    {emoji: '😎', code: 'cool', react: () => ReactionCool.reward()},
-    {emoji: '🤮', code: 'vomit', react: () => ReactionVomit.reward()},
-    {emoji: '🔥', code: 'fire', react: () => ReactionFire.reward()},
-];
-
-function react(code: string) {
-    const reaction = reactions.find(x => x.code === code);
-
-    if (!reaction) {
-        return;
-    }
-
-    reaction.react();
-
-    window.Echo.private(`room.${room.value.id}.online`)
-        //@ts-ignore
-        .whisper(reaction.code);
-}
 
 const room = ref(props.baseRoom);
 const isMyRoom = ref(props.baseIsMyRoom);
@@ -344,11 +310,6 @@ onMounted(() => {
         .leaving((user: User) => {
             onlineUsers.value = onlineUsers.value.filter(x => x.id !== user.id);
         });
-
-    const likesChannel = window.Echo.private(`room.${room.value.id}.online`);
-    for(const reaction of reactions) {
-        likesChannel.listenForWhisper(reaction.code, reaction.react);
-    }
 });
 
 onUnmounted(() => {
@@ -362,13 +323,6 @@ onUnmounted(() => {
     <Head :title="room.code"/>
 
     <Teleport to="body">
-        <div id="reaction-panel" class="size-[70px] fixed bottom-0 right-14 pointer-events-none"></div>
-        <div class="hidden md:flex flex-col gap-2 fixed bottom-3 right-3">
-            <button @click="() => react(reaction.code)" class="like-button" v-for="reaction in reactions" :key="reaction.code">
-                {{ reaction.emoji }}
-            </button>
-        </div>
-
         <!-- REALTIME LABEL -->
         <span class="live-badge absolute top-2 left-2">
             <font-awesome-icon icon="fa-solid fa-tower-broadcast" class="mr-2"/> LIVE
