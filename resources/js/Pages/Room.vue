@@ -51,6 +51,7 @@ const advancedMode = useStorage('advancedMode', true);
 const onlineUsers = ref<User[]>([]);
 const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
+const onlinePresence = ref(false);
 
 const membersTotal = computed(() => room.value.members.filter(x => x.type==='default' || x.type==='pending').length);
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
@@ -321,6 +322,7 @@ onMounted(() => {
         .join(`room.${room.value.id}.online`)
         .here((users: User[]) => {
             onlineUsers.value = users;
+            onlinePresence.value = true;
         })
         .joining((user: User) => {
             onlineUsers.value.push(user);
@@ -333,6 +335,7 @@ onMounted(() => {
 onUnmounted(() => {
     window.Echo.leave(`room.${room.value.id}`);
     window.Echo.leave(`room.${room.value.id}.online`);
+    onlinePresence.value = false;
 });
 
 </script>
@@ -497,7 +500,9 @@ onUnmounted(() => {
                     </div>
 
                     <!-- ONLINE USERS -->
-                    <div class="text-center" :class="{'text-red-500': onlineUsers.length===0, 'text-green-500': onlineUsers.length>0}">
+                    <div v-if="onlinePresence"
+                         class="text-center"
+                         :class="{'text-red-500': onlineUsers.length===0, 'text-green-500': onlineUsers.length>0}">
                         {{ trans_choice('app.room.online', onlineUsers.length) }}
                     </div>
 
