@@ -19,7 +19,7 @@ useIntervalFn(() => {
 </script>
 
 <template>
-    <div class="text-2xl font-bold text-black dark:text-white font-mono">{{ time.minutes }}:{{ time.seconds }}</div>
+    <div class="text-3xl font-bold text-black dark:text-white font-mono">{{ time.minutes }}:{{ time.seconds }}</div>
 </template>
 
 <style scoped lang="scss">
