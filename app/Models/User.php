@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use LasseRafn\Initials\Initials;
 use Throwable;
@@ -64,7 +65,9 @@ class User extends Authenticatable
         return Attribute::make(
             get: function () {
                 if (Storage::disk('public')->exists("avatars/{$this->id}.jpg")) {
-                    return asset("storage/avatars/{$this->id}.jpg");
+                    return Cache::rememberForever("avatar.{$this->id}", function () {
+                        return asset("storage/avatars/{$this->id}.jpg") . '?v=' . time();
+                    });
                 }
                 return null;
             },
@@ -114,6 +117,8 @@ class User extends Authenticatable
         }
 
         try {
+            Cache::forget("avatar.{$this->id}");
+
             $avatarPath = sprintf("avatars/%s.jpg", $this->id);
             $avatarContent = file_get_contents($avatarUrl);
             Storage::disk('public')->put($avatarPath, $avatarContent);
