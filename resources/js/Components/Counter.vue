@@ -1,7 +1,7 @@
 <script setup lang="ts">
-
 import DangerButton from "@/Components/DangerButton.vue";
 import SuccessButton from "@/Components/SuccessButton.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 withDefaults(defineProps<{
     canEdit: boolean;
@@ -17,9 +17,9 @@ defineEmits(['reset', 'decrement', 'increment']);
 
 <template>
     <div class="flex gap-1">
-        <DangerButton class="!px-1" @click="$emit('reset')" v-if="canEdit">
+        <PrimaryButton class="!px-1" @click="$emit('reset')" v-if="canEdit">
             <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
-        </DangerButton>
+        </PrimaryButton>
         <DangerButton class="!px-1" @click="$emit('decrement')" v-if="canEdit">
             <font-awesome-icon icon="fa-solid fa-minus"/>
         </DangerButton>

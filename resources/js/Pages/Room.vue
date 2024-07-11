@@ -384,13 +384,13 @@ onUnmounted(() => {
                             {{ userRoleLabel }}
                         </div>
                         <div class="grid grid-cols-3 gap-1">
-                            <Button severity="info" size="small" outlined class="font-bold" @click="reset">
+                            <Button severity="info" size="small" outlined class="font-bold" @click="reset" :class="{'col-span-3': room.type==='counter'}">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
                             </Button>
-                            <Button severity="success" size="small" outlined class="font-bold" @click="startRoom" :disabled="room.started_at!==null">
+                            <Button v-if="room.type==='status'" severity="success" size="small" outlined class="font-bold" @click="startRoom" :disabled="room.started_at!==null">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-play"/> {{trans('app.time.play')}}
                             </Button>
-                            <Button severity="danger" size="small" outlined class="font-bold" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
+                            <Button v-if="room.type==='status'" severity="danger" size="small" outlined class="font-bold" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-stop"/> {{trans('app.time.stop')}}
                             </Button>
                         </div>
@@ -468,7 +468,7 @@ onUnmounted(() => {
                     </div>
 
                     <!-- PROGRESS BAR -->
-                    <ProgressBar :value="membersSpokePercentual"
+                    <ProgressBar :value="membersSpokePercentual" v-if="room.type==='status'"
                                  class="mb-2 !h-1 !rounded-sm !bg-surface-300 dark:!bg-surface-800" :showValue="false"/>
 
                     <!-- MEMBERS -->
@@ -477,6 +477,7 @@ onUnmounted(() => {
                                     @avatarClick="openMemberUserLink(room.members[i])"
                                     :canEdit="isMyRoom"
                                     :advancedMode="advancedMode"
+                                    :showTime="room.type==='status'"
                                     :type="room.type"
                                     :isOnline="onlineUsers.some(x => x.id === room.members[i].user_id)"
                                     v-for="(member, i) in membersToRender" :key="member.id"

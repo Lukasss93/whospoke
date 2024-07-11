@@ -20,6 +20,7 @@ const props = defineProps<{
     advancedMode: boolean;
     type: "status" | "counter";
     isOnline: boolean;
+    showTime: boolean;
 }>();
 
 const checkedSound = useSound(bellSound, {
@@ -271,7 +272,7 @@ watch(() => member.value.status, (status) => {
                 </div>
 
                 <!-- Time Controls -->
-                <div class="hidden sm:flex gap-1" v-if="canEdit && advancedMode && isDefault">
+                <div class="hidden sm:flex gap-1" v-if="showTime && canEdit && advancedMode && isDefault">
                     <DangerButton class="!px-1" @click="resetTime">
                         <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
                     </DangerButton>
@@ -286,7 +287,7 @@ watch(() => member.value.status, (status) => {
 
                 <!-- Time Display -->
                 <div class="font-mono text-xl"
-                     v-show="isDefault && (!(minutes==='00' && seconds==='00') || (canEdit && advancedMode))">
+                     v-show="isDefault && (!(minutes==='00' && seconds==='00') || (showTime && canEdit && advancedMode))">
                     {{ minutes }}:{{ seconds }}
                 </div>
 
