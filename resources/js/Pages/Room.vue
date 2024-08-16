@@ -346,7 +346,7 @@ onUnmounted(() => {
     <Teleport to="body">
         <!-- REALTIME LABEL -->
         <span class="live-badge absolute top-2 left-2">
-            <font-awesome-icon icon="fa-solid fa-tower-broadcast" class="mr-2"/> LIVE
+            LIVE
         </span>
     </Teleport>
 
