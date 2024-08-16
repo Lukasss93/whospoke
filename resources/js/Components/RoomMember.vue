@@ -43,7 +43,7 @@ const allowedTypes = ref([
     {value: 'pending', icon: 'pi pi-pause-circle', tooltip: trans('app.member.status.pending.set')},
 ]);
 
-const emit = defineEmits(['avatarClick']);
+const emit = defineEmits(['avatarClick', 'timeStart']);
 
 async function updateStatus(status: boolean) {
     // store the old status to revert if the request fails
@@ -108,6 +108,8 @@ async function resetTime() {
 }
 
 async function startTime() {
+    emit('timeStart', member.value);
+
     // store the old status to revert if the request fails
     const oldValue = member.value.started_at;
 

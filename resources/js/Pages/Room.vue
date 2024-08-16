@@ -291,6 +291,12 @@ async function stopRoom() {
     }
 }
 
+async function onMemberTimeStart(member:Member) {
+    if(room.value.started_at===null){
+        await startRoom();
+    }
+}
+
 watch(focused, async (value) => {
     if(value){
         const serverVersion = await getServerVersion();
@@ -475,6 +481,7 @@ onUnmounted(() => {
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">
                         <RoomMember v-model="room.members[i]"
                                     @avatarClick="openMemberUserLink(room.members[i])"
+                                    @timeStart="onMemberTimeStart"
                                     :canEdit="isMyRoom"
                                     :advancedMode="advancedMode"
                                     :type="room.type"
