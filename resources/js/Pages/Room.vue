@@ -351,7 +351,7 @@ onUnmounted(() => {
 
     <Teleport to="body">
         <!-- REALTIME LABEL -->
-        <span class="live-badge absolute top-2 left-2">
+        <span class="live-badge absolute top-2 left-2" v-if="onlinePresence">
             LIVE
         </span>
     </Teleport>
