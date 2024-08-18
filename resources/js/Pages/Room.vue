@@ -26,12 +26,18 @@ import ProgressBar from 'primevue/progressbar';
 import Tag from 'primevue/tag';
 import { useWindowFocus } from '@vueuse/core';
 import memoize from 'memoize';
+import bellSound from "@sound/bell.mp3";
+import {useSound} from '@vueuse/sound';
 
 const focused = useWindowFocus();
 const getServerVersion = memoize(async()=>{
     const response = await axios.get(route('version'));
     return response.data.version;
 },{maxAge:1000*60*60});
+
+const checkedSound = useSound(bellSound, {
+    volume: 0.01
+});
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -488,6 +494,7 @@ onUnmounted(() => {
                         <RoomMember v-model="room.members[i]"
                                     @avatarClick="openMemberUserLink(room.members[i])"
                                     @timeStart="onMemberTimeStart"
+                                    @statusChange="onMemberStatusChange"
                                     :canEdit="isMyRoom"
                                     :advancedMode="advancedMode"
                                     :type="room.type"
