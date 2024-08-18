@@ -195,7 +195,13 @@ async function reset() {
     const oldEndedAt = room.value.ended_at;
 
     // update the status in the frontend
-    room.value.members.forEach(member => member.status = false);
+    room.value.members.forEach(member => {
+        member.type = 'default';
+        member.status = false;
+        member.count = 0;
+        member.started_at = null;
+        member.ended_at = null;
+    });
     room.value.started_at = null;
     room.value.ended_at = null;
 
