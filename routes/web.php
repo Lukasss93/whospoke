@@ -5,10 +5,11 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UsersController;
+use App\Http\Middleware\NoBrowserCache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RoomController::class, 'index'])->name('home');
-Route::get('@{room:code}', [RoomController::class, 'showRoom'])->name('room.show');
+Route::get('@{room:code}', [RoomController::class, 'showRoom'])->name('room.show')->middleware(NoBrowserCache::class);
 
 Route::middleware('guest')->group(function () {
     if (app()->isLocal()) {

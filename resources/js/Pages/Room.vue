@@ -26,12 +26,18 @@ import ProgressBar from 'primevue/progressbar';
 import Tag from 'primevue/tag';
 import { useWindowFocus } from '@vueuse/core';
 import memoize from 'memoize';
+import bellSound from "@sound/bell.mp3";
+import {useSound} from '@vueuse/sound';
 
 const focused = useWindowFocus();
 const getServerVersion = memoize(async()=>{
     const response = await axios.get(route('version'));
     return response.data.version;
 },{maxAge:1000*60*60});
+
+const checkedSound = useSound(bellSound, {
+    volume: 0.01
+});
 
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
@@ -195,7 +201,13 @@ async function reset() {
     const oldEndedAt = room.value.ended_at;
 
     // update the status in the frontend
-    room.value.members.forEach(member => member.status = false);
+    room.value.members.forEach(member => {
+        member.type = 'default';
+        member.status = false;
+        member.count = 0;
+        member.started_at = null;
+        member.ended_at = null;
+    });
     room.value.started_at = null;
     room.value.ended_at = null;
 
@@ -291,6 +303,12 @@ async function stopRoom() {
     }
 }
 
+async function onMemberTimeStart(member:Member) {
+    if(room.value.started_at===null){
+        await startRoom();
+    }
+}
+
 watch(focused, async (value) => {
     if(value){
         const serverVersion = await getServerVersion();
@@ -345,8 +363,8 @@ onUnmounted(() => {
 
     <Teleport to="body">
         <!-- REALTIME LABEL -->
-        <span class="live-badge absolute top-2 left-2">
-            <font-awesome-icon icon="fa-solid fa-tower-broadcast" class="mr-2"/> LIVE
+        <span class="live-badge absolute top-2 left-2" v-if="onlinePresence">
+            LIVE
         </span>
     </Teleport>
 
@@ -475,6 +493,8 @@ onUnmounted(() => {
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">
                         <RoomMember v-model="room.members[i]"
                                     @avatarClick="openMemberUserLink(room.members[i])"
+                                    @timeStart="onMemberTimeStart"
+                                    @statusChange="onMemberStatusChange"
                                     :canEdit="isMyRoom"
                                     :advancedMode="advancedMode"
                                     :showTime="room.type==='status'"

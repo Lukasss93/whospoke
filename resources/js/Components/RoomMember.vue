@@ -10,8 +10,6 @@ import DangerButton from "@/Components/DangerButton.vue";
 import SuccessButton from "@/Components/SuccessButton.vue";
 import Counter from "@/Components/Counter.vue";
 import Avatar from "primevue/avatar";
-import {useSound} from '@vueuse/sound';
-import bellSound from "@sound/bell.mp3";
 import {computed, ref, watch} from "vue";
 import SelectButton from 'primevue/selectbutton';
 
@@ -22,10 +20,6 @@ const props = defineProps<{
     isOnline: boolean;
     showTime: boolean;
 }>();
-
-const checkedSound = useSound(bellSound, {
-    volume: 0.01
-});
 
 const member = defineModel<Member>({required: true});
 const {minutes, seconds} = useTimeCounter(
@@ -44,7 +38,7 @@ const allowedTypes = ref([
     {value: 'pending', icon: 'pi pi-pause-circle', tooltip: trans('app.member.status.pending.set')},
 ]);
 
-const emit = defineEmits(['avatarClick']);
+const emit = defineEmits(['avatarClick', 'timeStart', 'statusChange']);
 
 async function updateStatus(status: boolean) {
     // store the old status to revert if the request fails
@@ -109,6 +103,8 @@ async function resetTime() {
 }
 
 async function startTime() {
+    emit('timeStart', member.value);
+
     // store the old status to revert if the request fails
     const oldValue = member.value.started_at;
 
@@ -209,11 +205,7 @@ function avatarClick() {
     emit('avatarClick', member.value);
 }
 
-watch(() => member.value.status, (status) => {
-    if (status) {
-        checkedSound.play();
-    }
-});
+watch(() => member.value.status, (status) => emit('statusChange', status));
 
 </script>
 
