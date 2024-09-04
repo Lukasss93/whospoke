@@ -5,6 +5,7 @@
         "dev": "vite",
         "build": "vue-tsc && vite build"
     },
+    "web-types": "./web-types.json",
     "devDependencies": {
         "@animxyz/vue3": "^0.6.7",
         "@fortawesome/fontawesome-svg-core": "^6.5.2",

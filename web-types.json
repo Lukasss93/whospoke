@@ -1,0 +1,35 @@
+{
+    "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
+    "framework": "vue",
+    "js-types-syntax": "typescript",
+    "description-markup": "markdown",
+    "framework-config": {
+        "enable-when": {
+            "file-extensions": [
+                "vue"
+            ]
+        }
+    },
+    "contributions": {
+        "html": {
+            "vue-directives": [
+                {
+                    "name": "tippy",
+                    "attribute-value": {
+                        "type": "string",
+                        "required": true
+                    }
+                },
+                {
+                    "name": "motion",
+                    "attribute-value": {
+                        "type": "boolean",
+                        "required": false
+                    }
+                }
+            ]
+        }
+    },
+    "name": "WhoSpoke",
+    "version": "0.0.1"
+}
