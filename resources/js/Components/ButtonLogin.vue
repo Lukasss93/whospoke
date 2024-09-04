@@ -56,8 +56,9 @@ async function localLogin() {
 
         <!-- LOCAL LOGIN -->
         <Button v-if="$page.props.app.isLocal"
+                class="w-full font-medium"
+                :class="{'text-xs !py-1 !px-2': size === 'small', '!text-lg !py-1': size === 'large'}"
                 :size="sizeForButton"
-                class="text-xs !py-1 !px-8"
                 label="Local Login"
                 severity="warning"
                 @click="localLogin"/>
