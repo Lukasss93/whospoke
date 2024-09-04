@@ -38,6 +38,8 @@ const allowedTypes = ref([
     {value: 'pending', icon: 'pi pi-pause-circle', tooltip: trans('app.member.status.pending.set')},
 ]);
 
+const isTalking = computed(() => member.value.started_at!==null && member.value.ended_at===null);
+
 const emit = defineEmits(['avatarClick', 'timeStart', 'statusChange']);
 
 async function updateStatus(status: boolean) {
@@ -210,7 +212,7 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
 </script>
 
 <template>
-    <div>
+    <div class="rounded-md" :class="{'loading':isTalking}">
         <div :class="{'!opacity-60':member.status || isOffline || isGuest}"
              class="flex flex-col gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
             <div class="flex items-center gap-1">
@@ -287,7 +289,7 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
                 <Checkbox class="size-8"
                           :checked="member.status"
                           :disabled="!canEdit"
-                          :loadingWhenUnchecked="member.started_at!==null && member.ended_at===null"
+                          :loadingWhenUnchecked="isTalking"
                           v-if="isDefault && type==='status'"
                           @change="checkboxChange"/>
 
@@ -351,5 +353,47 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
 </template>
 
 <style scoped lang="scss">
+.loading {
+    --loading-color: rgba(52, 211, 153, 0.6);
+    --loading-gap: -1px;
+    --loading-size: 1px;
+    --loading-speed: 10s;
+    --loading-radius: 7px;
 
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        top: var(--loading-gap);
+        left: var(--loading-gap);
+        right: var(--loading-gap);
+        bottom: var(--loading-gap);
+        border: var(--loading-size) solid var(--loading-color);
+        transition: all .5s;
+        animation: clippath var(--loading-speed) infinite linear;
+        border-radius: var(--loading-radius);
+        pointer-events: none;
+    }
+
+    &::after {
+        animation: clippath var(--loading-speed) infinite calc(var(--loading-speed)/-2) linear;
+    }
+}
+
+@keyframes clippath {
+    0%,
+    100% {
+        clip-path: inset(0 0 98% 0);
+    }
+
+    25% {
+        clip-path: inset(0 98% 0 0);
+    }
+    50% {
+        clip-path: inset(98% 0 0 0);
+    }
+    75% {
+        clip-path: inset(0 0 0 98%);
+    }
+}
 </style>
