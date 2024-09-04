@@ -190,6 +190,12 @@ watch(copied, () => {
 const memberUserLinkMember = ref<Member | null>(null);
 const memberUserLinkShow = computed(() => memberUserLinkMember.value !== null);
 
+function onMemberStatusChange(status:boolean) {
+    if (status) {
+        checkedSound.play();
+    }
+}
+
 function openMemberUserLink(member: Member) {
     memberUserLinkMember.value = structuredClone(toRaw(member));
 }
