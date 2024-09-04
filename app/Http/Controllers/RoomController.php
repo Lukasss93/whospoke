@@ -6,6 +6,7 @@ use App\Enums\MemberType;
 use App\Enums\RoomType;
 use App\Events\RoomChangedEvent;
 use App\Http\Requests\CreateRoomRequest;
+use App\Http\Requests\EndOtherMembersTimeRequest;
 use App\Http\Resources\RoomResource;
 use App\Models\Room;
 use Illuminate\Support\Facades\DB;
@@ -101,6 +102,27 @@ class RoomController extends Controller
 
         $room->ended_at = now();
         $room->save();
+
+        RoomChangedEvent::dispatch($room);
+    }
+
+    public function endOtherMembersTime(EndOtherMembersTimeRequest $request, Room $room)
+    {
+        $this->authorize('update', $room);
+
+        $except = $request->collect('except');
+
+        $room
+            ->members()
+            ->whereNotNull('started_at')
+            ->whereNull('ended_at')
+            ->whereNotIn('id', $except)
+            ->update([
+                'ended_at' => now(),
+                'status' => true,
+            ]);
+
+        $room->refresh();
 
         RoomChangedEvent::dispatch($room);
     }

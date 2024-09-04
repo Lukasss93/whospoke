@@ -40,7 +40,7 @@ const allowedTypes = ref([
 
 const isTalking = computed(() => member.value.started_at!==null && member.value.ended_at===null);
 
-const emit = defineEmits(['avatarClick', 'timeStart', 'statusChange']);
+const emit = defineEmits(['avatarClick', 'timeStarted', 'statusChange']);
 
 async function updateStatus(status: boolean) {
     // store the old status to revert if the request fails
@@ -105,8 +105,6 @@ async function resetTime() {
 }
 
 async function startTime() {
-    emit('timeStart', member.value);
-
     // store the old status to revert if the request fails
     const oldValue = member.value.started_at;
 
@@ -120,6 +118,8 @@ async function startTime() {
         // revert the status if the request fails
         member.value.started_at = oldValue;
         toast.error(trans('app.error'));
+    } finally {
+        emit('timeStarted', member.value);
     }
 }
 

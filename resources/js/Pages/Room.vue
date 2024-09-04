@@ -309,9 +309,39 @@ async function stopRoom() {
     }
 }
 
-async function onMemberTimeStart(member:Member) {
+async function onMemberTimeStarted(member:Member) {
     if(room.value.started_at===null){
         await startRoom();
+    }
+
+    await endOtherMembersTime([member.id]);
+}
+
+async function endOtherMembersTime(exceptMemberIds:number[]) {
+    // update the status in the frontend
+    let oldValue:number[] = [];
+    room.value.members
+        .filter((x:Member) => !exceptMemberIds.includes(x.id) && x.started_at !== null && x.ended_at === null)
+        .forEach(x => {
+            oldValue.push(x.id);
+            x.ended_at = new Date().toISOString();
+            x.status = true;
+        });
+
+    try{
+        // send the request to the server
+        await axios.post(route('room.members.time.end', {room: room.value.code}),{
+            except: exceptMemberIds,
+        });
+    } catch(e){
+        // revert the status if the request fails
+        room.value.members
+            .filter(x => oldValue.includes(x.id))
+            .forEach(x => {
+                x.ended_at = null;
+                x.status = false;
+            });
+        toast.error(trans('app.error'));
     }
 }
 
@@ -499,7 +529,7 @@ onUnmounted(() => {
                     <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-2 mb-2">
                         <RoomMember v-model="room.members[i]"
                                     @avatarClick="openMemberUserLink(room.members[i])"
-                                    @timeStart="onMemberTimeStart"
+                                    @timeStarted="onMemberTimeStarted"
                                     @statusChange="onMemberStatusChange"
                                     :canEdit="isMyRoom"
                                     :advancedMode="advancedMode"
