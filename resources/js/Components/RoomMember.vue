@@ -31,6 +31,7 @@ const isDefault = computed(() => member.value.type === 'default');
 const isOffline = computed(() => member.value.type === 'offline');
 const isGuest = computed(() => member.value.type === 'guest');
 const isPending = computed(() => member.value.type === 'pending');
+const hasOpacity = computed(() => !isDefault.value || member.value.status);
 const allowedTypes = ref([
     {value: 'default', icon: 'pi pi-eye', tooltip: trans('app.member.status.default.set')},
     {value: 'offline', icon: 'pi pi-eye-slash', tooltip: trans('app.member.status.offline.set')},
@@ -213,7 +214,7 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
 
 <template>
     <div class="rounded-md" :class="{'loading':isTalking}">
-        <div :class="{'!opacity-60':member.status || isOffline || isGuest}"
+        <div :class="{'!opacity-60':hasOpacity}"
              class="flex flex-col gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
             <div class="flex items-center gap-1">
 

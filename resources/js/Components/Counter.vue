@@ -4,7 +4,7 @@ import SuccessButton from "@/Components/SuccessButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 withDefaults(defineProps<{
-    canEdit: boolean;
+    canEdit?: boolean;
 }>(), {
     canEdit: false,
 });
