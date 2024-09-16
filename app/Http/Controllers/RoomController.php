@@ -53,6 +53,16 @@ class RoomController extends Controller
         ]);
     }
 
+    public function showRoomMini(Room $room)
+    {
+        return Inertia::render('RoomMini', [
+            'baseRoom' => new RoomResource($room),
+            'baseIsMyRoom' => $room->canManage(auth()->user()),
+            'baseUserRole' => $room->getUserRole(auth()->user()),
+            'roomUrl' => route('room.show', $room->code),
+        ]);
+    }
+
     public function deleteRoom(Room $room)
     {
         $this->authorize('delete', $room);

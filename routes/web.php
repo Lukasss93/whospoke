@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RoomController::class, 'index'])->name('home');
 Route::get('@{room:code}', [RoomController::class, 'showRoom'])->name('room.show')->middleware(NoBrowserCache::class);
+Route::get('@{room:code}/mini', [RoomController::class, 'showRoomMini'])->name('room.show.mini')->middleware(NoBrowserCache::class);
 
 Route::middleware('guest')->group(function () {
     if (app()->isLocal()) {
