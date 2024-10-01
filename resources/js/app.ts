@@ -25,6 +25,7 @@ import 'primeicons/primeicons.css';
 import '../css/app.scss';
 import Tooltip from 'primevue/tooltip';
 import { usePassThrough } from "primevue/passthrough";
+import CountryFlag from 'vue-country-flag-next';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -64,6 +65,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
             .component('font-awesome-icon', FontAwesomeIcon)
+            .component('country-flag', CountryFlag)
             .use(plugin)
             .use(MotionPlugin)
             .use(VueAnimXYZ)

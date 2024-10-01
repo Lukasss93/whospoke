@@ -9,8 +9,8 @@ import Tag from 'primevue/tag';
 const locale = document.getElementsByTagName('html')[0].getAttribute('lang');
 
 const langs = [
-    {code: 'it', name: '🇮🇹 Italian'},
-    {code: 'en', name: '🇺🇸 English'},
+    {code: 'it', name: 'Italian', country: 'it'},
+    {code: 'en', name: 'English', country: 'gb'},
 ];
 
 
@@ -56,15 +56,16 @@ const { system, store } = useColorMode();
                 </a>
             </span>
         </div>
-        <p>
-            <span v-for="({code, name}, index) in langs">
+        <div class="inline-flex gap-1">
+            <template v-for="({code, name, country}, index) in langs">
                 <a :href="route('locale.set', {locale: code})"
-                   class="lang-button" :data-active="locale===code">
-                    {{ name }}
+                   class="lang-button inline-flex justify-center items-center gap-0.5" :data-active="locale===code">
+                    <country-flag :country='country' size='small' />
+                    <span>{{ name }}</span>
                 </a>
                 <span v-if="index+1 !== langs.length">&nbsp;·&nbsp;</span>
-            </span>
-        </p>
+            </template>
+        </div>
     </footer>
 </template>
 
