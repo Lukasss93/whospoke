@@ -5,6 +5,9 @@ import { useColorMode } from '@vueuse/core';
 import {Tippy} from "vue-tippy";
 import {ref} from "vue";
 import Tag from 'primevue/tag';
+import IconWindows from "@/Components/IconWindows.vue";
+import IconLinux from "@/Components/IconLinux.vue";
+import IconMac from "@/Components/IconMac.vue";
 
 const locale = document.getElementsByTagName('html')[0].getAttribute('lang');
 
@@ -43,6 +46,7 @@ const { system, store } = useColorMode();
 
 
     <footer class="pt-5 text-center text-sm text-black dark:text-white">
+        <!-- CREDITS -->
         <div class="flex justify-center gap-1">
             <a :href="$page.props.developer.github" target="_blank" class="text-blue-500 hover:underline">
                 {{ $page.props.app.name }}
@@ -56,6 +60,13 @@ const { system, store } = useColorMode();
                 </a>
             </span>
         </div>
+
+        <!-- DOWNLOAD APP -->
+        <a href="https://github.com/Lukasss93/whospoke-companion/releases" target="_blank" class="block text-blue-500 hover:underline">
+            Scarica l'app desktop per <IconWindows/> Windows, <IconLinux/> Linux e <IconMac/> macOS
+        </a>
+
+        <!-- LANGUAGES -->
         <div class="inline-flex gap-1">
             <template v-for="({code, name, country}, index) in langs">
                 <a :href="route('locale.set', {locale: code})"
