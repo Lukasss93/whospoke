@@ -9,7 +9,7 @@ return [
         'recreate' => 'Cancella una sessione esistente e ricreane una nuova.',
     ],
     'join' => [
-        'info' => 'Per unirti in una sessione, apri un link diretto alla sessione.'
+        'info' => 'Unisciti in una sessione.'
     ],
     'developed' => 'Sviluppato da',
     'welcome' => 'Benvenuto, :name!',
@@ -109,4 +109,5 @@ return [
     'login' => [
         'slack' => 'Accedi con Slack',
     ],
+    'or' => 'Oppure',
 ];

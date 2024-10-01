@@ -9,7 +9,7 @@ return [
         'recreate' => 'Delete an existing session and create a new one.',
     ],
     'join' => [
-        'info' => 'To join a session, open a direct link to the session.'
+        'info' => 'Join a session.'
     ],
     'developed' => 'Developed by',
     'welcome' => 'Welcome, :name!',
@@ -109,4 +109,5 @@ return [
     'login' => [
         'slack' => 'Login with Slack',
     ],
+    'or' => 'Or',
 ];

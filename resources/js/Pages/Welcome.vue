@@ -14,10 +14,16 @@ import {useConfirm} from "primevue/useconfirm";
 import Button from 'primevue/button';
 import ConfirmDialog from 'primevue/confirmdialog';
 import {toast} from "vue3-toastify";
+import Divider from 'primevue/divider';
+import InputGroup from "primevue/inputgroup";
+import InputGroupAddon from "primevue/inputgroupaddon";
+import InputText from "primevue/inputtext";
+import {useStorage} from '@vueuse/core';
 
 const confirm = useConfirm();
 const page = usePage();
 const isLogged = computed(() => page.props.auth.user !== null);
+const roomToJoin = useStorage<string>('roomToJoin', '');
 
 const isCreatingRoom = ref<boolean>(false);
 const roomForm = useForm<{
@@ -61,6 +67,10 @@ const confirmRoomDelete = (event, roomCode) => {
     });
 };
 
+function joinRoom() {
+    router.get(route('room.show', roomToJoin.value));
+}
+
 </script>
 
 <template>
@@ -77,13 +87,13 @@ const confirmRoomDelete = (event, roomCode) => {
 
                 <main>
 
-                    <div class="flex flex-col items-center gap-2 text-center">
-
-                        <ButtonLogin v-if="!isLogged"/>
+                    <div class="flex flex-col items-center gap-1 text-center">
 
                         <p class="text-yellow-600 dark:text-yellow-500" v-if="!isLogged">
                             {{ trans('app.create.guest') }}
                         </p>
+
+                        <ButtonLogin v-if="!isLogged"/>
 
                         <p class="text-xl text-gray-600 dark:text-gray-400" v-if="isLogged">
                             {{ trans('app.welcome', {name: page.props.auth.user?.name}) }}
@@ -106,9 +116,21 @@ const confirmRoomDelete = (event, roomCode) => {
                                     v-model:type="roomForm.type"
                                     v-model:errors="roomForm.errors"/>
 
-                        <p class="text-xl mt-2 text-gray-600 dark:text-gray-400">
+                        <Divider align="center" class="lg:w-96 !my-2" pt:content:class="uppercase text-sm rounded !px-3 border border-surface-200 dark:border-surface-600">
+                            <b>{{ trans('app.or') }}</b>
+                        </Divider>
+
+                        <p class="text-xl mb-1 text-gray-600 dark:text-gray-400">
                             {{ trans('app.join.info') }}
                         </p>
+
+                        <InputGroup class="mb-3 lg:w-96">
+                            <InputGroupAddon>
+                                @
+                            </InputGroupAddon>
+                            <InputText placeholder="Codice sessione" v-model="roomToJoin" @keyup.enter="joinRoom" />
+                            <Button severity="info" :label="trans('actions.join')" @click="joinRoom" />
+                        </InputGroup>
 
                         <div v-if="isLogged && rooms.length>0" class="flex flex-col items-center gap-1">
                             <div class="border-b-[1px] w-64 my-2 border-gray-500"></div>
