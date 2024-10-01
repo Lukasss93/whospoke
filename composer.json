@@ -16,6 +16,7 @@
         "lcherone/php-petname": "^1.0",
         "nutgram/laravel": "^1.4",
         "pusher/pusher-php-server": "^7.2.4",
+        "silviolleite/laravelpwa": "^2.0",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

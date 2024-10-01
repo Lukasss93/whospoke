@@ -12,6 +12,7 @@
 
         <!-- Scripts -->
         @routes
+        @laravelPWA
         <script>
             window.fallbackLocale = "{{ config('app.fallback_locale') }}"
         </script>
