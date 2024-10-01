@@ -12,6 +12,7 @@ import Counter from "@/Components/Counter.vue";
 import Avatar from "primevue/avatar";
 import {computed, ref, watch} from "vue";
 import SelectButton from 'primevue/selectbutton';
+import ButtonInfo from "@/Components/ButtonInfo.vue";
 
 const props = defineProps<{
     canEdit: boolean;
@@ -40,6 +41,7 @@ const allowedTypes = ref([
 ]);
 
 const isTalking = computed(() => member.value.started_at!==null && member.value.ended_at===null);
+const hasTalked = computed(() => member.value.started_at!==null && member.value.ended_at!==null);
 
 const emit = defineEmits(['avatarClick', 'timeStarted', 'statusChange']);
 
@@ -268,14 +270,13 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
 
                 <!-- Time Controls -->
                 <div class="hidden sm:flex gap-1" v-if="showTime && canEdit && advancedMode && isDefault">
-                    <DangerButton class="!px-1" @click="resetTime">
+                    <ButtonInfo class="!px-1.5" @click="resetTime">
                         <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
-                    </DangerButton>
-                    <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
+                    </ButtonInfo>
+                    <SuccessButton class="!px-1.5" @click="startTime" v-if="!isTalking && !hasTalked">
                         <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
                     </SuccessButton>
-                    <DangerButton class="!px-1" @click="stopTime"
-                                  :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
+                    <DangerButton class="!px-1.5" @click="stopTime" v-if="isTalking || hasTalked" :disabled="hasTalked">
                         <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
                     </DangerButton>
                 </div>
@@ -337,14 +338,13 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
 
                 <!-- Time Controls -->
                 <div class="flex gap-1" v-if="canEdit && advancedMode && isDefault">
-                    <DangerButton class="!px-1" @click="resetTime">
+                    <ButtonInfo class="!px-1.5" @click="resetTime">
                         <font-awesome-icon icon="fa-solid fa-rotate-left" fixed-width/>
-                    </DangerButton>
-                    <SuccessButton class="!px-1" @click="startTime" :disabled="member.started_at!==null">
+                    </ButtonInfo>
+                    <SuccessButton class="!px-1.5" @click="startTime" v-if="!isTalking && !hasTalked">
                         <font-awesome-icon icon="fa-solid fa-play" fixed-width/>
                     </SuccessButton>
-                    <DangerButton class="!px-1" @click="stopTime"
-                                  :disabled="(member.started_at===null && member.ended_at===null) || (member.started_at!==null && member.ended_at!==null)">
+                    <DangerButton class="!px-1.5" @click="stopTime" v-if="isTalking || hasTalked" :disabled="hasTalked">
                         <font-awesome-icon icon="fa-solid fa-stop" fixed-width/>
                     </DangerButton>
                 </div>
