@@ -65,6 +65,9 @@ const membersSpokePercentual = computed(() => mapRange(membersSpoke.value, 0, me
 const isSessionCompleted = computed(() => membersSpoke.value === membersTotal.value);
 const nextAvailableMember = ref('-');
 
+const isRoomStarted = computed(() => room.value.started_at !== null);
+const isRoomStopped = computed(() => room.value.ended_at !== null);
+
 const userRoleLabel = computed(() => {
     if(userRole.value === 'owner') {
         return trans('app.room.owner');
@@ -437,14 +440,14 @@ onUnmounted(() => {
                         <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
                             {{ userRoleLabel }}
                         </div>
-                        <div class="grid grid-cols-3 gap-1">
+                        <div class="flex *:flex-1 gap-1">
                             <Button severity="info" size="small" outlined class="font-bold" @click="reset" :class="{'col-span-3': room.type==='counter'}">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
                             </Button>
-                            <Button v-if="room.type==='status'" severity="success" size="small" outlined class="font-bold" @click="startRoom" :disabled="room.started_at!==null">
+                            <Button v-if="room.type==='status' && !isRoomStarted" severity="success" size="small" outlined class="font-bold" @click="startRoom">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-play"/> {{trans('app.time.play')}}
                             </Button>
-                            <Button v-if="room.type==='status'" severity="danger" size="small" outlined class="font-bold" @click="stopRoom" :disabled="(room.started_at===null && room.ended_at===null) || (room.started_at!==null && room.ended_at!==null)">
+                            <Button v-if="room.type==='status' && isRoomStarted" severity="danger" size="small" outlined class="font-bold" @click="stopRoom" :disabled="!isRoomStarted || isRoomStopped">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-stop"/> {{trans('app.time.stop')}}
                             </Button>
                         </div>
