@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use LasseRafn\Initials\Initials;
 
 class Member extends Model
@@ -68,7 +69,7 @@ class Member extends Model
         ];
 
         return Attribute::make(
-            get: fn() => Arr::random($colors),
+            get: fn() => Cache::remember("member-color-{$this->id}", now()->addHours(12), fn() => Arr::random($colors)),
         );
     }
 }
