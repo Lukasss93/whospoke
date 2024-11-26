@@ -25,5 +25,12 @@ export default defineConfig({
             'vue': 'vue/dist/vue.esm-bundler',
             '@sound': path.resolve(__dirname, './resources/sound')
         },
-    }
+    },
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            host: 'localhost',
+        },
+        strictPort: true,
+    },
 });
