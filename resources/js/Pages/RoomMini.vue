@@ -20,7 +20,7 @@ const props = defineProps<{
 const room = ref(props.baseRoom);
 const onlineUsers = ref<User[]>([]);
 
-const membersTotal = computed(() => room.value.members.filter(x => x.type === 'default' || x.type === 'pending').length);
+const membersTotal = computed(() => room.value.members.filter(x => x.type === 'default').length);
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type === 'default').length);
 const membersSpokePercentual = computed(() => mapRange(membersSpoke.value, 0, membersTotal.value, 0, 100));
 const membersToRender = computed(() => {

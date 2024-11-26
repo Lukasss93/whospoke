@@ -59,7 +59,7 @@ const source = ref(props.roomUrl);
 const {text, copy, copied, isSupported} = useClipboard({source});
 const onlinePresence = ref(false);
 
-const membersTotal = computed(() => room.value.members.filter(x => x.type==='default' || x.type==='pending').length);
+const membersTotal = computed(() => room.value.members.filter(x => x.type==='default').length);
 const membersSpoke = computed(() => room.value.members.filter(x => x.status && x.type==='default').length);
 const membersSpokePercentual = computed(() => mapRange(membersSpoke.value, 0, membersTotal.value, 0, 100));
 const isSessionCompleted = computed(() => membersSpoke.value === membersTotal.value);
