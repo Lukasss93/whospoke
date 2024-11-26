@@ -42,9 +42,11 @@ const hasOpacity = computed(() => !isDefault.value || member.value.status);
             <div class="flex items-center gap-1">
                 <!-- Avatar -->
                 <div class="inline-flex relative">
-                    <Avatar icon="pi pi-user" v-if="!member.user?.avatar" class="!bg-gray-900" shape="circle"/>
-
-                    <Avatar v-if="member.user?.avatar" :image="member.user?.avatar" shape="circle"/>
+                    <Avatar :image="member.user?.avatar || undefined"
+                            :label="member.user ? undefined : member.initials"
+                            :class="{'text-white': true}"
+                            :style="{'background-color':member.color}"
+                            shape="circle"/>
 
                     <div v-if="isOnline" class="absolute bottom-[-3px] right-[-3px] inline-block size-3 bg-green-500 rounded-full border-2 border-gray-800"></div>
                 </div>

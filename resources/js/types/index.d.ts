@@ -21,6 +21,8 @@ export interface Member {
     user_id: number | null;
     type: MemberType;
     name: string;
+    initials: string;
+    color: string;
     status: boolean;
     count: number;
     started_at: string | null;

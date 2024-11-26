@@ -239,16 +239,10 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
 
                 <!-- Avatar -->
                 <div class="inline-flex relative">
-                    <Avatar icon="pi pi-user"
-                            v-if="!member.user?.avatar"
-                            class="!bg-gray-400 dark:!bg-gray-900"
-                            :class="{'cursor-pointer':canEdit}"
-                            @click="avatarClick"
-                            shape="circle"/>
-
-                    <Avatar v-if="member.user?.avatar"
-                            :image="member.user?.avatar"
-                            :class="{'cursor-pointer':canEdit}"
+                    <Avatar :image="member.user?.avatar || undefined"
+                            :label="member.user ? undefined : member.initials"
+                            :class="{'cursor-pointer':canEdit, 'text-white': true}"
+                            :style="{'background-color':member.color}"
                             @click="avatarClick"
                             shape="circle"/>
 
