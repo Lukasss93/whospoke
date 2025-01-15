@@ -215,7 +215,15 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
 </script>
 
 <template>
-    <div class="rounded-md" :class="{'loading':isTalking}">
+    <div class="rounded-md flex flex-row gap-1" :class="{'loading':isTalking}">
+
+        <div v-tippy="member.profession?.name"
+             :style="{'background-color':member.profession?.color || '#000000'}"
+             :class="{'!opacity-40':hasOpacity}"
+             class="text-white px-2 rounded min-w-10 text-center font-bold text-sm items-center justify-center inline-flex">
+            {{ member.profession?.abbreviation || '-'}}
+        </div>
+
         <div :class="{'!opacity-60':hasOpacity}"
              class="flex flex-col gap-1 w-full bg-surface-300 dark:bg-surface-800 border border-gray-400 dark:border-gray-700 p-1 rounded-md">
             <div class="flex items-center gap-1">

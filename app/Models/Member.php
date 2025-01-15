@@ -13,10 +13,10 @@ use LasseRafn\Initials\Initials;
 class Member extends Model
 {
     protected static $unguarded = true;
-    protected $with = ['user'];
+    protected $with = ['user', 'profession'];
     protected $appends = ['initials', 'color'];
 
-    protected function casts()
+    protected function casts(): array
     {
         return [
             'type' => MemberType::class,
@@ -35,6 +35,11 @@ class Member extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function profession(): BelongsTo
+    {
+        return $this->belongsTo(Profession::class);
     }
 
     public function initials(): Attribute
@@ -69,7 +74,11 @@ class Member extends Model
         ];
 
         return Attribute::make(
-            get: fn() => Cache::remember("member-color-{$this->id}", now()->addHours(12), fn() => Arr::random($colors)),
+            get: fn() => Cache::remember(
+                key: sprintf('member-color-%s', $this->id),
+                ttl: now()->addHours(12),
+                callback: fn() => Arr::random($colors),
+            ),
         );
     }
 }

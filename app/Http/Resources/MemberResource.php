@@ -30,6 +30,7 @@ class MemberResource extends JsonResource
             'ended_at' => $this->ended_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'profession' => new ProfessionResource($this->whenLoaded('profession')),
             'user' => $user,
         ];
     }

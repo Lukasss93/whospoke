@@ -85,6 +85,8 @@ const sortTypes = [
     {value: 'time_desc', label: trans('app.sorting.time')+' ▼'},
     {value: 'speech_asc', label: trans('app.sorting.speech')+' ▲'},
     {value: 'speech_desc', label: trans('app.sorting.speech')+' ▼'},
+    {value: 'profession_asc', label: trans('app.sorting.profession')+' ▲'},
+    {value: 'profession_desc', label: trans('app.sorting.profession')+' ▼'},
 ];
 const sortType = useStorage('sortType', sortTypes[0]);
 const membersToRender = computed(() => {
@@ -163,6 +165,10 @@ const membersToRender = computed(() => {
 
                 return endA > endB ? -1 : 1;
             });
+        case 'profession_asc':
+            return room.value.members.sort((a, b) => (a.profession?.name || '').localeCompare((b.profession?.name || '')));
+        case 'profession_desc':
+            return room.value.members.sort((a, b) => (b.profession?.name || '').localeCompare((a.profession?.name || '')));
         default:
             return room.value.members;
     }

@@ -36,7 +36,15 @@ const hasOpacity = computed(() => !isDefault.value || member.value.status);
 </script>
 
 <template>
-    <div class="rounded-md">
+    <div class="rounded-md flex flex-row gap-0.5">
+
+        <div v-tippy="member.profession?.name"
+             :style="{'background-color':member.profession?.color || '#000000'}"
+             :class="{'!opacity-40':hasOpacity}"
+             class="text-white px-2 min-w-10 text-center font-bold text-sm items-center justify-center inline-flex">
+            {{ member.profession?.abbreviation || '-'}}
+        </div>
+
         <div :class="{'!opacity-40':hasOpacity}"
              class="flex flex-col gap-1 w-full bg-slate-800 p-1">
             <div class="flex items-center gap-1">

@@ -88,6 +88,7 @@ return [
         'name' => 'Name',
         'time' => 'Time',
         'speech' => 'Speech',
+        'profession' => 'Profession',
     ],
     'widget' => [
         'session' => 'Session',

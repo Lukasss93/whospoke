@@ -15,6 +15,12 @@ export interface User {
 export type MemberType = "default" | "offline" | "guest" | "pending";
 export type MemberRole = "default" | "owner" | "editor";
 
+export interface Profession {
+    name: string;
+    abbreviation: string;
+    color: string;
+}
+
 export interface Member {
     id: number;
     room_id: number;
@@ -29,6 +35,7 @@ export interface Member {
     ended_at: string | null;
     created_at: string | null;
     updated_at: string | null;
+    profession: Profession | null;
     user: User | null;
 }
 
