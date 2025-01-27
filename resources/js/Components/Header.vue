@@ -19,12 +19,15 @@ const currentTime = useDateFormat(useNow(), 'dddd, DD MMMM YYYY HH:mm:ss', {loca
 
 <template>
     <header class="flex flex-col items-center gap-1 pb-4 text-center">
-        <Link :href="route('home')">
-            <ApplicationLogo :color="logoColor" class="transition-all duration-300 ease-in-out hover:scale-110"/>
-        </Link>
-        <h1 class="text-3xl text-black dark:text-white uppercase font-bold">
-            {{ title || trans('app.name') }}
-        </h1>
+        <div class="flex items-center gap-2">
+            <Link :href="route('home')">
+                <ApplicationLogo :color="logoColor" :size="60" class="transition-all duration-300 ease-in-out hover:scale-110"/>
+            </Link>
+            <h1 class="text-3xl text-black dark:text-white uppercase font-bold">
+                {{ title || trans('app.name') }}
+            </h1>
+        </div>
+
         <p class="font-mono uppercase font-bold text-gray-600 dark:text-gray-400">{{ currentTime }}</p>
     </header>
 </template>
