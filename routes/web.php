@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::post('@{room:code}/members/end-time', [RoomController::class, 'endOtherMembersTime'])->name('room.members.time.end');
     Route::post('@{room:code}/start', [RoomController::class, 'start'])->name('room.time.start');
     Route::post('@{room:code}/stop', [RoomController::class, 'stop'])->name('room.time.stop');
+    Route::patch('@{room:code}/professions', [RoomController::class, 'updateProfessionsStatus'])->name('room.professions.status');
 
     Route::post('member/{member}/status', [MemberController::class, 'setMemberStatus'])->name('member.status.update');
     Route::post('member/{member}/type', [MemberController::class, 'setMemberType'])->name('member.type.update');

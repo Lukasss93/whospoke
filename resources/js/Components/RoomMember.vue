@@ -14,13 +14,16 @@ import {computed, ref, watch} from "vue";
 import SelectButton from 'primevue/selectbutton';
 import ButtonInfo from "@/Components/ButtonInfo.vue";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     canEdit: boolean;
     advancedMode: boolean;
     type: "status" | "counter";
     isOnline: boolean;
     showTime: boolean;
-}>();
+    showProfession?: boolean;
+}>(),{
+    showProfession: false,
+});
 
 const member = defineModel<Member>({required: true});
 const {minutes, seconds} = useTimeCounter(
@@ -218,6 +221,7 @@ watch(() => member.value.status, (status) => emit('statusChange', status));
     <div class="rounded-md flex flex-row gap-1" :class="{'loading':isTalking}">
 
         <div v-tippy="member.profession?.name"
+             v-if="showProfession"
              :style="{'background-color':member.profession?.color || '#000000'}"
              :class="{'!opacity-40':hasOpacity}"
              class="text-white px-2 rounded min-w-10 text-center font-bold text-sm items-center justify-center inline-flex">

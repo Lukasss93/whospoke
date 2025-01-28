@@ -17,6 +17,7 @@ class RoomResource extends JsonResource
             'type' => $this->type,
             'title' => $this->title,
             'code' => $this->code,
+            'show_professions' => $this->show_professions,
             'members' => MemberResource::collection($this->whenLoaded('members')),
             'started_at' => $this->started_at,
             'ended_at' => $this->ended_at,

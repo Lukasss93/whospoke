@@ -49,6 +49,10 @@ return [
             'success' => 'Session deleted!',
         ],
         'completed' => 'Everyone spoke!',
+        'professions' => [
+            'show' => 'Show professions',
+            'hide' => 'Hide professions',
+        ],
     ],
     'your_rooms' => 'Your sessions',
     'error' => 'Error',

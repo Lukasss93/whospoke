@@ -9,6 +9,7 @@ use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\EndOtherMembersTimeRequest;
 use App\Http\Resources\RoomResource;
 use App\Models\Room;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -163,6 +164,16 @@ class RoomController extends Controller
             ]);
 
         $room->refresh();
+
+        RoomChangedEvent::dispatch($room);
+    }
+
+    public function updateProfessionsStatus(Request $request, Room $room)
+    {
+        $this->authorize('update', $room);
+
+        $room->show_professions = $request->boolean('show');
+        $room->save();
 
         RoomChangedEvent::dispatch($room);
     }

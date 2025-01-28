@@ -91,6 +91,7 @@ onUnmounted(() => {
                                 v-for="(member, i) in membersToRender"
                                 :key="member.id"
                                 :showTime="room.type==='status'"
+                                :showProfession="room.show_professions"
                                 :type="room.type"
                                 :isOnline="onlineUsers.some(x => x.id === room.members[i].user_id)"/>
             </div>

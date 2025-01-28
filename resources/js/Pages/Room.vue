@@ -228,6 +228,25 @@ async function reset() {
     }
 }
 
+async function updateProfessionsStatus(status: boolean) {
+    // store the old status to revert if the request fails
+    const oldStatus = room.value.show_professions;
+
+    // update the status in the frontend
+    room.value.show_professions = status;
+
+    try {
+        // send the request to the server
+        await axios.patch(route('room.professions.status', {room: room.value.code}), {
+            show: status,
+        });
+    } catch (e) {
+        // revert the status if the request fails
+        room.value.show_professions = oldStatus;
+        toast.error(trans('app.error'));
+    }
+}
+
 async function setMembersOnline() {
     // store the old status to revert if the request fails
     const oldMembers = room.value.members;
@@ -432,8 +451,8 @@ onUnmounted(() => {
 
                     <!-- ADMIN TOOLBAR -->
                     <div v-if="isMyRoom"
-                         class="my-2 grid lg:grid-cols-2 gap-2 *:p-1 *:rounded-md *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
-                        <div class="flex *:flex-1 gap-1">
+                         class="my-2 grid lg:grid-cols-10 gap-2 *:p-1 *:rounded-md *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
+                        <div class="flex *:flex-1 gap-1 lg:col-span-4">
                             <Button severity="info" size="small" outlined class="font-bold" @click="reset" :class="{'col-span-3': room.type==='counter'}">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
                             </Button>
@@ -444,7 +463,7 @@ onUnmounted(() => {
                                 <font-awesome-icon fixed-width icon="fa-solid fa-stop"/> {{trans('app.time.stop')}}
                             </Button>
                         </div>
-                        <div class="grid grid-cols-3 gap-1">
+                        <div class="grid grid-cols-4 gap-1 lg:col-span-6">
                             <Button :label="trans('app.member.status.default.all')"
                                     v-tooltip.top="trans('app.member.status.except')"
                                     class="text-xs !p-1 text-balance"
@@ -455,6 +474,13 @@ onUnmounted(() => {
                                     class="text-xs !p-1 text-balance"
                                     @click="setMembersPending"
                                     severity="secondary" outlined />
+                            <ToggleButton :modelValue="room.show_professions"
+                                          @update:modelValue="() => updateProfessionsStatus(!room.show_professions)"
+                                          class="text-xs"
+                                          :pt:box="({props}) => ({class: [{'!text-white before:!bg-blue-600 dark:before:!bg-blue-600': props.modelValue}]})"
+                                          pt:box:class="!p-1 text-balance"
+                                          :onLabel="trans('app.room.professions.hide')"
+                                          :offLabel="trans('app.room.professions.show')" />
                             <ToggleButton v-model="advancedMode"
                                           class="text-xs"
                                           :pt:box="({props}) => ({class: [{'!text-white before:!bg-blue-600 dark:before:!bg-blue-600': props.modelValue}]})"
@@ -530,6 +556,7 @@ onUnmounted(() => {
                                     :canEdit="isMyRoom"
                                     :advancedMode="advancedMode"
                                     :showTime="room.type==='status'"
+                                    :showProfession="room.show_professions"
                                     :type="room.type"
                                     :isOnline="onlineUsers.some(x => x.id === room.members[i].user_id)"
                                     v-for="(member, i) in membersToRender" :key="member.id"

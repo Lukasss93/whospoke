@@ -49,6 +49,10 @@ return [
             'success' => 'Sessione cancellata!',
         ],
         'completed' => 'Hanno parlato tutti!',
+        'professions' => [
+            'show' => 'Mostra professioni',
+            'hide' => 'Nascondi professioni',
+        ],
     ],
     'your_rooms' => 'Le tue sessioni',
     'error' => 'Errore',

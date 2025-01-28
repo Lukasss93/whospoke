@@ -20,6 +20,7 @@ class Room extends Model
             'type' => RoomType::class,
             'started_at' => 'datetime',
             'ended_at' => 'datetime',
+            'show_professions' => 'boolean',
         ];
     }
 

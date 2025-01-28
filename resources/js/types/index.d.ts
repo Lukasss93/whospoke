@@ -45,6 +45,7 @@ export interface Room {
     type: "status" | "counter";
     title: string | null;
     code: string;
+    show_professions: boolean;
     members: Member[];
     started_at: string | null;
     ended_at: string | null;
