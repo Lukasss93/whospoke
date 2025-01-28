@@ -16,6 +16,7 @@ export type MemberType = "default" | "offline" | "guest" | "pending";
 export type MemberRole = "default" | "owner" | "editor";
 
 export interface Profession {
+    id: number;
     name: string;
     abbreviation: string;
     color: string;

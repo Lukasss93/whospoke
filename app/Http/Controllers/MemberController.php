@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\MemberType;
 use App\Events\RoomChangedEvent;
-use App\Http\Requests\LinkMemberToUserRequest;
+use App\Http\Requests\EditMemberRequest;
 use App\Http\Requests\UpdateMemberTypeRequest;
 use App\Http\Requests\UpdateMemberStatusRequest;
 use App\Models\Member;
@@ -109,11 +109,12 @@ class MemberController extends Controller
         RoomChangedEvent::dispatch($member->room);
     }
 
-    public function linkUser(LinkMemberToUserRequest $request, Member $member)
+    public function editMember(EditMemberRequest $request, Member $member)
     {
         $this->authorize('update', $member->room);
 
         $member->user_id = $request->input('user_id');
+        $member->profession_id = $request->input('profession_id');
         $member->save();
 
         $member->room->refresh();

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ProfessionsController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\NoBrowserCache;
@@ -43,9 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::post('member/{member}/count/reset', [MemberController::class, 'resetCount'])->name('member.count.reset');
     Route::post('member/{member}/count/increment', [MemberController::class, 'incrementCount'])->name('member.count.increment');
     Route::post('member/{member}/count/decrement', [MemberController::class, 'decrementCount'])->name('member.count.decrement');
-    Route::post('member/{member}/user', [MemberController::class, 'linkUser'])->name('member.user.link');
+    Route::post('member/{member}/edit', [MemberController::class, 'editMember'])->name('member.user.edit');
 
     Route::get('users', [UsersController::class, 'search'])->name('users.search');
+    Route::get('professions', [ProfessionsController::class, 'search'])->name('professions.search');
 });
 
 Route::get('locale/{locale}', function(string $locale){

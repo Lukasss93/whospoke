@@ -87,7 +87,12 @@ return [
     'member_user' => [
         'detach' => 'Remove association',
         'empty' => 'No user found',
-        'title' => 'Associate a user to :name',
+        'title' => 'Associate a user',
+    ],
+    'member_profession' => [
+        'detach' => 'Remove profession',
+        'empty' => 'No profession found',
+        'title' => 'Associate a profession',
     ],
     'sorting' => [
         'name' => 'Name',

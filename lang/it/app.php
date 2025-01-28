@@ -87,7 +87,12 @@ return [
     'member_user' => [
         'detach' => 'Rimuovi associazione',
         'empty' => 'Nessun utente trovato',
-        'title' => 'Associa un utente a :name',
+        'title' => 'Associa un utente',
+    ],
+    'member_profession' => [
+        'detach' => 'Rimuovi professione',
+        'empty' => 'Nessuna professione trovata',
+        'title' => 'Associa una professione',
     ],
     'sorting' => [
         'name' => 'Nome',
