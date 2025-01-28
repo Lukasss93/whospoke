@@ -68,16 +68,6 @@ const nextAvailableMember = ref('-');
 const isRoomStarted = computed(() => room.value.started_at !== null);
 const isRoomStopped = computed(() => room.value.ended_at !== null);
 
-const userRoleLabel = computed(() => {
-    if(userRole.value === 'owner') {
-        return trans('app.room.owner');
-    }
-    if(userRole.value === 'editor'){
-        return trans('app.room.editor');
-    }
-    return '-';
-});
-
 const sortTypes = [
     {value: 'name_asc', label: trans('app.sorting.name')+' ▲'},
     {value: 'name_desc', label: trans('app.sorting.name')+' ▼'},
@@ -442,10 +432,7 @@ onUnmounted(() => {
 
                     <!-- ADMIN TOOLBAR -->
                     <div v-if="isMyRoom"
-                         class="my-2 grid lg:grid-cols-3 gap-2 *:p-1 *:rounded-md *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
-                        <div class="flex items-center justify-center text-green-600 text-sm font-bold uppercase">
-                            {{ userRoleLabel }}
-                        </div>
+                         class="my-2 grid lg:grid-cols-2 gap-2 *:p-1 *:rounded-md *:bg-surface-300 *:dark:bg-surface-800 *:border *:border-gray-400 *:dark:border-gray-700">
                         <div class="flex *:flex-1 gap-1">
                             <Button severity="info" size="small" outlined class="font-bold" @click="reset" :class="{'col-span-3': room.type==='counter'}">
                                 <font-awesome-icon fixed-width icon="fa-solid fa-rotate-left"/> {{trans('app.time.reset')}}
