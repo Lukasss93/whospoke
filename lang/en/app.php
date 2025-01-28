@@ -77,6 +77,7 @@ return [
             'except' => 'Except offline or guest members',
         ],
         'canEdit' => 'Can edit this session',
+        'edit' => 'Edit member',
     ],
     'show_advanced' => 'Advanced controls',
     'member_user' => [

@@ -16,7 +16,7 @@ import Avatar from 'primevue/avatar';
 import {chunk, mapRange} from "@/Support/Helpers";
 import ButtonLogout from "@/Components/ButtonLogout.vue";
 import ButtonLogin from "@/Components/ButtonLogin.vue";
-import MemberUserLink from "@/Modals/MemberUserLink.vue";
+import EditMemberModal from "@/Modals/EditMemberModal.vue";
 import Widget from "@/Components/Widget.vue";
 import Dropdown from 'primevue/dropdown';
 import {DateTime} from "luxon";
@@ -403,7 +403,7 @@ onUnmounted(() => {
         </span>
     </Teleport>
 
-    <MemberUserLink v-model:show="memberUserLinkShow"
+    <EditMemberModal v-model:show="memberUserLinkShow"
                     v-model:member="memberUserLinkMember"
                     @close="memberUserLinkMember = null"
                     @save="memberUserLinkMember = null;"/>

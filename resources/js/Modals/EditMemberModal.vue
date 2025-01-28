@@ -67,10 +67,13 @@ function updateAutoCompleteValue(value) {
 
         <template #header>
             <span class="text-lg font-medium">
-                {{ trans('app.member_user.title', {name: member?.name}) }}
+                {{ trans('app.member.edit')}}
             </span>
         </template>
 
+        <div>
+            {{ trans('app.member_user.title', {name: member?.name}) }}
+        </div>
         <AutoComplete class="block w-full pt-1"
                       pt:input:class="w-full"
                       :model-value="member?.user"
